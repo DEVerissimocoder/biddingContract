@@ -6,7 +6,7 @@ class Licitacao (models.Model):
     categoria = models.CharField(max_length=200, null=False)
     assunto = models.CharField(max_length=200)
     date = models.DateField()
-
+    
     class meta:
         verbose_name_plural = "licitações"
 
@@ -18,8 +18,12 @@ class Fornecedor(models.Model):
     num  = models.CharField(max_length=200)
     bairro  = models.CharField(max_length=200)
     cep = models.CharField(max_length=200)
+    cidade = models.CharField(max_length=200)
     telefone = models.CharField(max_length=200)
 
+    def __str__(self):
+        return self.nome, self.cnpj, self.endereco, self.num, self.bairro, self.cep, self.cidade, self.telefone
+    
     class meta:
         verbose_name_plural = "fornecedores"
 
@@ -32,3 +36,7 @@ class Contrato(models.Model):
     valor = models.FloatField(null=False)
     licitacao_fk= models.ForeignKey("Licitacao", on_delete=models.CASCADE)
     fornecedor_fk = models.ForeignKey("Fornecedor", on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return self.numero, self.assuntoDetalhado, self.dataInicial, self.dataFinal, self.valor
+    

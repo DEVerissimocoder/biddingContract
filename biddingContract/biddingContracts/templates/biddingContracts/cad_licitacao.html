@@ -1,0 +1,11 @@
+{% extends "biddingContracts/base.html"%}
+
+{% block content %} 
+<div id="licitacao">
+    <form action="{% url 'cadLicitacao' %}" method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">enviar</button>
+    </form>
+</div>
+{% endblock content %}
