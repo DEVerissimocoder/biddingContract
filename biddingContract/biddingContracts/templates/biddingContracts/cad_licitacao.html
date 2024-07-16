@@ -4,7 +4,7 @@
 <div id="licitacao">
     <form action="{% url 'cadLicitacao' %}" method="POST">
         {% csrf_token %}
-        {{ form }}
+        {{ form.as_p }}
         <button type="submit">enviar</button>
     </form>
 </div>
