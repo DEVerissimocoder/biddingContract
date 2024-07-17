@@ -1,0 +1,20 @@
+{% extends "biddingContracts/base.html" %}
+
+{% block content %} 
+    {% for fornecedor in fornecedores %}
+        <ul>
+            <p>--------------------------------</p>
+            <li>{{fornecedor.nome}}</li>
+            <li>{{fornecedor.cnpj}}</li>
+            <li>{{fornecedor.endereco}}</li>
+            <li>{{fornecedor.num}}</li>
+            <li>{{fornecedor.bairro}}</li>
+            <li>{{fornecedor.cep}}</li>
+            <li>{{fornecedor.cidade}}</li>
+            <li>{{fornecedor.telefone}}</li>
+            <li>uf:?</li>
+        </ul>
+        {% empty %}
+            <p> nenhum fornecedor encontrado </p>
+    {% endfor %}
+{% endblock content %}

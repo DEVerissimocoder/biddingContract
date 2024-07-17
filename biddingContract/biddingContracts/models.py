@@ -21,8 +21,8 @@ class Fornecedor(models.Model):
     cidade = models.CharField(max_length=200)
     telefone = models.CharField(max_length=200)
 
-    def __str__(self):
-        return self.nome, self.cnpj, self.endereco, self.num, self.bairro, self.cep, self.cidade, self.telefone
+   #def __str__(self):
+    #    return self.nome, self.cnpj, self.endereco, self.num, self.bairro, self.cep, self.cidade, self.telefone
     
     class meta:
         verbose_name_plural = "fornecedores"
@@ -38,5 +38,5 @@ class Contrato(models.Model):
     fornecedor_fk = models.ForeignKey("Fornecedor", on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return self.numero, self.assuntoDetalhado, self.dataInicial, self.dataFinal, self.valor
+        return self.assuntoDetalhado
     
