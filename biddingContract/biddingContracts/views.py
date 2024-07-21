@@ -1,12 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from  .forms import formLicitacao, formFornecedor
+from  .forms import formLicitacao, formFornecedor, formContrato
 from django.urls import reverse
-from .models import Licitacao, Fornecedor
+from .models import Licitacao, Fornecedor, Contrato
 # Create your views here.
 
 
-
+# LICITACÃO
 def cadLicitacao(request):
     if (request.method == 'POST'):
         form = formLicitacao(request.POST)
@@ -26,27 +26,50 @@ def listLicitacoes(request):
     return render(request, "biddingContracts/licitacoes.html", context)
    
 
+# FORNECEDOR
 def cadFornecedor(request):
     if request.method == 'POST':
         form = formFornecedor(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('listFornecedores'))
+            return HttpResponseRedirect(reverse('fornecedores'))
     else:
         form = formFornecedor()
 
     return render(request, 'biddingContracts/fornecedor_new.html', {"form": form})
 
 def listFornecedores(request):
-    """MOSTRA TODOS OS FORNECEDORES CADASTRADOS"""
     fornecedores = Fornecedor.objects.all()
-    for fornecedor in fornecedores:
-        print(fornecedor.nome)
     context = {"fornecedores": fornecedores}
-
     return render(request, "biddingContracts/fornecedores.html", context)
+"""
+def infoFornecedores(request, forn_id):
+  
+    fornecedor = Fornecedor.objects.get(id = forn_id)
     
+    context = {"fornecedor": fornecedor}
+
+    return render(request, "biddingContracts/fornecedor.html", context)"""
+
+
+# CONTRATO
+def cadContrato(request):
+    if request.method == "POST":
+        form = formContrato(request.POST),
+
+        if form.is_valid:
+            form.save()
+            return HttpResponseRedirect(reverse("contratos"))
+    else:
+        form = formContrato()
+    return render(request, "biddingContracts/contrato_new.html", {"form": form})
+
+def listContratos(request):
+    contratos = Contrato.objects.all()
+    context = {"contratos": contratos}
+    return render(request, "biddingsContratos/contratos.html", context)
+
+
+# INDEX
 def index(request):
     return render(request, 'biddingContracts/index.html')
-
-

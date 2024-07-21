@@ -1,9 +1,0 @@
-{% extends 'biddingContracts/base.html' %}
-
-{% block content %} 
-<form action="{% url 'fornecedor_new' %}" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">enviar</button>
-</form>
-{% endblock content %}

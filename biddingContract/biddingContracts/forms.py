@@ -1,5 +1,5 @@
 from django import forms
-from .models import Licitacao, Fornecedor
+from .models import Licitacao, Fornecedor, Contrato
 
 class formLicitacao(forms.ModelForm):
     class Meta:
@@ -10,4 +10,9 @@ class formLicitacao(forms.ModelForm):
 class formFornecedor(forms.ModelForm):
     class Meta: 
         model = Fornecedor
+        fields = "__all__"
+
+class formContrato(forms.ModelForm):
+    class Meta:
+        model = Contrato
         fields = "__all__"

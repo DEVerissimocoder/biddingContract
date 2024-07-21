@@ -37,6 +37,18 @@ class Contrato(models.Model):
     licitacao_fk= models.ForeignKey("Licitacao", on_delete=models.CASCADE)
     fornecedor_fk = models.ForeignKey("Fornecedor", on_delete=models.CASCADE)
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.assuntoDetalhado
-    
+
+class NotaFiscal(models.Model):
+    num = models.IntegerField()
+    serie = models.CharField(max_length=15)
+    valor = models.FloatField()
+    tipo = models.CharField(max_length=50)
+    contrato_fk = models.ForeignKey("Contrato", on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "Notas Fiscais"
+
+    """def __str__(self):
+        return self.serie, self.tipo"""
