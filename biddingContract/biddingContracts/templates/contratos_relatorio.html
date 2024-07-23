@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <p> saldo atual: {{saldoAtual}} </p>
+    
+
+    <h3>notas fiscais</h3>
+    <ul>
+        {% for nota in notasfiscais%}
+        ----------------------------------
+            <li> {{nota.num}} </li>
+            <li> {{nota.serie}} </li>
+            <li> {{nota.valor}}</li>
+            <li> {{nota.tipo}} </li>
+            <li> {{nota.dataEmissao}} </li>
+            
+            {% empty %}
+                <p>sem notas fiscais emitidas por enquanto</p>
+        {% endfor %}
+{% endblock %}

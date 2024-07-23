@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from  .forms import formLicitacao, formFornecedor, formContrato
 from django.urls import reverse
-from .models import Licitacao, Fornecedor, Contrato
+from .models import Licitacao, Fornecedor, Contrato, NotaFiscal
 # Create your views here.
 
 
@@ -67,9 +67,22 @@ def cadContrato(request):
 def listContratos(request):
     contratos = Contrato.objects.all()
     context = {"contratos": contratos}
-    return render(request, "biddingsContratos/contratos.html", context)
+    return render(request, "contratos.html", context)
 
+def contratosRelatorio(request, id_contrato):
+    contrato = Contrato.objects.get(numero=id_contrato)
+    notasFiscais = NotaFiscal.objects.filter(contrato_fk = id_contrato)
+    saldoAtual = contrato.valor
+    for notas in notasFiscais:
+        if notas.contrato_fk.numero ==contrato.numero:
+            saldoAtual -= notas.valor
+    context = {
+        "notasfiscais": notasFiscais,
+        "saldoAtual": saldoAtual
+        }
+    return render(request, "contratos_relatorio.html", context)
 
 # INDEX
 def index(request):
     return render(request, 'biddingContracts/index.html')
+

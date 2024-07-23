@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %} 
+    <ul>
+
+        {% for contrato in contratos %}
+        <br>------------------------------<br>
+        <li> {{contrato.numero}}</li>
+        <li> {{contrato.assuntoDetalhado}}</li>
+        <li> {{contrato.dataInicial}}</li>
+        <li> {{contrato.dataFinal}}</li>
+        <li> {{contrato.valor}}</li>
+        <li> {{contrato.dataFinal}}</li>
+        <li> <a href="{% url 'relatorio' contrato.numero %}">mais</a> </li>
+       
+        {% empty %}
+            <p>não há contratos!!</p>
+        {% endfor %}
+    </ul>
+    <!--<a href="#">novo contrato</a>-->
+{% endblock content %} 
