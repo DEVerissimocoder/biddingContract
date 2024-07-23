@@ -73,16 +73,18 @@ def contratosRelatorio(request, id_contrato):
     contrato = Contrato.objects.get(numero=id_contrato)
     notasFiscais = NotaFiscal.objects.filter(contrato_fk = id_contrato)
     saldoAtual = contrato.valor
+    vigencia = contrato.dataFinal - contrato.dataInicial
     for notas in notasFiscais:
         if notas.contrato_fk.numero ==contrato.numero:
             saldoAtual -= notas.valor
     context = {
         "notasfiscais": notasFiscais,
-        "saldoAtual": saldoAtual
+        "saldoAtual": saldoAtual,
+        "vigencia": vigencia
         }
     return render(request, "contratos_relatorio.html", context)
 
 # INDEX
 def index(request):
-    return render(request, 'biddingContracts/index.html')
+    return render(request, 'index.html')
 

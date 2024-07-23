@@ -10,7 +10,7 @@
         <li> {{contrato.dataInicial}}</li>
         <li> {{contrato.dataFinal}}</li>
         <li> {{contrato.valor}}</li>
-        <li> {{contrato.dataFinal}}</li>
+        <li> {{contrato.fornecedor_fk.nome}}</li>
         <li> <a href="{% url 'relatorio' contrato.numero %}">mais</a> </li>
        
         {% empty %}
