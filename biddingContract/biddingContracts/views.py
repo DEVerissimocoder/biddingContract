@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
-from  .forms import formLicitacao, formFornecedor, formContrato
+#from django.http import HttpResponseRedirect
+#from  .forms import formLicitacao, formFornecedor, formContrato
 from django.urls import reverse
-from .models import Licitacao, Fornecedor, Contrato, NotaFiscal
+from .models import Contrato, NotaFiscal
 import datetime
 from datetime import date
 # Create your views here.
@@ -52,4 +52,3 @@ def verifica_prazo_validade_contrato(dataFinal, hoje):
 # INDEX
 def index(request):
     return render(request, 'index.html')
-
