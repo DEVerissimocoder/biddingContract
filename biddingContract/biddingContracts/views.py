@@ -20,7 +20,7 @@ def contratosRelatorio(request, id_contrato):
     # convertendo para o tipo datetime.date
     hoje = hoje.date()
     # tipo datetime.date
-    dataFinalContrato = datetime(2024,7,25)#contrato.dataFinal  
+    dataFinalContrato = contrato.dataFinal  
     prazoRestante = relativedelta(dataFinalContrato, hoje)
     mensagem = verifica_prazo_validade_contrato(prazoRestante, dataFinalContrato, hoje)
 
@@ -42,7 +42,6 @@ def verifica_prazo_validade_contrato(prazoRestante, dataFinal, hoje):
     else:
         mensagem =  "O prazo de validade do contrato já expirou."
     return mensagem
-
 # INDEX
 def index(request):
     return render(request, 'index.html')
