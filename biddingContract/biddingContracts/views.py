@@ -3,10 +3,8 @@ from django.shortcuts import render
 #from  .forms import formLicitacao, formFornecedor, formContrato
 from django.urls import reverse
 from .models import Contrato, NotaFiscal
-import datetime
-from datetime import date
-# Create your views here.
-
+from datetime import datetime, timedelta, date
+from dateutil.relativedelta import relativedelta
 
 def listContratos(request):
     contratos = Contrato.objects.all()
@@ -16,13 +14,15 @@ def listContratos(request):
 def contratosRelatorio(request, id_contrato):
     contrato = Contrato.objects.get(numero=id_contrato)
     notasFiscais = NotaFiscal.objects.filter(contrato_fk = id_contrato)
-    
     saldoAtual = contrato.valor
-    
-    hoje = date.today()
-    dataFinalContrato = contrato.dataFinal
-
-    prazoRestante=verifica_prazo_validade_contrato(dataFinalContrato, hoje)
+    #tipo datetime.datetime
+    hoje = datetime.today()
+    # convertendo para o tipo datetime.date
+    hoje = hoje.date()
+    # tipo datetime.date
+    dataFinalContrato = datetime(2024,7,25)#contrato.dataFinal  
+    prazoRestante = relativedelta(dataFinalContrato, hoje)
+    mensagem = verifica_prazo_validade_contrato(prazoRestante, dataFinalContrato, hoje)
 
     for notas in notasFiscais:
         if notas.contrato_fk.numero == contrato.numero:
@@ -30,24 +30,18 @@ def contratosRelatorio(request, id_contrato):
     context = {
         "notasfiscais": notasFiscais,
         "saldoAtual": saldoAtual,
-        "vigencia": prazoRestante
+        "vigencia": mensagem
         }
     return render(request, "contratos_relatorio.html", context)
 
-def verifica_prazo_validade_contrato(dataFinal, hoje):
-    anoFinalContrato = dataFinal.year
-    mesFinalContrato = dataFinal.month
-    diaFinalContrato = dataFinal.day
-    anoAtual = hoje.year
-    mesAtual = hoje.month
-    diaAtual = hoje.day
-    dataFinalContrato_dateTime = datetime.datetime(anoFinalContrato, mesFinalContrato, diaFinalContrato)
-    dataAtual_dateTime = datetime.datetime(anoAtual, mesAtual, diaAtual) 
-
-    if dataFinalContrato_dateTime >= dataAtual_dateTime:
-        return dataFinalContrato_dateTime - dataAtual_dateTime
-
-    return f"contrato passou do prazo: {dataFinalContrato_dateTime.strftime("%d/%m/%Y")}"
+def verifica_prazo_validade_contrato(prazoRestante, dataFinal, hoje):
+    mensagem = " "
+    if dataFinal >= hoje:
+        mensagem = f"O contrato é válido por mais {prazoRestante.years} anos, {prazoRestante.months} meses e {prazoRestante.days} dias."
+        return mensagem
+    else:
+        mensagem =  "O prazo de validade do contrato já expirou."
+    return mensagem
 
 # INDEX
 def index(request):
