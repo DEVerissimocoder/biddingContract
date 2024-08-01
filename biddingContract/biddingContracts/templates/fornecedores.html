@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %} 
+
+    <ul>
+        {% for fornecedor in fornecedores%}
+        <p>--------------------------------</p>
+        <li>{{fornecedor.nome}}</li>
+        <li>{{fornecedor.cnpj}}</li>
+        <li>{{fornecedor.endereco}}</li>
+        <li>{{fornecedor.num}}</li>
+        <li>{{fornecedor.bairro}}</li>
+        <li>{{fornecedor.cep}}</li>
+        <li>{{fornecedor.cidade}}</li>
+        <li>{{fornecedor.telefone}}</li>
+        <li>uf:?</li>
+        {% empty %}
+            <p> nenhum fornecedor encontrado! </p>
+      {% endfor %}
+    </ul>
+{% endblock content %}

@@ -2,10 +2,11 @@ from django.shortcuts import render
 #from django.http import HttpResponseRedirect
 #from  .forms import formLicitacao, formFornecedor, formContrato
 from django.urls import reverse
-from .models import Contrato, NotaFiscal
+from .models import Contrato, NotaFiscal, Fornecedor, Licitacao
 from datetime import datetime, timedelta, date
 from dateutil.relativedelta import relativedelta
 
+# CONTRATOS + RELATORIOS
 def listContratos(request):
     contratos = Contrato.objects.all()
     context = {"contratos": contratos}
@@ -45,3 +46,25 @@ def verifica_prazo_validade_contrato(prazoRestante, dataFinal, hoje):
 # INDEX
 def index(request):
     return render(request, 'index.html')
+
+
+def listFornecedores(request):
+    fornecedores = Fornecedor.objects.all()
+    context = {"fornecedores": fornecedores}
+    return render(request, "fornecedores.html", context)
+"""
+def infoFornecedores(request, forn_id):
+  
+    fornecedor = Fornecedor.objects.get(id = forn_id)
+    
+    context = {"fornecedor": fornecedor}
+
+    return render(request, "biddingContracts/fornecedor.html", context)"""
+
+def listLicitacoes(request):
+    """mostra todas as licitacoes"""
+    licitacoes = Licitacao.objects.all()
+    context = {"licitacoes": licitacoes}
+   
+    return render(request, "licitacoes.html", context)
+   
