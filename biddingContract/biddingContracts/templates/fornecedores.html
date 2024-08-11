@@ -1,21 +1,29 @@
-{% extends "base.html" %}
+{% extends "base_template.html" %}
 
-{% block content %} 
-
-    <ul>
-        {% for fornecedor in fornecedores%}
-        <p>--------------------------------</p>
-        <li>{{fornecedor.nome}}</li>
-        <li>{{fornecedor.cnpj}}</li>
-        <li>{{fornecedor.endereco}}</li>
-        <li>{{fornecedor.num}}</li>
-        <li>{{fornecedor.bairro}}</li>
-        <li>{{fornecedor.cep}}</li>
-        <li>{{fornecedor.cidade}}</li>
-        <li>{{fornecedor.telefone}}</li>
-        <li>uf:?</li>
-        {% empty %}
-            <p> nenhum fornecedor encontrado! </p>
-      {% endfor %}
-    </ul>
+{% block content %}
+<div class="container my-5">
+    <h2 class="text-center mb-4">Lista de Fornecedores</h2>
+    {% if fornecedores %}
+        <div class="row">
+            {% for fornecedor in fornecedores %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ fornecedor.nome }}</h5>
+                        <p class="card-text"><strong>CNPJ:</strong> {{ fornecedor.cnpj }}</p>
+                        <p class="card-text"><strong>Endereço:</strong> {{ fornecedor.endereco }}, {{ fornecedor.num }}</p>
+                        <p class="card-text"><strong>Bairro:</strong> {{ fornecedor.bairro }}</p>
+                        <p class="card-text"><strong>CEP:</strong> {{ fornecedor.cep }}</p>
+                        <p class="card-text"><strong>Cidade:</strong> {{ fornecedor.cidade }}</p>
+                        <p class="card-text"><strong>Telefone:</strong> {{ fornecedor.telefone }}</p>
+                        <p class="card-text"><strong>UF:</strong> ?</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center">Nenhum fornecedor encontrado!</p>
+    {% endif %}
+</div>
 {% endblock content %}
