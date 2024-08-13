@@ -1,0 +1,16 @@
+{% extends "base_template.html" %}
+
+{% block content %} 
+    <ul>
+        
+        {% for licitacao in licitacoes %}
+        <br>------------------------------<br>
+        <li> {{licitacao.numProcess}}</li>
+        <li> {{licitacao.assunto}}</li>
+        <li> {{licitacao.categoria}}</li>
+        <li> {{licitacao.date}}</li>
+        {% empty %}
+            <p>vazio!!</p>
+        {% endfor %}
+    </ul>
+{% endblock content %}

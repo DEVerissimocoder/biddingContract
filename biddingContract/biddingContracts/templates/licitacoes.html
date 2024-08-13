@@ -1,16 +1,33 @@
-{% extends "base_template.html" %}
+{% extends 'base_template.html' %}
 
-{% block content %} 
-    <ul>
-        
-        {% for licitacao in licitacoes %}
-        <br>------------------------------<br>
-        <li> {{licitacao.numProcess}}</li>
-        <li> {{licitacao.assunto}}</li>
-        <li> {{licitacao.categoria}}</li>
-        <li> {{licitacao.date}}</li>
-        {% empty %}
-            <p>vazio!!</p>
-        {% endfor %}
-    </ul>
-{% endblock content %}
+{% block title %} Cadastro de Licitação {% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card p-4 shadow-lg">
+                {% if messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {% for message in messages %}
+                    <p class="{{ message.tags }}">{{ message }}</p>
+                    {% endfor %}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+                <h3 class="text-center text-primary mb-4">Cadastro de Licitação</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.media }}
+                    {{ form.as_p }}
+                    <div class="d-flex justify-content-end mt-5">
+                        <a href="{ url 'calendar:my_cal' calendar_slug='calendario' %}" name="cancel"
+                           class="btn btn-secondary me-2">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

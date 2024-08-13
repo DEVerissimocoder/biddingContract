@@ -1,10 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect
 from  .forms import formLicitacao, formFornecedor, formContrato
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from .models import Contrato, NotaFiscal, Fornecedor, Licitacao
 from datetime import datetime, timedelta, date
 from dateutil.relativedelta import relativedelta
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from django.views.generic import CreateView
 
 # CONTRATOS + RELATORIOS
 def cadContrato(request):
@@ -77,5 +80,15 @@ def listLicitacoes(request):
     licitacoes = Licitacao.objects.all()
     context = {"licitacoes": licitacoes}
    
-    return render(request, "licitacoes.html", context)
+    return render(request, "list_licitacoes.html", context)
+
+#View que cria as licitações
+# @method_decorator(login_required(login_url=reverse_lazy("user:login")), name="dispatch")
+# @method_decorator(user_complete_required, name="dispatch")
+
+class BiddingCreateView(CreateView):
+    model = Licitacao
+    form_class = formLicitacao
+    template_name = 'licitacoes.html'
+    success_url = reverse_lazy('biddingContracts:licitacoes')
    

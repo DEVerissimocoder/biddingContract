@@ -3,11 +3,12 @@ from django.db import models
 #licitacao
 class Licitacao (models.Model):
     numProcess = models.IntegerField(primary_key=True)
-    categoria = models.CharField(max_length=200, null=False)
-    assunto = models.CharField(max_length=200)
+    categoria = models.CharField(max_length=200, verbose_name="Categoria", null=False)
+    assunto = models.CharField(max_length=200, verbose_name="Assunto",  null=False, blank=False)
     date = models.DateField()
     
     class meta:
+        verbose_name = "licitação"
         verbose_name_plural = "licitações"
 
 #Fornecedor
@@ -29,8 +30,8 @@ class Fornecedor(models.Model):
 
 #Contrato
 class Contrato(models.Model):
-    numero = models.IntegerField(primary_key=True)
-    assuntoDetalhado = models.TextField(max_length=200)
+    numero = models.CharField(primary_key=True, max_length=7, null=False, blank=False)
+    assuntoDetalhado = models.TextField(max_length=200, verbose_name="Detalhe do contrato", null=False, blank=False)
     dataInicial = models.DateField()
     dataFinal = models.DateField()
     valor = models.FloatField(null=False)
