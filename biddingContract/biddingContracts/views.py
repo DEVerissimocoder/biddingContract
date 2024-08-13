@@ -1,12 +1,23 @@
 from django.shortcuts import render
-#from django.http import HttpResponseRedirect
-#from  .forms import formLicitacao, formFornecedor, formContrato
+from django.http import HttpResponseRedirect
+from  .forms import formLicitacao, formFornecedor, formContrato
 from django.urls import reverse
 from .models import Contrato, NotaFiscal, Fornecedor, Licitacao
 from datetime import datetime, timedelta, date
 from dateutil.relativedelta import relativedelta
 
 # CONTRATOS + RELATORIOS
+def cadContrato(request):
+    if request.method == "POST":
+        form = formContrato(request.POST),
+
+        if form.is_valid:
+            form.save()
+            return HttpResponseRedirect(reverse("contratos"))
+    else:
+        form = formContrato()
+    return render(request, "contrato_new.html", {"form": form})
+
 def listContratos(request):
     contratos = Contrato.objects.all()
     context = {"contratos": contratos}

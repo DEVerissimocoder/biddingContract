@@ -1,0 +1,12 @@
+{% extends "base_template.html"%}
+
+{% block content %} 
+<div id="contrato">
+    <form action="{% url 'cadContrato' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">enviar</button>
+    </form>
+</div>
+
+{% endblock %}
