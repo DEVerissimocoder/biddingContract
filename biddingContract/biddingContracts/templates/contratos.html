@@ -17,7 +17,7 @@
                 <small>Fornecedor: {{ contrato.fornecedor_fk.nome }}</small>
                 <div class="mt-2">
                     <span class="badge badge-primary">Valor: {{ contrato.valor }}</span>
-                    <a href="{% url 'relatorio' contrato.numero %}" class="btn btn-sm btn-outline-primary ml-3">Mais detalhes</a>
+                    <a href="{% url 'biddingContracts:  relatorio' contrato.numero %}" class="btn btn-sm btn-outline-primary ml-3">Mais detalhes</a>
                 </div>
             </div>
             {% endfor %}

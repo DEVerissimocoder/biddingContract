@@ -7,6 +7,9 @@ class Licitacao (models.Model):
     assunto = models.CharField(max_length=200, verbose_name="Assunto",  null=False, blank=False)
     date = models.DateField()
     
+    def __str__(self):
+        return f"{self.assunto}"
+
     class meta:
         verbose_name = "licitação"
         verbose_name_plural = "licitações"
@@ -22,8 +25,8 @@ class Fornecedor(models.Model):
     cidade = models.CharField(max_length=200)
     telefone = models.CharField(max_length=200)
 
-   #def __str__(self):
-    #    return self.nome, self.cnpj, self.endereco, self.num, self.bairro, self.cep, self.cidade, self.telefone
+    def __str__(self):
+        return f"{self.nome}"
     
     class meta:
         verbose_name_plural = "fornecedores"
@@ -38,8 +41,8 @@ class Contrato(models.Model):
     licitacao_fk= models.ForeignKey("Licitacao", on_delete=models.CASCADE)
     fornecedor_fk = models.ForeignKey("Fornecedor", on_delete=models.CASCADE)
 
-    """def __str__(self):
-        return self.assuntoDetalhado"""
+    def __str__(self):
+        return f"{self.assuntoDetalhado}"
 
 class NotaFiscal(models.Model):
     num = models.IntegerField()
@@ -52,7 +55,7 @@ class NotaFiscal(models.Model):
     class Meta:
         verbose_name_plural = "Notas Fiscais"
 
-    """def __str__(self):
-        return self.serie, self.tipo"""
+    def __str__(self):
+        return f"{self.tipo}"
 
 

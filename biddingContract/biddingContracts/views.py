@@ -14,7 +14,7 @@ def cadContrato(request):
     if request.method == "POST":
         form = formContrato(request.POST),
 
-        if form.is_valid:
+        if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse("contratos"))
     else:
@@ -87,6 +87,9 @@ def listLicitacoes(request):
 # @method_decorator(user_complete_required, name="dispatch")
 
 class BiddingCreateView(CreateView):
+    """
+    Faz o cadastro das licitações
+    """
     model = Licitacao
     form_class = formLicitacao
     template_name = 'licitacoes.html'

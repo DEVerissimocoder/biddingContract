@@ -1,5 +1,5 @@
 {% extends 'base_template.html' %}
-
+{% load static %}
 {% block title %} Cadastro de Licitação {% endblock %}
 
 {% block content %}
@@ -21,7 +21,7 @@
                     {{ form.media }}
                     {{ form.as_p }}
                     <div class="d-flex justify-content-end mt-5">
-                        <a href="{ url 'calendar:my_cal' calendar_slug='calendario' %}" name="cancel"
+                        <a href="{% url 'biddingContracts:index' %}" name="cancel"
                            class="btn btn-secondary me-2">Cancelar</a>
                         <button type="submit" class="btn btn-primary">Salvar</button>
                     </div>
