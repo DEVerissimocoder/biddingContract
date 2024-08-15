@@ -12,10 +12,10 @@ class formLicitacao(forms.ModelForm):
         ]
 
         labels = {
-            "numProcess": "Número do Processo",
-            "categoria": "Categoria",
-            "assunto": "Detalhe da Licitação",
-            "date": "Data de criação"
+            "numProcess": "PROCESSO",
+            "categoria": "MODALIDADE",
+            "assunto": "OBJETO",
+            "date": "DATA"
         }
 
         widgets = {
@@ -30,13 +30,13 @@ class formLicitacao(forms.ModelForm):
                 attrs={
                     "type": "text",
                     "class": "form-control",
-                    "placeholder": "Categoria"
+                    "placeholder": "Modalidade"
                 }
             ),
             "assunto": forms.Textarea(
                 attrs={
                     "class": "form-control",
-                    "placeholder": "Descreva de que se trata a licitação"
+                    "placeholder": "ex.: material de expediente"
                 }
             ),
             "date": forms.DateInput(
@@ -79,11 +79,11 @@ class formContrato(forms.ModelForm):
             "fornecedor_fk",
         ]
         labels = {
-            "numero": "Número do Processo",
-            "assuntoDetalhado": "Detalhe do contrato",
-            "dataInicial": "Início do Contrato",
-            "dataFinal": "Término do Contrato",
-            "valor": "Valor do Contrato",
+            "numero": "NÚMERO",
+            "assuntoDetalhado": "OBJETO DETALHADO",
+            "dataInicial": "DATA INICIAL",
+            "dataFinal": "DATA FINAL",
+            "valor": "VALOR",
             "licitacao_fk": "Licitação",
             "fornecedor_fk": "Fornecedor"
         }
