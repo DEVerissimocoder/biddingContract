@@ -79,7 +79,7 @@ def listLicitacoes(request):
     """mostra todas as licitacoes"""
     licitacoes = Licitacao.objects.all()
     context = {"licitacoes": licitacoes}
-   
+    print("chegou aqui")
     return render(request, "list_licitacoes.html", context)
 
 #View que cria as licitações

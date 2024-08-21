@@ -1,16 +1,20 @@
 {% extends "base_template.html" %}
 
 {% block content %} 
-    <ul>
-        
-        {% for licitacao in licitacoes %}
-        <br>------------------------------<br>
-        <li> {{licitacao.numProcess}}</li>
-        <li> {{licitacao.assunto}}</li>
-        <li> {{licitacao.categoria}}</li>
-        <li> {{licitacao.date}}</li>
-        {% empty %}
-            <p>vazio!!</p>
-        {% endfor %}
+<div class="container-sm"></div>
+    <ul class="list-group">
+    {% for licitacao in licitacoes %}
+    <div class="row justify-content-start">
+        <div class="col">
+            <li class="list-group-item" aria-current="True"> {{licitacao.numProcess}}</li>
+            <li class="list-group-item"> {{licitacao.assunto}}</li>
+            <li class="list-group-item"> {{licitacao.categoria}}</li>
+            <li class="list-group-item"> {{licitacao.date}}</li>
+            {% empty %}
+                <p>vazio!!</p>
+            {% endfor %}
+        </div>
+    </div>
     </ul>
+</div>
 {% endblock content %}
