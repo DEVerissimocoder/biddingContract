@@ -4,12 +4,20 @@
 <div class="container-sm"></div>
     <ul class="list-group">
     {% for licitacao in licitacoes %}
-    <div class="row justify-content-start">
-        <div class="col">
-            <li class="list-group-item" aria-current="True"> {{licitacao.numProcess}}</li>
-            <li class="list-group-item"> {{licitacao.assunto}}</li>
-            <li class="list-group-item"> {{licitacao.categoria}}</li>
-            <li class="list-group-item"> {{licitacao.date}}</li>
+    <div class="accordion" id="accordionBidding-{{ licitacao.numProcess }}">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne-{{ licitacao.numProcess }}">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBidding-{{ licitacao.numProcess }}" aria-expanded="false" aria-controls="collapseBidding-{{ licitacao.numProcess }}">
+                    <li class="list-group-item" aria-current="true"> processo licitatorio: {{licitacao.numProcess}}</li>
+                </button>
+            </h2>
+            <div id="collapseBidding-{{ licitacao.numProcess }}" class="accordion-collapse collapse show" aria-labelledby="headingOne-{{ licitacao.numProcess }}" data-bs-parent="accordionBidding-{{ licitacao.numProcess }}">
+                <div class="accordion-body">
+                    <li class="list-group-item"> {{licitacao.assunto}}</li>
+                    <li class="list-group-item"> {{licitacao.categoria}}</li>
+                    <li class="list-group-item"> {{licitacao.date}}</li>
+                </div>
+            </div>
             {% empty %}
                 <p>vazio!!</p>
             {% endfor %}
