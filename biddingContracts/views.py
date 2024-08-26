@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect
-from  .forms import formLicitacao, formFornecedor, formContrato
+from  biddingContracts.forms import formLicitacao, formFornecedor, formContrato
 from django.urls import reverse, reverse_lazy
 from .models import Contrato, NotaFiscal, Fornecedor, Licitacao
 from datetime import datetime, timedelta, date
@@ -93,3 +93,17 @@ class BiddingCreateView(CreateView):
     template_name = 'licitacoes.html'
     success_url = reverse_lazy('biddingContracts:licitacoes')
    
+
+
+def buscar(request):
+    biddings = Licitacao.objects.order_by("numProccess").all()
+    print(f"hhhh {biddings}")
+
+    if "buscar" in request.GET:
+        name_to_search = request.GET['buscar']
+        if name_to_search:
+            biddings = biddings.filter(categoria__icontains=name_to_search)
+            context = {"licitacoes": biddings}
+
+
+    return render(request, 'buscar.html', context)

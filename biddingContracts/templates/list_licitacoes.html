@@ -2,6 +2,15 @@
 
 {% block content %} 
 <div class="container-sm">
+    <h1 class="text-center mt-2 text-muted">Lista de licitações</h1>
+    <form action="{% url "biddingContracts:buscar" %}">
+        <div class="d-flex flex-row-reverse mt-4">
+            <button class="btn btn-success ml-2" type="submit">
+                Buscar
+            </button>
+            <input style="margin-right: 1.5rem; box-shadow: none;" class="d-flex rounded-pill" type="text" name="buscar" id="">
+        </div>
+    </form>
     <ul class="list-group accordion">
     {% for licitacao in licitacoes %}
         <div class="accordion-item accordion-flush mt-4">

@@ -49,7 +49,6 @@ class formLicitacao(forms.ModelForm):
 
 
 class formFornecedor(forms.ModelForm):
-    print("formFornecedor")
     class Meta: 
         model = Fornecedor
         fields=[
@@ -62,15 +61,19 @@ class formFornecedor(forms.ModelForm):
         "cidade", 
         "telefone"
         ]
-        label={}
-        widget = {
+
+        labels={
+            "nome": "Razão Social",
+        }
+
+        widgets = {
             "nome": forms.TextInput(
                 attrs={
-                "type = text"
-                "class = razão social" 
-                "placeholder = razão social"
-            }
-        )  
+                "type": "text",
+                "class": "form-control", 
+                "placeholder": "razão social"
+                }
+            ),  
         }
 
 class formContrato(forms.ModelForm):

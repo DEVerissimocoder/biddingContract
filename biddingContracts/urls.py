@@ -11,5 +11,6 @@ urlpatterns = [
     path('criar-fornecedor/', views.BiddingFornecedor.as_view(), name='fornecedor_new'),
     path('licitacoes/', views.listLicitacoes, name='licitacoes'),
     path('criar-licitacoes/', views.BiddingCreateView.as_view(), name='create-bidding'),
-    path('contrato/', views.cadContrato, name="cadContrato")
+    path('contrato/', views.cadContrato, name="cadContrato"),
+    path('buscar', views.buscar, name='buscar'),
 ]
