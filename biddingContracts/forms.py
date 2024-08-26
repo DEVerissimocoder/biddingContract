@@ -49,10 +49,29 @@ class formLicitacao(forms.ModelForm):
 
 
 class formFornecedor(forms.ModelForm):
+    print("formFornecedor")
     class Meta: 
         model = Fornecedor
-        fields = "__all__"
-
+        fields=[
+        "nome",
+        "cnpj",
+        "endereco",
+        "num",
+        "bairro",  
+        "cep",
+        "cidade", 
+        "telefone"
+        ]
+        label={}
+        widget = {
+            "nome": forms.TextInput(
+                attrs={
+                "type = text"
+                "class = razão social" 
+                "placeholder = razão social"
+            }
+        )  
+        }
 
 class formContrato(forms.ModelForm):
     licitacao_fk = forms.ModelChoiceField(

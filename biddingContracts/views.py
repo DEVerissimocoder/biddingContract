@@ -61,19 +61,18 @@ def verifica_prazo_validade_contrato(prazoRestante, dataFinal, hoje):
 def index(request):
     return render(request, 'index.html')
 
+class BiddingFornecedor(CreateView):
+    model = Fornecedor
+    form_class = formFornecedor
+    template_name = 'fornecedor_new.html'
+    print("BiddingFornecedor")
+    success_url = reverse_lazy('biddingContracts:fornecedores')
+
 
 def listFornecedores(request):
     fornecedores = Fornecedor.objects.all()
     context = {"fornecedores": fornecedores}
     return render(request, "fornecedores.html", context)
-"""
-def infoFornecedores(request, forn_id):
-  
-    fornecedor = Fornecedor.objects.get(id = forn_id)
-    
-    context = {"fornecedor": fornecedor}
-
-    return render(request, "biddingContracts/fornecedor.html", context)"""
 
 def listLicitacoes(request):
     """mostra todas as licitacoes"""
