@@ -1,51 +1,57 @@
 {% extends "base_template.html" %}
-
+{% load static %}
 {% block title %} Notas Fiscais {% endblock %}
 
+
+
 {% block content %}
-<div class="container my-5">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="alert alert-info" role="alert">
-                <strong>Saldo Atual:</strong> {{ saldoAtual }}
+
+<div class="d-flex">
+    {% include "sidebar.html" %}
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="alert alert-info" role="alert">
+                    <strong>Saldo Atual:</strong> {{ saldoAtual }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="alert alert-warning" role="alert">
+                    <strong>Prazo Restante:</strong> {{ vigencia }}
+                </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="alert alert-warning" role="alert">
-                <strong>Prazo Restante:</strong> {{ vigencia }}
-            </div>
+    
+        <h3 class="text-center mb-4">Notas Fiscais</h3>
+    
+        {% if notasfiscais %}
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Número</th>
+                        <th>Série</th>
+                        <th>Valor</th>
+                        <th>Tipo</th>
+                        <th>Data de Emissão</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for nota in notasfiscais %}
+                    <tr>
+                        <td>{{ nota.num }}</td>
+                        <td>{{ nota.serie }}</td>
+                        <td>{{ nota.valor }}</td>
+                        <td>{{ nota.tipo }}</td>
+                        <td>{{ nota.dataEmissao }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
+        {% else %}
+        <p class="text-center">Sem notas fiscais emitidas por enquanto</p>
+        {% endif %}
     </div>
-
-    <h3 class="text-center mb-4">Notas Fiscais</h3>
-
-    {% if notasfiscais %}
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Número</th>
-                    <th>Série</th>
-                    <th>Valor</th>
-                    <th>Tipo</th>
-                    <th>Data de Emissão</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for nota in notasfiscais %}
-                <tr>
-                    <td>{{ nota.num }}</td>
-                    <td>{{ nota.serie }}</td>
-                    <td>{{ nota.valor }}</td>
-                    <td>{{ nota.tipo }}</td>
-                    <td>{{ nota.dataEmissao }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% else %}
-    <p class="text-center">Sem notas fiscais emitidas por enquanto</p>
-    {% endif %}
 </div>
 {% endblock %}

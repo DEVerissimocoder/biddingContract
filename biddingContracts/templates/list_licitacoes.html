@@ -1,38 +1,47 @@
 {% extends "base_template.html" %}
+{% load static %}
+{% block title %} Licitações  {% endblock %}
+
+
 
 {% block content %} 
-<div class="container-sm">
-    <h1 class="text-center mt-2 text-muted">Lista de licitações</h1>
-    <form action="{% url "biddingContracts:buscar" %}">
-        <div class="d-flex flex-row-reverse mt-4">
-            <button class="btn btn-primary ml-2" type="submit">
-                Buscar
-            </button>
-            <input style="margin-right: 1.5rem; box-shadow: none;" placeholder="Digite o n° do mês" class="d-flex rounded-pill" type="text" name="buscar" id="">
-        </div>
-    </form>
-    <ul class="list-group accordion">
-    {% for licitacao in licitacoes %}
-        <div class="accordion-item accordion-flush mt-4">
-            <h2 class="accordion-header" id="headingOne-{{ licitacao.numProcess }}">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBidding-{{ licitacao.numProcess }}" aria-expanded="true" aria-controls="collapseBidding-{{ licitacao.numProcess }}">
-                    <li class="list-group-item" aria-current="true"> processo licitatorio: {{licitacao.numProcess}}</li>
+<div class="d-flex">
+    {% include "sidebar.html" %}
+    <div class="container-sm">
+        <h1 class="text-center mt-2 text-muted">Lista de licitações</h1>
+        {% include "messages.html" %}
+        <form action="{% url "biddingContracts:buscar" %}">
+            <div class="d-flex flex-row-reverse mt-4">
+                <button class="btn btn-primary ml-2" type="submit">
+                    Buscar
                 </button>
-            </h2>
-            <div id="collapseBidding-{{ licitacao.numProcess }}" class="accordion-collapse collapse" aria-labelledby="headingOne-{{ licitacao.numProcess }}">
-                <div class="accordion-body">
-                    <li class="list-group-item"> {{licitacao.assunto}}</li>
-                    <li class="list-group-item"> {{licitacao.categoria}}</li>
-                    <li class="list-group-item"> {{licitacao.date}}</li>
+                <input style="margin-right: 1.5rem; box-shadow: none;" placeholder="Digite o n° do mês" class="d-flex rounded-pill" type="text" name="buscar" id="">
+            </div>
+        </form>
+        <ul class="list-group accordion">
+        {% for licitacao in licitacoes %}
+            <div class="accordion-item accordion-flush mt-4">
+                <h2 class="accordion-header" id="headingOne-{{ licitacao.numProcess }}">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBidding-{{ licitacao.numProcess }}" aria-expanded="true" aria-controls="collapseBidding-{{ licitacao.numProcess }}">
+                        <li class="list-group-item" aria-current="true"> processo licitatorio: {{licitacao.numProcess}}</li>
+                    </button>
+                </h2>
+                <div id="collapseBidding-{{ licitacao.numProcess }}" class="accordion-collapse collapse" aria-labelledby="headingOne-{{ licitacao.numProcess }}">
+                    <div class="accordion-body">
+                        <li class="list-group-item"> {{licitacao.assunto}}</li>
+                        <li class="list-group-item"> {{licitacao.categoria}}</li>
+                        <li class="list-group-item"> {{licitacao.date}}</li>
+                    </div>
                 </div>
             </div>
+        {% empty %}
+            <p>vazio!!</p>
+        {% endfor %}
+        </ul>
+        <div class="d-flex mt-4">
+            <a class="btn btn-secondary " href="{% url "biddingContracts:index" %}">Voltar</a>
+            <a class="btn btn-success ms-2" href="{% url "biddingContracts:create-bidding" %}">Criar Licitação</a>
         </div>
-    {% empty %}
-        <p>vazio!!</p>
-    {% endfor %}
-    </ul>
-    <div class="d-flex">
-        <a class="btn btn-secondary mt-2" href="{% url "biddingContracts:index" %}">Voltar</a>
-    </div>  
+    </div>
 </div>
 {% endblock content %}

@@ -10,6 +10,7 @@ from dateutil.relativedelta import relativedelta
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.views.generic import CreateView
+from django.contrib import messages
 
 # CONTRATOS + RELATORIOS
 def cadContrato(request):
@@ -82,10 +83,6 @@ def listLicitacoes(request):
     context = {"licitacoes": licitacoes}
     return render(request, "list_licitacoes.html", context)
 
-#View que cria as licitações
-# @method_decorator(login_required(login_url=reverse_lazy("user:login")), name="dispatch")
-# @method_decorator(user_complete_required, name="dispatch")
-
 class BiddingCreateView(CreateView):
     """
     Faz o cadastro das licitações
@@ -94,8 +91,13 @@ class BiddingCreateView(CreateView):
     form_class = formLicitacao
     template_name = 'licitacoes.html'
     success_url = reverse_lazy('biddingContracts:licitacoes')
-   
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, 'Licitação cadastrada com sucesso!')
+        return response
+
+    
 
 class BuscarView(View):
     """

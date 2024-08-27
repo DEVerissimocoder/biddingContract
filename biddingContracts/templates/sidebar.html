@@ -1,0 +1,26 @@
+<!-- Sidebar -->
+<div class="text-white p-4" id="sidebar" style="width: 250px; min-height: 100vh; background-color: #55b058;">
+    <h4 class="text-center text-uppercase mb-4">Menu</h4>
+    <ul class="nav flex-column">
+        <li class="nav-item mb-3">
+            <a class="nav-link text-white" href="{% url 'biddingContracts:cadContrato' %}">
+                <i class="bi bi-file-earmark-plus-fill me-2"></i> Criar Contratos
+            </a>
+        </li>
+        <li class="nav-item mb-3">
+            <a class="nav-link text-white" href="{% url 'biddingContracts:contratos' %}">
+                <i class="bi bi-file-earmark-text-fill me-2"></i> Listar Contratos
+            </a>
+        </li>
+        <li class="nav-item mb-3">
+            <a class="nav-link text-white" href="{% url 'biddingContracts:create-bidding' %}">
+                <i class="bi bi-file-earmark-plus-fill me-2"></i> Criar Licitação
+            </a>
+        </li>
+        <li class="nav-item mb-3">
+            <a class="nav-link text-white" href="{% url 'biddingContracts:licitacoes' %}">
+                <i class="bi bi-file-earmark-text-fill me-2"></i> Listar Licitações
+            </a>
+        </li>
+    </ul>
+</div>

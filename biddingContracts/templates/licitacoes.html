@@ -1,47 +1,52 @@
-{% extends 'base_template.html' %}
+{% extends "base_template.html" %}
 {% load static %}
-{% block title %} Cadastro de Licitação {% endblock %}
+{% block title %} Cadastro de Licitação  {% endblock %}
+
+
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card p-4 shadow-lg">
-                {% if messages %}
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {% for message in messages %}
-                    <p class="{{ message.tags }}">{{ message }}</p>
-                    {% endfor %}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<div class="d-flex">
+    {% include "sidebar.html" %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card p-4 shadow-lg">
+                    {% if messages %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {% for message in messages %}
+                        <p class="{{ message.tags }}">{{ message }}</p>
+                        {% endfor %}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+                    <h3 class="text-center text-primary mb-4">Cadastro de Licitação</h3>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.media }}
+                        <div class="mb-3">
+                            <label for="id_numProcess" class="form-label">PROCESSO</label>
+                            {{ form.numProcess }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_categoria" class="form-label">MODALIDADE</label>
+                            {{ form.categoria }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_assunto" class="form-label">OBJETO</label>
+                            {{ form.assunto }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_date" class="form-label">DATA</label>
+                            {{ form.date }}
+                        </div>
+                        <div class="d-flex justify-content-end mt-5">
+                            <a href="{% url 'biddingContracts:index' %}" name="cancel"
+                               class="btn btn-secondary me-2">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">Salvar</button>
+                        </div>
+                    </form>
+    
                 </div>
-                {% endif %}
-                <h3 class="text-center text-primary mb-4">Cadastro de Licitação</h3>
-                <form method="post">
-                    {% csrf_token %}
-                    {{ form.media }}
-                    <div class="mb-3">
-                        <label for="id_numProcess" class="form-label">PROCESSO</label>
-                        {{ form.numProcess }}
-                    </div>
-                    <div class="mb-3">
-                        <label for="id_categoria" class="form-label">MODALIDADE</label>
-                        {{ form.categoria }}
-                    </div>
-                    <div class="mb-3">
-                        <label for="id_assunto" class="form-label">OBJETO</label>
-                        {{ form.assunto }}
-                    </div>
-                    <div class="mb-3">
-                        <label for="id_date" class="form-label">DATA</label>
-                        {{ form.date }}
-                    </div>
-                    <div class="d-flex justify-content-end mt-5">
-                        <a href="{% url 'biddingContracts:index' %}" name="cancel"
-                           class="btn btn-secondary me-2">Cancelar</a>
-                        <button type="submit" class="btn btn-primary">Salvar</button>
-                    </div>
-                </form>
-                
             </div>
         </div>
     </div>

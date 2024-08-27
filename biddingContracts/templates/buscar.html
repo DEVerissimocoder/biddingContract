@@ -1,25 +1,30 @@
 {% extends "base_template.html" %}
+{% load static %}
+{% block title %} Licitações  {% endblock %}
 
 {% block content %} 
-<div class="container-sm">
-    {% if licitacoes %}
-        <ul class="list-group">
-        {% for lic in licitacoes %}
-            <li class="list-group-item mt-2">
-                <h5>Processo: {{ lic.numProcess }}</h5>
-                <p>Assunto: {{ lic.assunto }}</p>
-                <p>Categoria: {{ lic.categoria }}</p>
-                <p>Data: {{ lic.date }}</p>
-            </li>
-        {% endfor %}
-        </ul>
-    {% elif error_message %}
-        <div class="alert alert-danger">{{ error_message }}</div>
-    {% else %}
-        <div class="d-flex">
-            <p class="text-uppercase mt-4">Licitações não encontradas</p>
-        </div>
-    {% endif %}
-    <a class="btn btn-secondary mt-2" href="{% url "biddingContracts:licitacoes" %}">Voltar</a>
+<div class="d-flex">
+    {% include "sidebar.html" %}
+    <div class="container-sm">
+        {% if licitacoes %}
+            <ul class="list-group">
+            {% for lic in licitacoes %}
+                <li class="list-group-item mt-2">
+                    <h5>Processo: {{ lic.numProcess }}</h5>
+                    <p>Assunto: {{ lic.assunto }}</p>
+                    <p>Categoria: {{ lic.categoria }}</p>
+                    <p>Data: {{ lic.date }}</p>
+                </li>
+            {% endfor %}
+            </ul>
+        {% elif error_message %}
+            <div class="alert alert-danger">{{ error_message }}</div>
+        {% else %}
+            <div class="d-flex">
+                <p class="text-uppercase mt-4">Licitações não encontradas</p>
+            </div>
+        {% endif %}
+        <a class="btn btn-secondary mt-2" href="{% url "biddingContracts:licitacoes" %}">Voltar</a>
+    </div>
 </div>
 {% endblock content %}
