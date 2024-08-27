@@ -12,6 +12,6 @@ urlpatterns = [
     path('licitacoes/', views.listLicitacoes, name='licitacoes'),
     path('criar-licitacoes/', views.BiddingCreateView.as_view(), name='create-bidding'),
     path('contrato/', views.cadContrato, name="cadContrato"),
-    #path('buscar', views.buscar, name='buscar'),
     path('buscar/', views.BuscarView.as_view(), name='buscar'),
+    path('criar-ARP/', views.BiddingCreateArp.as_view(), name='create-ARP')#ARP - SIGLA PARA (ATA DE REGISTRO DE PREÇOS)
 ]

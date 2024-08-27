@@ -59,3 +59,16 @@ class NotaFiscal(models.Model):
         return f"{self.tipo}"
 
 
+class AtaRegistroPreco(models.Model):
+    numero = models.CharField(primary_key=True, max_length=7, null=False, blank=False)
+    assuntoDetalhado = models.TextField(max_length=200, verbose_name="Detalhe do contrato", null=False, blank=False)
+    dataInicial = models.DateField()
+    dataFinal = models.DateField()
+    valor = models.FloatField(null=False)
+    licitacao_fk= models.ForeignKey("Licitacao", on_delete=models.CASCADE)
+    fornecedor_fk = models.ForeignKey("Fornecedor", on_delete=models.CASCADE)
+    
+    class Meta:
+        verbose_name_plural = 'Atas de Registros de Preços'
+    
+    

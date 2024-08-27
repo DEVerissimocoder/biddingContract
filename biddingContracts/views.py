@@ -2,9 +2,9 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect
 from django.views import View
 from datetime import datetime
-from  biddingContracts.forms import formLicitacao, formFornecedor, formContrato
+from  biddingContracts.forms import formLicitacao, formFornecedor, formContrato, formARP
 from django.urls import reverse, reverse_lazy
-from .models import Contrato, NotaFiscal, Fornecedor, Licitacao
+from .models import Contrato, NotaFiscal, Fornecedor, Licitacao, AtaRegistroPreco
 from datetime import datetime, timedelta, date
 from dateutil.relativedelta import relativedelta
 from django.utils.decorators import method_decorator
@@ -18,9 +18,11 @@ def cadContrato(request):
 
         if form.is_valid():
             form.save()
+            
             return HttpResponseRedirect(reverse("contratos"))
     else:
         form = formContrato()
+
     return render(request, "contrato_new.html", {"form": form})
 
 def listContratos(request):
@@ -52,6 +54,15 @@ def contratosRelatorio(request, id_contrato):
     return render(request, "contratos_relatorio.html", context)
 
 def verifica_prazo_validade_contrato(prazoRestante, dataFinal, hoje):
+    mensagem = " "
+    if dataFinal >= hoje:
+        mensagem = f"O contrato é válido por mais {prazoRestante.years} anos, {prazoRestante.months} meses e {prazoRestante.days} dias."
+        return mensagem
+    else:
+        mensagem =  "O prazo de validade do contrato já expirou."
+    return mensagem
+
+def verifica_prazo_validade_ARP(prazoRestante, dataFinal, hoje):
     mensagem = " "
     if dataFinal >= hoje:
         mensagem = f"O contrato é válido por mais {prazoRestante.years} anos, {prazoRestante.months} meses e {prazoRestante.days} dias."
@@ -95,8 +106,6 @@ class BiddingCreateView(CreateView):
     template_name = 'licitacoes.html'
     success_url = reverse_lazy('biddingContracts:licitacoes')
    
-
-
 class BuscarView(View):
     """
     Faz a o filtro por licitações baseando-se no n° do mês digitado, de 1 a 12. 
@@ -123,3 +132,20 @@ class BuscarView(View):
         return render(request, self.template_name, context)
 
  
+class BiddingCreateArp(CreateView):
+    model=AtaRegistroPreco
+    form_class = formARP
+    template_name = 'AtaRegistroPreco_new.html'
+    success_url = reverse_lazy('biddingContracts:create-ARP')
+
+def createArp(request):
+    if request.method == "POST":
+        form = formARP(request.POST)
+        if form.is_valid():
+            form.save(commit=False)
+            dataInicial = form.data
+            dataFinal = dataInicial + relativedelta(days=365)
+            
+
+    else:
+        form = formARP()

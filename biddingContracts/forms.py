@@ -1,5 +1,5 @@
 from django import forms
-from .models import Licitacao, Fornecedor, Contrato
+from .models import Licitacao, Fornecedor, Contrato, AtaRegistroPreco
 
 class formLicitacao(forms.ModelForm):
     class Meta:
@@ -142,6 +142,69 @@ class formContrato(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "placeholder": "Valor do Contrato",
+                }
+            ),
+        }
+
+class formARP(forms.ModelForm):
+    licitacao_fk = forms.ModelChoiceField(
+        queryset=Licitacao.objects.all(),
+        label="Licitação",
+        #widget=forms.Select(attrs={'class': 'form-select'})
+    )
+
+    fornecedor_fk = forms.ModelChoiceField(
+        queryset=Fornecedor.objects.all(),
+        label="Fornecedor",
+        #widget=forms.Select(attrs={'class': 'form-select'})
+    )
+
+    class Meta:
+        model = AtaRegistroPreco
+        fields = [
+            "numero",
+            "assuntoDetalhado",
+            "data",
+            "dataFinal"
+            "valor",
+            "licitacao_fk",
+            "fornecedor_fk",
+        ]
+        labels = {
+            "numero": "NÚMERO",
+            "assuntoDetalhado": "OBJETO DETALHADO",
+            "data": "DATA INICIAL",
+            "dataFinal": "DATA FINAL",
+            "valor": "VALOR",
+            "licitacao_fk": "Licitação",
+            "fornecedor_fk": "Fornecedor"
+        }
+        widgets = {
+            "numero": forms.TextInput(
+                attrs={
+                    "type": "text",
+                    "class": "form-control",
+                    "placeholder": "Número Ata de Registro de Preços"
+                }
+            ),
+            "assuntoDetalhado": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Descreva o objeto relacionado a Ata de Registro de Preços (ARP)",
+                    "rows": 2,  # Adicionando rows para controle da altura do campo
+                }
+            ),
+            "data": forms.DateInput(
+                attrs={
+                    "type": "date",
+                    "class": "form-control",
+                }
+            ),
+            "dataFinal" #como eu faço para calcular o valor da dat
+            "valor": forms.NumberInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Valor da Ata de Registro de Preços",
                 }
             ),
         }
