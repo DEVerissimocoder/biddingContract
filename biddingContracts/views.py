@@ -1,5 +1,7 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect
+from django.views import View
+from datetime import datetime
 from  biddingContracts.forms import formLicitacao, formFornecedor, formContrato
 from django.urls import reverse, reverse_lazy
 from .models import Contrato, NotaFiscal, Fornecedor, Licitacao
@@ -95,15 +97,29 @@ class BiddingCreateView(CreateView):
    
 
 
-def buscar(request):
-    biddings = Licitacao.objects.order_by("numProccess").all()
-    print(f"hhhh {biddings}")
+class BuscarView(View):
+    """
+    Faz a o filtro por licitações baseando-se no n° do mês digitado, de 1 a 12. 
+    """
+    template_name = 'buscar.html'
 
-    if "buscar" in request.GET:
-        name_to_search = request.GET['buscar']
-        if name_to_search:
-            biddings = biddings.filter(categoria__icontains=name_to_search)
-            context = {"licitacoes": biddings}
+    def get(self, request):
+        if "buscar" in request.GET:
+            mes_to_search = request.GET['buscar']
+            if mes_to_search:
+                try:
+                    mes_to_search = int(mes_to_search)
+                    if 1 <= mes_to_search <= 12:
+                        biddings = Licitacao.objects.filter(date__month=mes_to_search)
+                        context = {"licitacoes": biddings}
+                    else:
+                        context = {"error_message": "Mês inválido. Digite um número entre 1 e 12."}
+                except ValueError:
+                    context = {"error_message": "Mês inválido. Digite um número entre 1 e 12."}
+            else:
+                context = {"error_message": "Por favor, digite um mês válido."}
+        else:
+            context = {}
+        return render(request, self.template_name, context)
 
-
-    return render(request, 'buscar.html', context)
+ 

@@ -19,15 +19,39 @@
                 <form method="post">
                     {% csrf_token %}
                     {{ form.media }}
-                    {{ form.as_p }}
+                    <div class="mb-3">
+                        <label for="id_numProcess" class="form-label">PROCESSO</label>
+                        {{ form.numProcess }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_categoria" class="form-label">MODALIDADE</label>
+                        {{ form.categoria }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_assunto" class="form-label">OBJETO</label>
+                        {{ form.assunto }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_date" class="form-label">DATA</label>
+                        {{ form.date }}
+                    </div>
                     <div class="d-flex justify-content-end mt-5">
                         <a href="{% url 'biddingContracts:index' %}" name="cancel"
                            class="btn btn-secondary me-2">Cancelar</a>
                         <button type="submit" class="btn btn-primary">Salvar</button>
                     </div>
                 </form>
+                
             </div>
         </div>
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-mask-plugin@1.14.16/dist/jquery.mask.min.js"></script>
+
+
+<script>
+    $('#proc').mask('00/0000', {placeholder: ''});
+    
+</script>
 {% endblock %}

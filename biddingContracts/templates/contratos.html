@@ -26,5 +26,8 @@
     {% else %}
         <p class="text-center">Não há contratos!</p>
     {% endif %}
+    <div class="d-flex">
+        <a class="btn btn-secondary mt-2" href="{% url "biddingContracts:index" %}">Voltar</a>
+    </div>
 </div>
 {% endblock content %}

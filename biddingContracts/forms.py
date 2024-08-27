@@ -23,7 +23,8 @@ class formLicitacao(forms.ModelForm):
                 attrs={
                     "type": "text",
                     "class": "form-control",
-                    "placeholder": "Número da licitação"
+                    "placeholder": "Número da licitação",
+                    "id": "proc",
                 }
             ),
             "categoria": forms.TextInput(
@@ -71,7 +72,8 @@ class formFornecedor(forms.ModelForm):
                 attrs={
                 "type": "text",
                 "class": "form-control", 
-                "placeholder": "razão social"
+                "placeholder": "razão social",
+                
                 }
             ),  
         }

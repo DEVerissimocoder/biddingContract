@@ -1,0 +1,59 @@
+<!-- Sidebar -->
+{% load static %}
+<ul class="navbar-nav bg-dark sidebar sidebar-dark accordion" id="accordionSidebar">
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+        {% comment %} <div class="sidebar-brand-icon">
+            <img style="width: 80px;" src="{% static 'img/cog.png' %}" alt="logo">
+        </div> {% endcomment %}
+        <!-- Optional brand text can be added here -->
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0" />
+
+    <!-- Nav Item - Home -->
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'biddingContracts:index' %}">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+    </li>
+
+    <!-- Nav Item - Criar Contratos -->
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'biddingContracts:cadContrato' %}">
+            <i class="fa fa-tree" aria-hidden="true"></i>
+            <span>Criar Contratoss</span>
+        </a>
+    </li>
+
+    <!-- Nav Item - Listar Contratos -->
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'biddingContracts:contratos' %}">
+            <i class="fa-solid fa-phone" aria-hidden="true"></i>
+            <span>Listar Contratos</span>
+        </a>
+    </li>
+
+    <!-- Nav Item - Criar Licitação -->
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'biddingContracts:create-bidding' %}">
+            <i class="fa fa-book" aria-hidden="true"></i>
+            <span>Criar Licitação</span>
+        </a>
+    </li>
+
+    <!-- Nav Item - Listar Licitações -->
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'biddingContracts:licitacoes' %}">
+            <i class="fa fa-book" aria-hidden="true"></i>
+            <span>Listar Licitações</span>
+        </a>
+    </li>
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+</ul>
+<!-- End of Sidebar -->

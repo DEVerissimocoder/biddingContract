@@ -1,12 +1,37 @@
-{% extends "base_template.html" %}
+{% extends "base_template2.html" %}
 {% block content %}
-<div class="container mt-5">
-    <h3 class="text-center text-uppercase mb-4">Sistema para Controle de Contratos Licitatórios da Prefeitura</h3>
-    <div class="d-flex flex-wrap justify-content-center">
-        <a class="btn btn-info m-2" href="{% url 'biddingContracts:contratos' %}">Contratos</a>
-        <a class="btn btn-primary m-2" href="{% url 'biddingContracts:create-bidding' %}">Criar Licitação</a>
-        <a class="btn btn-secondary m-2" href="{% url 'biddingContracts:licitacoes' %}">Licitações</a>
-        <a class="btn btn-secondary m-2" href="{% url 'biddingContracts:cadContrato' %}">Criar Contratos</a>
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div class="text-white p-4" id="sidebar" style="width: 250px; min-height: 100vh; background-color: #55b058;">
+        <h4 class="text-center text-uppercase mb-4">Menu</h4>
+        <ul class="nav flex-column">
+            <li class="nav-item mb-3">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:cadContrato' %}">
+                    <i class="bi bi-file-earmark-plus-fill me-2"></i> Criar Contratos
+                </a>
+            </li>
+            <li class="nav-item mb-3">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:contratos' %}">
+                    <i class="bi bi-file-earmark-text-fill me-2"></i> Listar Contratos
+                </a>
+            </li>
+            <li class="nav-item mb-3">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:create-bidding' %}">
+                    <i class="bi bi-file-earmark-plus-fill me-2"></i> Criar Licitação
+                </a>
+            </li>
+            <li class="nav-item mb-3">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:licitacoes' %}">
+                    <i class="bi bi-file-earmark-text-fill me-2"></i> Listar Licitações
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-5">
+        <h3 style="margin-top: 5rem;" class="text-center text-uppercase mb-4 text-muted">Sistema para Controle de Contratos Licitatórios da Prefeitura de <br> <span style="color: #188249;">Paranatama</span></h3>
+        
     </div>
 </div>
 {% endblock content %}
