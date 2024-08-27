@@ -1,0 +1,68 @@
+{% extends 'base_template.html' %}
+{% block content %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-10 mx-auto">
+      <div class="card">
+        <h4 class="font-weight-normal text-center m-3">Atualizar informações da Licitação de n°: {{licitacao.numProcess}}</h4>
+        <form action="{% url 'biddingContracts:update-bidding' licitacao.pk %}" method="post" class="needs-validation" novalidate>
+          {% csrf_token %}
+          {{ form.media }}
+          {% load static %}
+          <link href="{% static 'css/localStyle.css' %}" rel="stylesheet">
+          <div class="col-md-10 mx-auto">
+            <div class="card-body">
+              <div class="form-row">
+                <div class="form-group col-12">
+
+                  <label for="{{ form.numProcess.id_for_label }}">PROCESSO:</label>
+                  {{ form.numProcess }}
+                  {% if form.numProcess.errors %}
+                  <div class="alert-danger pt-1 col-auto" role="alert">
+                    {{ form.numProcess.errors }}
+                  </div>
+                  {% endif %}
+                </div>
+                <div class="form-group col-12">
+                  <label for="{{ form.categoria.id_for_label }}">MODALIDADE:</label>
+                  {{ form.categoria }}
+                  {% if form.categoria.errors %}
+                  <div class="alert-danger pt-1 col-auto" role="alert">
+                    {{ form.categoria.errors }}
+                  </div>
+                  {% endif %}
+                </div>
+                <div class="form-group col-12">
+                  <label for="{{ form.assunto.id_for_label }}">OBJETO:</label>
+                  {{ form.assunto}}
+                  {% if form.assunto.errors %}
+                  <div class="alert-danger pt-1 col-auto" role="alert">
+                    {{ form.assunto.errors }}
+                  </div>
+                  {% endif %}
+                </div>
+                <div class="form-group col-12">
+                    <label for="{{ form.date.id_for_label }}">DATA:</label>
+                    {{ form.date}}
+                    {% if form.date.errors %}
+                    <div class="alert-danger pt-1 col-auto" role="alert">
+                      {{ form.date.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+              </div>
+            </div>
+            <div class="d-flex justify-content-end mt-3 mb-4 col-12">
+              <a href="{% url 'biddingContracts:licitacoes' %}" name="cancel"
+                class="btn btn-secondary mr-2">Cancelar</a>
+              <button type="submit" class="btn btn-primary mr-2">Salvar</button>
+            </div>
+          </div>
+          <br>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+  {% endblock content %}

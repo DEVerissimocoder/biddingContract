@@ -14,4 +14,6 @@ urlpatterns = [
     path('contrato/', views.cadContrato, name="cadContrato"),
     #path('buscar', views.buscar, name='buscar'),
     path('buscar/', views.BuscarView.as_view(), name='buscar'),
+    #path('atualizar/<pk>/edit/', views.BiddingUpdateView.as_view(), name="update-bidiing")
+    path('licitacoes/<str:pk>/editar/', views.BiddingUpdateView.as_view(), name='update-bidding'),
 ]

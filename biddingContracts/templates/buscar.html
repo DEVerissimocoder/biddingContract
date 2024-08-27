@@ -14,7 +14,12 @@
                     <p>Assunto: {{ lic.assunto }}</p>
                     <p>Categoria: {{ lic.categoria }}</p>
                     <p>Data: {{ lic.date }}</p>
+                    <div class="d-flex">
+                        <a href="{ url 'biddingContracts:update-bidding' lic.numProcess %}" name=""
+                    class="btn btn-info mr-2">Editar</a>
+                    </div>
                 </li>
+                
             {% endfor %}
             </ul>
         {% elif error_message %}
@@ -27,4 +32,4 @@
         <a class="btn btn-secondary mt-2" href="{% url "biddingContracts:licitacoes" %}">Voltar</a>
     </div>
 </div>
-{% endblock content %}
+{% endblock %}

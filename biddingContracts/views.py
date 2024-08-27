@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect
 from django.views import View
+from django.views.generic import UpdateView
 from datetime import datetime
 from  biddingContracts.forms import formLicitacao, formFornecedor, formContrato
 from django.urls import reverse, reverse_lazy
@@ -125,3 +126,29 @@ class BuscarView(View):
         return render(request, self.template_name, context)
 
  
+ # View que atualiza os membros da integração
+
+class BiddingUpdateView(UpdateView):
+    model = Licitacao
+    template_name = "licitacoes/edit_licitacoes.html"
+    form_class = formLicitacao
+    context_object_name = "licitacao"
+
+    def get_object(self, queryset=None):
+        non = Licitacao.objects.get(numProcess=self.kwargs.get('pk'))
+        print(f"RRRRRRRR {self.kwargs.get('pk')}")
+        return non
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+    def form_valid(self, form):
+        form.instance.modified_by = self.request.user
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        return render(self.request, self.template_name, {"form": form})
+
+    def get_success_url(self):
+        return reverse_lazy("biddingContracts:licitacoes")
