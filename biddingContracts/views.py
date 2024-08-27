@@ -135,7 +135,7 @@ class BiddingUpdateView(UpdateView):
     context_object_name = "licitacao"
 
     def get_object(self, queryset=None):
-        non = Licitacao.objects.get(numProcess=self.kwargs.get('pk'))
+        non = Licitacao.objects.get(numProcess=self.kwargs.get('numProcess'))
         print(f"RRRRRRRR {self.kwargs.get('pk')}")
         return non
 
