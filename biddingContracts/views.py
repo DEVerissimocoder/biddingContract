@@ -9,7 +9,7 @@ from datetime import datetime, timedelta, date
 from dateutil.relativedelta import relativedelta
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView
 
 # CONTRATOS + RELATORIOS
 def cadContrato(request):
@@ -132,20 +132,31 @@ class BuscarView(View):
         return render(request, self.template_name, context)
 
  
-class BiddingCreateArp(CreateView):
+"""class BiddingCreateArp(CreateView):
     model=AtaRegistroPreco
     form_class = formARP
-    template_name = 'AtaRegistroPreco_new.html'
-    success_url = reverse_lazy('biddingContracts:create-ARP')
+    template_name = 'ataRegistroPreco_new.html'
+    success_url = reverse_lazy('biddingContracts:create-ARP')"""
 
 def createArp(request):
     if request.method == "POST":
-        form = formARP(request.POST)
+        form = formARP(data=request.POST)
         if form.is_valid():
             form.save(commit=False)
             dataInicial = form.data
             dataFinal = dataInicial + relativedelta(days=365)
-            
-
+            print(dataFinal)
+            print(type(dataFinal))
+            form.dataFinal = dataFinal
+            form.save()
+            return HttpResponseRedirect(reverse('biddingContracts:atas'))
+            # dataFinal ja está definido agora como faço para sa
     else:
         form = formARP()
+        context={form:form}
+        return render(request, "ataRegistroPreco_new.html", context)
+
+class listARPs(ListView):
+    model=AtaRegistroPreco
+    template_name='atas.html'
+    success_url= reverse_lazy('biddingContracts:atas')

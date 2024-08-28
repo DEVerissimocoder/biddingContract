@@ -158,14 +158,16 @@ class formARP(forms.ModelForm):
         label="Fornecedor",
         #widget=forms.Select(attrs={'class': 'form-select'})
     )
-
+    data= forms.DateField()
+    dataFinal = forms.DateField()
+    
     class Meta:
         model = AtaRegistroPreco
         fields = [
             "numero",
             "assuntoDetalhado",
             "data",
-            "dataFinal"
+            "dataFinal",
             "valor",
             "licitacao_fk",
             "fornecedor_fk",
@@ -174,7 +176,7 @@ class formARP(forms.ModelForm):
             "numero": "NÚMERO",
             "assuntoDetalhado": "OBJETO DETALHADO",
             "data": "DATA INICIAL",
-            "dataFinal": "DATA FINAL",
+            "dataFinal": "data Final",
             "valor": "VALOR",
             "licitacao_fk": "Licitação",
             "fornecedor_fk": "Fornecedor"
@@ -200,7 +202,12 @@ class formARP(forms.ModelForm):
                     "class": "form-control",
                 }
             ),
-            "dataFinal" #como eu faço para calcular o valor da dat
+            "dataFinal": forms.HiddenInput(
+                attrs={
+                    "type": "date",
+                    "class": "form-control"
+                }
+            ),
             "valor": forms.NumberInput(
                 attrs={
                     "class": "form-control",
