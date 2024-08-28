@@ -7,12 +7,14 @@
     {% include "sidebar.html" %}
     <div class="container-sm">
         <h1 class="text-center mt-2 text-muted">Lista de licitações</h1>
-        <div class="d-flex flex-row-reverse mt-4">
-            <button class="btn btn-primary ml-2" type="submit">
-                Buscar
-            </button>
-            <input style=" border-radius: 5px; width: 20%;" placeholder="Digite o n° do mês" class="d-flex form-control me-2" type="text" name="buscar" id="">
-        </div>
+        <form action="{% url 'biddingContracts:buscar' %}">
+            <div class="d-flex flex-row-reverse mt-4">
+                <button class="btn btn-primary ml-2" type="submit">
+                    Buscar
+                </button>
+                <input style=" border-radius: 5px; width: 20%;" placeholder="Digite o n° do mês" class="d-flex form-control me-2" type="text" name="buscar" id="">
+            </div>
+        </form>
         {% if licitacoes %}
             <ul class="list-group">
             {% for lic in licitacoes %}
@@ -20,9 +22,9 @@
                     <h5>Processo: {{ lic.numProcess }}</h5>
                     <p>Assunto: {{ lic.assunto }}</p>
                     <p>Categoria: {{ lic.categoria }}</p>
-                    <p>Data: {{ lic.date }}</p>
+                    <p>Data: {{ lic.date|date:"d/m/Y" }}</p>
                     <div class="d-flex">
-                        <a href="{% url 'biddingContracts:update-bidding' lic.numProcess %}" name=""
+                        <a href="{ url 'biddingContracts:update-bidding' lic.numProcess %}" name=""
                     class="btn btn-info mr-2">Editar</a>
                     </div>
                 </li>

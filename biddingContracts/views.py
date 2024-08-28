@@ -102,50 +102,50 @@ class BiddingCreateView(CreateView):
 
 class BuscarView(View):
     """
-    Faz a o filtro por licitações baseando-se no n° do mês digitado, de 1 a 12. 
+    Faz o filtro por licitações baseando-se no n° do mês digitado, de 1 a 12. 
     """
     template_name = 'buscar.html'
 
     def get(self, request):
+        context = {}
         if "buscar" in request.GET:
             mes_to_search = request.GET['buscar']
             if mes_to_search:
                 try:
                     mes_to_search = int(mes_to_search)
                     if 1 <= mes_to_search <= 12:
-                        biddings = Licitacao.objects.filter(date__month=mes_to_search)
+                        biddings = self.get_queryset(mes_to_search)
                         context = {"licitacoes": biddings}
                     else:
                         context = {"error_message": "Mês inválido. Digite um número entre 1 e 12."}
                 except ValueError:
-                    context = {"error_message": "Mês inválido. Digite um número entre 1 e 12."}
+                    context = {"error_message": "Erro: o valor digitado não é um número."}
             else:
                 context = {"error_message": "Por favor, digite um mês válido."}
-        else:
-            context = {}
         return render(request, self.template_name, context)
 
+    def get_queryset(self, mes):
+        return Licitacao.objects.filter(date__month=mes)
+
  
- # View que atualiza as licitações
+ # Visão que atualiza as licitações
 class BiddingUpdateView(UpdateView):
     model = Licitacao
     template_name = "licitacoes/edit_licitacoes.html"
     form_class = formLicitacao
     context_object_name = "licitacao"
 
-    def get_object(self, queryset=None):
-        return Licitacao.objects.get(numProcess=self.kwargs['pk'])
-        
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
-
     def form_valid(self, form):
-        form.instance.modified_by = self.request.user
+        messages.success(self.request, 'Licitação editada com sucesso!')
         return super().form_valid(form)
 
     def form_invalid(self, form):
+        messages.error(self.request, 'Erro ao editar licitação. Verifique os campos do formulário.')
         return render(self.request, self.template_name, {"form": form})
 
     def get_success_url(self):
         return reverse_lazy("biddingContracts:licitacoes")
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
