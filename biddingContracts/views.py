@@ -126,8 +126,7 @@ class BuscarView(View):
         return render(request, self.template_name, context)
 
  
- # View que atualiza os membros da integração
-
+ # View que atualiza as licitações
 class BiddingUpdateView(UpdateView):
     model = Licitacao
     template_name = "licitacoes/edit_licitacoes.html"
@@ -135,10 +134,8 @@ class BiddingUpdateView(UpdateView):
     context_object_name = "licitacao"
 
     def get_object(self, queryset=None):
-        non = Licitacao.objects.get(numProcess=self.kwargs.get('numProcess'))
-        print(f"RRRRRRRR {self.kwargs.get('pk')}")
-        return non
-
+        return Licitacao.objects.get(numProcess=self.kwargs['pk'])
+        
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
