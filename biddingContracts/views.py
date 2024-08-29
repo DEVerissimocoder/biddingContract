@@ -133,7 +133,7 @@ class BiddingUpdateView(UpdateView):
     model = Licitacao
     template_name = "licitacoes/edit_licitacoes.html"
     form_class = formLicitacao
-    context_object_name = "licitacao"
+    context_object_name = "licita"
 
     def form_valid(self, form):
         messages.success(self.request, 'Licitação editada com sucesso!')

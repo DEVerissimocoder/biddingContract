@@ -19,12 +19,13 @@
             <ul class="list-group">
             {% for lic in licitacoes %}
                 <li class="list-group-item mt-2">
+                    {{lic.pk}}aaaa
                     <h5>Processo: {{ lic.numProcess }}</h5>
                     <p>Assunto: {{ lic.assunto }}</p>
                     <p>Categoria: {{ lic.categoria }}</p>
                     <p>Data: {{ lic.date|date:"d/m/Y" }}</p>
                     <div class="d-flex">
-                        <a href="{ url 'biddingContracts:update-bidding' lic.numProcess %}" name=""
+                        <a href="{% url 'biddingContracts:update-bidding' lic.pk %}" name=""
                     class="btn btn-info mr-2">Editar</a>
                     </div>
                 </li>
