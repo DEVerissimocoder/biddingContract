@@ -158,16 +158,13 @@ class formARP(forms.ModelForm):
         label="Fornecedor",
         #widget=forms.Select(attrs={'class': 'form-select'})
     )
-    data= forms.DateField()
-    dataFinal = forms.DateField()
     
     class Meta:
         model = AtaRegistroPreco
         fields = [
             "numero",
             "assuntoDetalhado",
-            "data",
-            "dataFinal",
+            "dataInicial",
             "valor",
             "licitacao_fk",
             "fornecedor_fk",
@@ -175,8 +172,7 @@ class formARP(forms.ModelForm):
         labels = {
             "numero": "NÚMERO",
             "assuntoDetalhado": "OBJETO DETALHADO",
-            "data": "DATA INICIAL",
-            "dataFinal": "data Final",
+            "dataInicial": "DATA INICIAL",
             "valor": "VALOR",
             "licitacao_fk": "Licitação",
             "fornecedor_fk": "Fornecedor"
@@ -196,16 +192,10 @@ class formARP(forms.ModelForm):
                     "rows": 2,  # Adicionando rows para controle da altura do campo
                 }
             ),
-            "data": forms.DateInput(
+            "dataInicial": forms.DateInput(
                 attrs={
                     "type": "date",
                     "class": "form-control",
-                }
-            ),
-            "dataFinal": forms.HiddenInput(
-                attrs={
-                    "type": "date",
-                    "class": "form-control"
                 }
             ),
             "valor": forms.NumberInput(

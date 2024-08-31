@@ -140,21 +140,22 @@ class BuscarView(View):
 
 def createArp(request):
     if request.method == "POST":
-        form = formARP(data=request.POST)
-        if form.is_valid():
-            form.save(commit=False)
-            dataInicial = form.data
-            dataFinal = dataInicial + relativedelta(days=365)
-            print(dataFinal)
-            print(type(dataFinal))
-            form.dataFinal = dataFinal
-            form.save()
+        form = formARP(request.POST)
+        print("enviando método POST")
+        if form.is_valid(): #por que o formulário não está sendo validaddo?
+            arp = form.save(commit=False)
+            dataInicial = arp.dataInicial
+            print("formulario valido", dataInicial)
+            if dataInicial:
+                dataFinal = dataInicial + relativedelta(days=365)
+                arp.dataFinal = dataFinal
+                print("dataInicial Validada", arp.dataFinal)
+            arp.save()
             return HttpResponseRedirect(reverse('biddingContracts:atas'))
-            # dataFinal ja está definido agora como faço para sa
     else:
         form = formARP()
-        context={form:form}
-        return render(request, "ataRegistroPreco_new.html", context)
+    context = {'form': form}
+    return render(request, "ataRegistroPreco_new.html", context)
 
 class listARPs(ListView):
     model=AtaRegistroPreco
