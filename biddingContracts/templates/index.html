@@ -27,13 +27,37 @@
                     <i class="bi bi-file-earmark-text-fill me-2"></i> Listar Licitações
                 </a>
             </li>
+            
+            <li class="nav-item mb-3">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:fornecedor_new' %}">
+                    <i class="bi bi-file-earmark-text-fill me-2"></i> Criar Fornecedores
+                </a>
+            </li>
+            <li class="nav-item mb-3">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:fornecedores' %}">
+                    <i class="bi bi-file-earmark-text-fill me-2"></i> Listar Fornecedores
+                </a>
+            </li>
+            <li class="nav-item mb-3">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:create-ARP' %}">
+                    <i class="bi bi-file-earmark-text-fill me-2"></i>criar Atas de Registro de Preços
+                </a>
+            </li>
+
+            <li class="nav-item mb-3">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:atas' %}">
+                    <i class="bi bi-file-earmark-text-fill me-2"></i> Listar Atas de Registros de Preços
+                </a>
+            </li>
+            
+            
         </ul>
     </div>
 
     <!-- Main Content -->
     <div class="container-fluid mt-5">
         <h3 style="margin-top: 5rem;" class="text-center text-uppercase mb-4 text-muted">Sistema para Controle de Contratos Licitatórios da Prefeitura de <br> <span style="color: #188249;">Paranatama</span></h3>
-        <img src="{% static "img/para.png" %}" alt="">
+        <img src="{% static 'img/para.png' %}" alt="">
         
     </div>
 </div>
