@@ -22,8 +22,3 @@ class UserCreateView(CreateView):
         form.save()
         messages.success(self.request, self.success_mensage)
         return super(UserCreateView, self).form_valid(form)
-    
-
-
-# class CustomLogoutView(LogoutView):
-#     next_page = reverse_lazy('login')

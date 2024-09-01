@@ -51,14 +51,11 @@
             </li>
             {% if user.is_authenticated %}
                 <li class="nav-item mb-3">
-                    <span class="">
-                        <a class="nav-link text-danger" href="{% url 'logout' %}">
-                            <i class="fa-solid fa-circle-xmark"></i>
-                            <i class="bi bi-file-earmark-text-fill me-2"></i>Sair do sistema
-                        </a>
-                    </span>
+                    <a class="nav-link text-danger" href="{% url 'usuarios:logout' %}">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                        <i class="bi bi-file-earmark-text-fill me-2"></i>Sair do sistema
+                    </a>
                 </li>
             {% endif %}
-            
         </ul>
     </div>
