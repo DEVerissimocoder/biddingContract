@@ -1,78 +1,82 @@
 {% extends "base_template.html" %}
-
+{% block title %} Cadastrar ARP {% endblock title %} Cadastrar ARP 
 {% block content %}
-<div id="ARP" class="container mt-5">
-    <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h5 class="card-title mb-0">Cadastro de Ata de Registro de Preços (ARP)</h5>
-        </div>
-        <div class="card-body">
-            <form action="{% url 'biddingContracts:create-ARP' %}" method="POST" class="row g-3">
-                {% csrf_token %}
-                
-                <div class="col-md-6">
-                    <label for="{{ form.numero.id_for_label }}" class="form-label">{{ form.numero.label }}</label>
-                    {{ form.numero }}
-                    {% if form.numero.errors %}
-                        <div class="text-danger">{{ form.numero.errors }}</div>
-                    {% endif %}
-                </div>
 
-                <div class="col-md-12">
-                    <label for="{{ form.assuntoDetalhado.id_for_label }}" class="form-label">{{ form.assuntoDetalhado.label }}</label>
-                    {{ form.assuntoDetalhado }}
-                    {% if form.assuntoDetalhado.errors %}
-                        <div class="text-danger">{{ form.assuntoDetalhado.errors }}</div>
-                    {% endif %}
-                </div>
-
-                <div class="col-md-6">
-                    <label for="{{ form.dataInicial.id_for_label }}" class="form-label">{{ form.dataInicial.label }}</label>
-                    {{ form.dataInicial }}
-                    {% if form.dataInicial.errors %}
-                        <div class="text-danger">{{ form.dataInicial.errors }}</div>
-                    {% endif %}
-                </div>
-                <!--
-                <div class="col-md-6">
-                    <label for="{{ form.dataFinal.id_for_label }}" class="form-label">{{ form.dataFinal.label }}</label>
-                    {{ form.dataFinal }}
-                    {% if form.dataFinal.errors %}
-                        <div class="text-danger">{{ form.dataFinal.errors }}</div>
-                    {% endif %}
-                </div> 
-                -->
-
-                <div class="col-md-6">
-                    <label for="{{ form.valor.id_for_label }}" class="form-label">{{ form.valor.label }}</label>
-                    {{ form.valor }}
-                    {% if form.valor.errors %}
-                        <div class="text-danger">{{ form.valor.errors }}</div>
-                    {% endif %}
-                </div>
-
-                <div class="col-md-6">
-                    <label for="{{ form.licitacao_fk.id_for_label }}" class="form-label">{{ form.licitacao_fk.label }}</label>
-                    {{ form.licitacao_fk }}
-                    {% if form.licitacao_fk.errors %}
-                        <div class="text-danger">{{ form.licitacao_fk.errors }}</div>
-                    {% endif %}
-                </div>
-
-                <div class="col-md-6">
-                    <label for="{{ form.fornecedor_fk.id_for_label }}" class="form-label">{{ form.fornecedor_fk.label }}</label>
-                    {{ form.fornecedor_fk }}
-                    {% if form.fornecedor_fk.errors %}
-                        <div class="text-danger">{{ form.fornecedor_fk.errors }}</div>
-                    {% endif %}
-                </div>
-
-                <div class="col-12 text-center">
-                    <button type="submit" class="btn btn-primary">Enviar</button>
-                    <a class="btn btn-secondary mr-2" href="{% url 'biddingContracts:index' %}">Voltar</a>
-                </div>
-            </form>
-            
+<div class="d-flex">
+    {% include "sidebar.html" %}
+    <div id="ARP" class="container mt-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">Cadastro de Ata de Registro de Preços (ARP)</h5>
+            </div>
+            <div class="card-body">
+                <form action="{% url 'biddingContracts:create-ARP' %}" method="POST" class="row g-3">
+                    {% csrf_token %}
+    
+                    <div class="col-md-6">
+                        <label for="{{ form.numero.id_for_label }}" class="form-label">{{ form.numero.label }}</label>
+                        {{ form.numero }}
+                        {% if form.numero.errors %}
+                            <div class="text-danger">{{ form.numero.errors }}</div>
+                        {% endif %}
+                    </div>
+    
+                    <div class="col-md-12">
+                        <label for="{{ form.assuntoDetalhado.id_for_label }}" class="form-label">{{ form.assuntoDetalhado.label }}</label>
+                        {{ form.assuntoDetalhado }}
+                        {% if form.assuntoDetalhado.errors %}
+                            <div class="text-danger">{{ form.assuntoDetalhado.errors }}</div>
+                        {% endif %}
+                    </div>
+    
+                    <div class="col-md-6">
+                        <label for="{{ form.dataInicial.id_for_label }}" class="form-label">{{ form.dataInicial.label }}</label>
+                        {{ form.dataInicial }}
+                        {% if form.dataInicial.errors %}
+                            <div class="text-danger">{{ form.dataInicial.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <!--
+                    <div class="col-md-6">
+                        <label for="{{ form.dataFinal.id_for_label }}" class="form-label">{{ form.dataFinal.label }}</label>
+                        {{ form.dataFinal }}
+                        {% if form.dataFinal.errors %}
+                            <div class="text-danger">{{ form.dataFinal.errors }}</div>
+                        {% endif %}
+                    </div>
+                    -->
+    
+                    <div class="col-md-6">
+                        <label for="{{ form.valor.id_for_label }}" class="form-label">{{ form.valor.label }}</label>
+                        {{ form.valor }}
+                        {% if form.valor.errors %}
+                            <div class="text-danger">{{ form.valor.errors }}</div>
+                        {% endif %}
+                    </div>
+    
+                    <div class="col-md-6">
+                        <label for="{{ form.licitacao_fk.id_for_label }}" class="form-label">{{ form.licitacao_fk.label }}</label>
+                        {{ form.licitacao_fk }}
+                        {% if form.licitacao_fk.errors %}
+                            <div class="text-danger">{{ form.licitacao_fk.errors }}</div>
+                        {% endif %}
+                    </div>
+    
+                    <div class="col-md-6">
+                        <label for="{{ form.fornecedor_fk.id_for_label }}" class="form-label">{{ form.fornecedor_fk.label }}</label>
+                        {{ form.fornecedor_fk }}
+                        {% if form.fornecedor_fk.errors %}
+                            <div class="text-danger">{{ form.fornecedor_fk.errors }}</div>
+                        {% endif %}
+                    </div>
+    
+                    <div class="col-12 text-center">
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                        <a class="btn btn-secondary mr-2" href="{% url 'biddingContracts:index' %}">Voltar</a>
+                    </div>
+                </form>
+    
+            </div>
         </div>
     </div>
 </div>

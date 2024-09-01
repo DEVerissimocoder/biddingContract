@@ -80,8 +80,9 @@ class formFornecedor(forms.ModelForm):
                 attrs={
                 "type": "text",
                 "class": "form-control", 
-                "placeholder": "Cnpj",
+                "placeholder": "Apenas números",
                 "required": True,
+                "id": "cnpj",
                 }
             ),
             "endereco": forms.TextInput(
@@ -112,8 +113,9 @@ class formFornecedor(forms.ModelForm):
                 attrs={
                     "type": "text",
                     "class": "form-control",
-                    "placeholder": "ex: 55.000-000",
+                    "placeholder": "ex: 00000-000",
                     "required": True,
+                    "id": "cep",
                 }
             ),
             "cidade": forms.TextInput(
@@ -124,12 +126,13 @@ class formFornecedor(forms.ModelForm):
                     "required": True,
                 }
             ),
-            "telefone": forms.TextInput(
+            "telefone": forms.NumberInput(
                 attrs={
                     "type": "text",
                     "class": "form-control",
                     "placeholder": "Telefone",
                     "required": True,
+                    "id": "phone",
                 }
             )
         }   
@@ -196,8 +199,10 @@ class formContrato(forms.ModelForm):
             ),
             "valor": forms.NumberInput(
                 attrs={
+                    "type": "number",
                     "class": "form-control",
                     "placeholder": "Valor do Contrato",
+                    "id": "money",
                 }
             ),
         }

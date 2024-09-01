@@ -18,12 +18,12 @@ import weasyprint
 # CONTRATOS + RELATORIOS
 def cadContrato(request):
     if request.method == "POST":
-        form = formContrato(request.POST),
+        form = formContrato(request.POST)
 
         if form.is_valid():
             form.save()
             
-            return HttpResponseRedirect(reverse("contratos"))
+            return HttpResponseRedirect(reverse("biddingContracts:contratos"))
     else:
         form = formContrato()
 
@@ -35,7 +35,7 @@ def listContratos(request):
     return render(request, "contratos.html", context)
 
 def contratosRelatorio(request, id_contrato):
-    contrato = Contrato.objects.get(numero=id_contrato)
+    contrato = Contrato.objects.get(id_contrato=id_contrato)
     notasFiscais = NotaFiscal.objects.filter(contrato_fk = id_contrato)
     saldoAtual = contrato.valor
     #tipo datetime.datetime
@@ -53,16 +53,21 @@ def contratosRelatorio(request, id_contrato):
     context = {
         "notasfiscais": notasFiscais,
         "saldoAtual": saldoAtual,
-        "vigencia": mensagem
+        "vigencia": mensagem,
+        "hoje": hoje,
+        "dataFinal": dataFinalContrato,
         }
     return render(request, "contratos_relatorio.html", context)
 
 def verifica_prazo_validade_contrato(prazoRestante, dataFinal, hoje):
     mensagem = " "
-    if dataFinal >= hoje:
+    if dataFinal > hoje:
         mensagem = f"O contrato é válido por mais {prazoRestante.years} anos, {prazoRestante.months} meses e {prazoRestante.days} dias."
         return mensagem
-    else:
+    elif dataFinal == hoje:
+        mensagem = f"O contrato é válido até hoje dia: {dataFinal.strftime('%d/%m/%y')}"
+        return mensagem
+    elif dataFinal < hoje:
         mensagem =  "O prazo de validade do contrato já expirou."
     return mensagem
 
@@ -172,7 +177,7 @@ class BiddingUpdateView(UpdateView):
     model = Licitacao
     template_name = "licitacoes/edit_licitacoes.html"
     form_class = formLicitacao
-    context_object_name = "licita"
+    context_object_name = "licitacao"
 
     def form_valid(self, form):
         messages.success(self.request, 'Licitação editada com sucesso!')

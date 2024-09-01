@@ -25,7 +25,7 @@
                     <p>Categoria: {{ lic.categoria }}</p>
                     <p>Data: {{ lic.date|date:"d/m/Y" }}</p>
                     <div class="d-flex">
-                        <a href="{{ lic.url }}" name=""
+                        <a href="{% url "biddingContracts:update_bidding" lic.pk  %}" name=""
                     class="btn btn-info mr-2">Editar</a>
                     </div>
                 </li>

@@ -16,9 +16,20 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="alert alert-warning" role="alert">
-                    <strong>Prazo Restante:</strong> {{ vigencia }}
-                </div>
+                {% if dataFinal > hoje %}
+                    <div class="alert alert-success" role="alert">
+                        <strong>Prazo Restante:</strong> {{ vigencia }}
+                    </div>
+                {% elif dataFinal == hoje %}
+                    <div class="alert alert-warning" role="alert">
+                        <strong>Prazo Restante:</strong> {{ vigencia }}
+                    </div>
+                {% else %}
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Prazo Restante:</strong> {{ vigencia }}
+                    </div>
+                {% endif %}
+                
             </div>
         </div>
     

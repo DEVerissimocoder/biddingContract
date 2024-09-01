@@ -3,6 +3,11 @@
     <h4 class="text-center text-uppercase mb-4">Menu</h4>
         <ul class="nav flex-column">
             <li class="nav-item mb-3">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:index' %}">
+                    <i class="bi bi-file-earmark-plus-fill me-2"></i> Início
+                </a>
+            </li>
+            <li class="nav-item mb-3">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:cadContrato' %}">
                     <i class="bi bi-file-earmark-plus-fill me-2"></i> Criar Contratos
                 </a>
@@ -35,7 +40,7 @@
             </li>
             <li class="nav-item mb-3">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:create-ARP' %}">
-                    <i class="bi bi-file-earmark-text-fill me-2"></i>criar Atas de Registro de Preços
+                    <i class="bi bi-file-earmark-text-fill me-2"></i>Criar Atas de Registro de Preços
                 </a>
             </li>
 
