@@ -13,6 +13,8 @@ from django.views.generic import CreateView, ListView
 from django.contrib import messages
 import tempfile
 import weasyprint
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.decorators import login_required
 
 
 # CONTRATOS + RELATORIOS
@@ -79,7 +81,9 @@ def verifica_prazo_validade_ARP(prazoRestante, dataFinal, hoje):
     else:
         mensagem =  "O prazo de validade do contrato já expirou."
     return mensagem
+
 # INDEX
+@login_required
 def index(request):
     return render(request, 'index.html')
 

@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'biddingContracts',
+    'usuarios',
 ]
 
 MIDDLEWARE = [
@@ -142,10 +143,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-    
-]
+
+#----- urls de redirecionamento -----
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
 
 
 STATICFILES_FINDERS = [
@@ -156,11 +159,16 @@ STATICFILES_FINDERS = [
 
 ]
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+    
+]
+
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+#MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -176,3 +184,4 @@ MESSAGE_TAGS = {
     messages.WARNING: "warning",
     messages.DEBUG: "secondary",
 }
+
