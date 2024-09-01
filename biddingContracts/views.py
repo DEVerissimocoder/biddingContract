@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.views import View
 from django.views.generic import UpdateView
 from datetime import datetime
@@ -8,19 +8,22 @@ from django.urls import reverse, reverse_lazy
 from .models import Contrato, NotaFiscal, Fornecedor, Licitacao, AtaRegistroPreco
 from datetime import datetime, timedelta, date
 from dateutil.relativedelta import relativedelta
-from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
-from django.views.generic import CreateView
+from django.template.loader import render_to_string
+from django.views.generic import CreateView, ListView
 from django.contrib import messages
+import tempfile
+import weasyprint
+
 
 # CONTRATOS + RELATORIOS
 def cadContrato(request):
     if request.method == "POST":
-        form = formContrato(request.POST)
+        form = formContrato(request.POST),
 
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse("biddingContracts:contratos"))
+            
+            return HttpResponseRedirect(reverse("contratos"))
     else:
         form = formContrato()
 
@@ -94,6 +97,10 @@ def listLicitacoes(request):
     context = {"licitacoes": licitacoes}
     return render(request, "list_licitacoes.html", context)
 
+#View que cria as licitações
+# @method_decorator(login_required(login_url=reverse_lazy("user:login")), name="dispatch")
+# @method_decorator(user_complete_required, name="dispatch")
+
 class BiddingCreateView(CreateView):
     """
     Faz o cadastro das licitações
@@ -102,43 +109,65 @@ class BiddingCreateView(CreateView):
     form_class = formLicitacao
     template_name = 'licitacoes.html'
     success_url = reverse_lazy('biddingContracts:licitacoes')
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        messages.success(self.request, 'Licitação cadastrada com sucesso!')
-        return response
-
-    
-
+   
 class BuscarView(View):
     """
-    Faz o filtro por licitações baseando-se no n° do mês digitado, de 1 a 12. 
+    Faz a o filtro por licitações baseando-se no n° do mês digitado, de 1 a 12. 
     """
     template_name = 'buscar.html'
 
     def get(self, request):
-        context = {}
         if "buscar" in request.GET:
             mes_to_search = request.GET['buscar']
             if mes_to_search:
                 try:
                     mes_to_search = int(mes_to_search)
                     if 1 <= mes_to_search <= 12:
-                        biddings = self.get_queryset(mes_to_search)
+                        biddings = Licitacao.objects.filter(date__month=mes_to_search)
                         context = {"licitacoes": biddings}
                     else:
                         context = {"error_message": "Mês inválido. Digite um número entre 1 e 12."}
                 except ValueError:
-                    context = {"error_message": "Erro: o valor digitado não é um número."}
+                    context = {"error_message": "Mês inválido. Digite um número entre 1 e 12."}
             else:
                 context = {"error_message": "Por favor, digite um mês válido."}
+        else:
+            context = {}
         return render(request, self.template_name, context)
 
-    def get_queryset(self, mes):
-        return Licitacao.objects.filter(date__month=mes)
+ 
+"""class BiddingCreateArp(CreateView):
+    model=AtaRegistroPreco
+    form_class = formARP
+    template_name = 'ataRegistroPreco_new.html'
+    success_url = reverse_lazy('biddingContracts:create-ARP')"""
+
+def createArp(request):
+    if request.method == "POST":
+        form = formARP(request.POST)
+        print("enviando método POST")
+        if form.is_valid(): #por que o formulário não está sendo validaddo?
+            arp = form.save(commit=False)
+            dataInicial = arp.dataInicial
+            print("formulario valido", dataInicial)
+            if dataInicial:
+                dataFinal = dataInicial + relativedelta(days=365)
+                arp.dataFinal = dataFinal
+                print("dataInicial Validada", arp.dataFinal)
+            arp.save()
+            return HttpResponseRedirect(reverse('biddingContracts:atas'))
+    else:
+        form = formARP()
+    context = {'form': form}
+    return render(request, "ataRegistroPreco_new.html", context)
+
+class listARPs(ListView):
+    model=AtaRegistroPreco
+    template_name='atas.html'
+    success_url= reverse_lazy('biddingContracts:atas')
 
  
- # Visão que atualiza as licitações
+ # View que atualiza as licitações
 class BiddingUpdateView(UpdateView):
     model = Licitacao
     template_name = "licitacoes/edit_licitacoes.html"
@@ -159,3 +188,20 @@ class BiddingUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+    
+
+#view para salvar as licitações como pdf
+def export_pdf(request): 
+    biddings = Licitacao.objects.all() # lista todas as licitações 
+    html_index = render_to_string('pdf/export-pdf.html', {'licitacoes': biddings})  
+    weasyprint_html = weasyprint.HTML(string=html_index, base_url='http://127.0.0.1:8000/media')
+    pdf = weasyprint_html.write_pdf(stylesheets=[weasyprint.CSS(string='body { font-family: serif} img {margin: 10px; width: 50px;}')]) 
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=Products'+str(date.today())+'.pdf'
+    response['Content-Transfer-Encoding'] = 'binary'
+    with tempfile.NamedTemporaryFile(delete=True) as output:
+        output.write(pdf)
+        output.flush() 
+        output.seek(0)
+        response.write(output.read()) 
+    return response

@@ -3,7 +3,7 @@ from django.db import models
 #licitacao
 class Licitacao (models.Model):
     id_licitacao = models.IntegerField(primary_key=True, auto_created=True)
-    numProcess = models.CharField(max_length=7, unique=True)
+    numProcess = models.CharField(max_length=7, unique=True, blank=False, null=False)
     categoria = models.CharField(max_length=200, verbose_name="Categoria", null=False)
     assunto = models.CharField(max_length=200, verbose_name="Assunto",  null=False, blank=False)
     date = models.DateField()
@@ -17,8 +17,8 @@ class Licitacao (models.Model):
 
 #Fornecedor
 class Fornecedor(models.Model):
-    nome = models.CharField(max_length=200)
-    cnpj = models.CharField(max_length=200, unique=True)
+    nome = models.CharField(max_length=200, verbose_name="Nome do fornecedor", null=False, blank=False)
+    cnpj = models.CharField(max_length=200, unique=True, verbose_name="Cadastro de Pessoa Jurídica", null=False, blank=False)
     endereco = models.CharField(max_length=200)
     num  = models.CharField(max_length=200)
     bairro  = models.CharField(max_length=200)
@@ -30,6 +30,7 @@ class Fornecedor(models.Model):
         return f"{self.nome}"
     
     class meta:
+        verbose_name = "Fornecedor"
         verbose_name_plural = "fornecedores"
 
 #Contrato
