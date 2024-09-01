@@ -1,5 +1,5 @@
 from django import forms
-from .models import Licitacao, Fornecedor, Contrato
+from .models import Licitacao, Fornecedor, Contrato, AtaRegistroPreco
 
 class formLicitacao(forms.ModelForm):
     class Meta:
@@ -73,7 +73,7 @@ class formFornecedor(forms.ModelForm):
                 "type": "text",
                 "class": "form-control", 
                 "placeholder": "razão social",
-                
+                "required": True,
                 }
             ),
             "cnpj": forms.TextInput(
@@ -81,7 +81,7 @@ class formFornecedor(forms.ModelForm):
                 "type": "text",
                 "class": "form-control", 
                 "placeholder": "Cnpj",
-                
+                "required": True,
                 }
             ),
             "endereco": forms.TextInput(
@@ -89,13 +89,15 @@ class formFornecedor(forms.ModelForm):
                     "type": "text",
                     "class": "form-control",
                     "placeholder": "Endereço",
+                    "required": True,
                 }
             ),
             "num": forms.NumberInput(
                 attrs={
                     "type": "number",
                     "class": "form-control",
-                    "placeholder": "Número", 
+                    "placeholder": "Número",
+                    "required": True,
                 }
             ),
             "bairro": forms.TextInput(
@@ -103,6 +105,7 @@ class formFornecedor(forms.ModelForm):
                     "type": "text",
                     "class": "form-control",
                     "placeholder": "Bairro",
+                    "required": True,
                 }
             ),
             "cep": forms.TextInput(
@@ -110,6 +113,7 @@ class formFornecedor(forms.ModelForm):
                     "type": "text",
                     "class": "form-control",
                     "placeholder": "ex: 55.000-000",
+                    "required": True,
                 }
             ),
             "cidade": forms.TextInput(
@@ -117,6 +121,7 @@ class formFornecedor(forms.ModelForm):
                     "type": "text",
                     "class": "form-control",
                     "placeholder": "Cidade",
+                    "required": True,
                 }
             ),
             "telefone": forms.TextInput(
@@ -193,6 +198,66 @@ class formContrato(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "placeholder": "Valor do Contrato",
+                }
+            ),
+        }
+
+class formARP(forms.ModelForm):
+    licitacao_fk = forms.ModelChoiceField(
+        queryset=Licitacao.objects.all(),
+        label="Licitação",
+        #widget=forms.Select(attrs={'class': 'form-select'})
+    )
+
+    fornecedor_fk = forms.ModelChoiceField(
+        queryset=Fornecedor.objects.all(),
+        label="Fornecedor",
+        #widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    
+    class Meta:
+        model = AtaRegistroPreco
+        fields = [
+            "numero",
+            "assuntoDetalhado",
+            "dataInicial",
+            "valor",
+            "licitacao_fk",
+            "fornecedor_fk",
+        ]
+        labels = {
+            "numero": "NÚMERO",
+            "assuntoDetalhado": "OBJETO DETALHADO",
+            "dataInicial": "DATA INICIAL",
+            "valor": "VALOR",
+            "licitacao_fk": "Licitação",
+            "fornecedor_fk": "Fornecedor"
+        }
+        widgets = {
+            "numero": forms.TextInput(
+                attrs={
+                    "type": "text",
+                    "class": "form-control",
+                    "placeholder": "Número Ata de Registro de Preços"
+                }
+            ),
+            "assuntoDetalhado": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Descreva o objeto relacionado a Ata de Registro de Preços (ARP)",
+                    "rows": 2,  # Adicionando rows para controle da altura do campo
+                }
+            ),
+            "dataInicial": forms.DateInput(
+                attrs={
+                    "type": "date",
+                    "class": "form-control",
+                }
+            ),
+            "valor": forms.NumberInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Valor da Ata de Registro de Preços",
                 }
             ),
         }

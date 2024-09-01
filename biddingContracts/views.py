@@ -3,9 +3,9 @@ from django.http import HttpResponseRedirect
 from django.views import View
 from django.views.generic import UpdateView
 from datetime import datetime
-from  biddingContracts.forms import formLicitacao, formFornecedor, formContrato
+from  biddingContracts.forms import formLicitacao, formFornecedor, formContrato, formARP
 from django.urls import reverse, reverse_lazy
-from .models import Contrato, NotaFiscal, Fornecedor, Licitacao
+from .models import Contrato, NotaFiscal, Fornecedor, Licitacao, AtaRegistroPreco
 from datetime import datetime, timedelta, date
 from dateutil.relativedelta import relativedelta
 from django.utils.decorators import method_decorator
@@ -23,6 +23,7 @@ def cadContrato(request):
             return HttpResponseRedirect(reverse("biddingContracts:contratos"))
     else:
         form = formContrato()
+
     return render(request, "contrato_new.html", {"form": form})
 
 def listContratos(request):
@@ -54,6 +55,15 @@ def contratosRelatorio(request, id_contrato):
     return render(request, "contratos_relatorio.html", context)
 
 def verifica_prazo_validade_contrato(prazoRestante, dataFinal, hoje):
+    mensagem = " "
+    if dataFinal >= hoje:
+        mensagem = f"O contrato é válido por mais {prazoRestante.years} anos, {prazoRestante.months} meses e {prazoRestante.days} dias."
+        return mensagem
+    else:
+        mensagem =  "O prazo de validade do contrato já expirou."
+    return mensagem
+
+def verifica_prazo_validade_ARP(prazoRestante, dataFinal, hoje):
     mensagem = " "
     if dataFinal >= hoje:
         mensagem = f"O contrato é válido por mais {prazoRestante.years} anos, {prazoRestante.months} meses e {prazoRestante.days} dias."

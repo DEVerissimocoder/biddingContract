@@ -14,4 +14,6 @@ urlpatterns = [
     path('contrato/', views.cadContrato, name="cadContrato"),
     path('buscar/', views.BuscarView.as_view(), name='buscar'),
     path('licitacoes/<str:pk>/editar/', views.BiddingUpdateView.as_view(), name='update-bidding'),
+    path('criar-ARP/', views.createArp, name='create-ARP'),#ARP - SIGLA PARA (ATA DE REGISTRO DE PREÇOS)
+    path('atas/', views.listARPs.as_view(), name="atas")
 ]

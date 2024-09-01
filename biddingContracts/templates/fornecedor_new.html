@@ -1,16 +1,18 @@
 {% extends "base_template.html" %}
 {% load static %}
-{% block title %} Cadastro de Fornecedores  {% endblock %}
-
-
+{% block title %} Cadastro de Fornecedores {% endblock %}
 
 {% block content %}
 <div class="d-flex">
+    {% block sidebar %}
     {% include "sidebar.html" %}
+    {% endblock %}
+    
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card p-4 shadow-lg">
+                    {% block messages %}
                     {% if messages %}
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {% for message in messages %}
@@ -19,15 +21,56 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                     {% endif %}
+                    {% endblock %}
+                    
+                    {% block form_title %}
                     <h3 class="text-center text-primary mb-4">Cadastro de Fornecedores</h3>
+                    {% endblock %}
+                    
                     <form method="post">
                         {% csrf_token %}
                         {{ form.media }}
-                        {{ form.as_p }}
+                        
+                        {% block form_content %}
+                        <div class="mb-3">
+                            <label for="id_nome" class="form-label">Razão Social</label>
+                            {{ form.nome }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_cnpj" class="form-label">CNPJ</label>
+                            {{ form.cnpj }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_endereco" class="form-label">Endereço</label>
+                            {{ form.endereco }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_num" class="form-label">Número</label>
+                            {{ form.num }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_bairro" class="form-label">Bairro</label>
+                            {{ form.bairro }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_cep" class="form-label">CEP</label>
+                            {{ form.cep }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_cidade" class="form-label">Cidade</label>
+                            {{ form.cidade }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_telefone" class="form-label">Telefone</label>
+                            {{ form.telefone }}
+                        </div>
+                        {% endblock %}
+                        
                         <div class="d-flex justify-content-end mt-5">
-                            <a href="{% url 'biddingContracts:index' %}" name="cancel"
-                               class="btn btn-secondary me-2">Cancelar</a>
+                            {% block form_buttons %}
+                            <a href="{% url 'biddingContracts:index' %}" name="cancel" class="btn btn-secondary me-2">Cancelar</a>
                             <button type="submit" class="btn btn-primary">Salvar</button>
+                            {% endblock %}
                         </div>
                     </form>
                 </div>
