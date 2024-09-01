@@ -75,8 +75,59 @@ class formFornecedor(forms.ModelForm):
                 "placeholder": "razão social",
                 
                 }
-            ),  
-        }
+            ),
+            "cnpj": forms.TextInput(
+                attrs={
+                "type": "text",
+                "class": "form-control", 
+                "placeholder": "Cnpj",
+                
+                }
+            ),
+            "endereco": forms.TextInput(
+                attrs={
+                    "type": "text",
+                    "class": "form-control",
+                    "placeholder": "Endereço",
+                }
+            ),
+            "num": forms.NumberInput(
+                attrs={
+                    "type": "number",
+                    "class": "form-control",
+                    "placeholder": "Número", 
+                }
+            ),
+            "bairro": forms.TextInput(
+                attrs={
+                    "type": "text",
+                    "class": "form-control",
+                    "placeholder": "Bairro",
+                }
+            ),
+            "cep": forms.TextInput(
+                attrs={
+                    "type": "text",
+                    "class": "form-control",
+                    "placeholder": "ex: 55.000-000",
+                }
+            ),
+            "cidade": forms.TextInput(
+                attrs={
+                    "type": "text",
+                    "class": "form-control",
+                    "placeholder": "Cidade",
+                }
+            ),
+            "telefone": forms.TextInput(
+                attrs={
+                    "type": "text",
+                    "class": "form-control",
+                    "placeholder": "Telefone",
+                    "required": True,
+                }
+            )
+        }   
 
 class formContrato(forms.ModelForm):
     licitacao_fk = forms.ModelChoiceField(

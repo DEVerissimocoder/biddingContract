@@ -16,11 +16,11 @@ from django.contrib import messages
 # CONTRATOS + RELATORIOS
 def cadContrato(request):
     if request.method == "POST":
-        form = formContrato(request.POST),
+        form = formContrato(request.POST)
 
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse("contratos"))
+            return HttpResponseRedirect(reverse("biddingContracts:contratos"))
     else:
         form = formContrato()
     return render(request, "contrato_new.html", {"form": form})

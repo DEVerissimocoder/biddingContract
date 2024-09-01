@@ -14,8 +14,8 @@
                 {% for contrato in contratos %}
                 <div class="list-group-item list-group-item-action flex-column align-items-start mb-3">
                     <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">Contrato Nº: {{ contrato.numero }}</h5>
-                        <small>De: {{ contrato.dataInicial }} até {{ contrato.dataFinal }}</small>
+                        <h5 class="mb-1">Contrato Nº: {{ contrato.numero }}</h5> 
+                        <small>De: {{ contrato.dataInicial }} - até - {{ contrato.dataFinal }}</small>
                         <small>valor: {{ contrato.valor }}</small>
                     </div>
                     <p class="mb-1">{{ contrato.assuntoDetalhado }}</p>
