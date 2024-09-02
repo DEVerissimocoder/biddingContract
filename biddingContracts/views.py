@@ -32,6 +32,7 @@ def cadContrato(request):
 def listContratos(request):
     contratos = Contrato.objects.all()
     context = {"contratos": contratos}
+    print("chamando view")
     return render(request, "contratos.html", context)
 
 def contratosRelatorio(request, id_contrato):
@@ -87,7 +88,6 @@ class BiddingFornecedor(CreateView):
     model = Fornecedor
     form_class = formFornecedor
     template_name = 'fornecedor_new.html'
-    print("BiddingFornecedor")
     success_url = reverse_lazy('biddingContracts:fornecedores')
 
 
@@ -100,8 +100,9 @@ def listLicitacoes(request):
     """mostra todas as licitacoes"""
     licitacoes = Licitacao.objects.all()
     context = {"licitacoes": licitacoes}
+    print("listLicitacoes")
     return render(request, "list_licitacoes.html", context)
-
+   
 #View que cria as licitações
 # @method_decorator(login_required(login_url=reverse_lazy("user:login")), name="dispatch")
 # @method_decorator(user_complete_required, name="dispatch")

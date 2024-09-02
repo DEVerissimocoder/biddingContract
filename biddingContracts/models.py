@@ -9,7 +9,7 @@ class Licitacao (models.Model):
     date = models.DateField()
     
     def __str__(self):
-        return f"{self.assunto}"
+        return f"{self.numProcess}"
 
     class meta:
         verbose_name = "licitação"

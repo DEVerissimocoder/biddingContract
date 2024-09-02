@@ -37,7 +37,8 @@ class formLicitacao(forms.ModelForm):
             "assunto": forms.Textarea(
                 attrs={
                     "class": "form-control",
-                    "placeholder": "ex.: material de expediente"
+                    "placeholder": "ex.: material de expediente",
+                    "rows":2,
                 }
             ),
             "date": forms.DateInput(
