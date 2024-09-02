@@ -50,13 +50,13 @@
                     {% endif %}
                 </div>
                 <div class="col-md-6">
-                    <label for="{{ form.licitacao_fk.id_for_label }}" class="form-label">{{ form.licitacao_fk.label }}</label>
+                    <label for="{{ form.licitacao_fk.id_for_label }}" class="form-label" value="{{ form.licitacao_fk.id_for_label }}">{{ form.licitacao_fk.label }}</label>
                     {{ form.licitacao_fk }}
                     <button type="button" id="bot-licitacao" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-licitacao">
                         procurar
                     </button>
                     <div class="modal fade" id="modal-licitacao" aria-labelledby="head" aria-hidden="true">
-                        <div class="modal-dialog modal-fullscreen">
+                        <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="head">licitacoes</h5>
@@ -64,18 +64,21 @@
                                 </div>
 
                                 <div class="modal-body" id="modal-body-content">
+                                    
                                     <p>lista aparecerá aqui </p>
                                     
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancelar</button>
-                                    <button type="button" class="btn btn-primary">confirmar</button>
+                                    <button id="btn-confirmar" type="button" class="btn btn-primary">confirmar</button>
+                                    <!-- estou precisando que ao confirmar -->
                                 </div>
                             </div>
                         </div>
                     </div>
-                
+                    
                     {% if form.licitacao_fk.errors %}
+                        
                         <div class="text-danger">{{ form.licitacao_fk.errors }}</div>
                     {% endif %}
                 </div>
@@ -99,13 +102,20 @@
 </div>
 <script>
     document.getElementById('bot-licitacao').addEventListener('click', function() {
-    fetch("{% url 'biddingContracts:licitacoes' %}")
+    fetch("{% url 'biddingContracts:modal-licitacao' %}")
         .then(response => response.text())
         .then(data => {
             document.getElementById('modal-body-content').innerHTML = data;
         });
     });
     
+    document.getElementById('btn-confirmar').addEventListener('click', function(){
+        var biddingSelect = document.querySelector('input[name="flexRadioDefault"]:checked')
+        document.getElementById('{{ form.licitacao_fk.id_for_label }}').value = biddingSelect.value;
+        console.log(biddingSelect.value)
+        var modal = bootstrap.Modal.getInstance(document.getElementById('modal-licitacao')); 
+        modal.hide();
+    });
 
 </script>  
 {% endblock %}

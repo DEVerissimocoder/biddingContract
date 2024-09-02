@@ -1,0 +1,34 @@
+{% extends "base_template.html" %}
+
+{% load static %}
+
+
+{% block content %}
+<div class="form-check">
+    
+    {% for licitacao in licitacoes %}
+    <!-- ao selecionar uma licitação, por meio do radio button eu preciso que, ao confirmar com o botão lá no arquivo contrato_new.html, o valor {{licitacao.numProcess}} vá para o campo do form.licitacao_fk lá no arquivo contrato_new.html -->
+    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="{{licitacao.numProcess}}" checked>
+    <label class="form-check-label" for="flexRadioDefault2">
+    <div class="accordion-item accordion-flush mt-4">
+        <h2 class="accordion-header" id="headingOne-{{ licitacao.numProcess }}">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBidding-{{ licitacao.numProcess }}" aria-expanded="true" aria-controls="collapseBidding-{{ licitacao.numProcess }}">
+                <li class="list-group-item" aria-current="true"> processo licitatorio: {{licitacao.numProcess}}</li>
+            </button>
+        </h2>
+        <div id="collapseBidding-{{ licitacao.numProcess }}" class="accordion-collapse collapse" aria-labelledby="headingOne-{{ licitacao.numProcess }}">
+            <div class="accordion-body">
+                <li class="list-group-item"> Objeto: <span class="text-success">{{licitacao.assunto}}</span></li>
+                <li class="list-group-item"> Modalidade: <span class="text-success">{{licitacao.categoria}}</span></li>
+                <li class="list-group-item"> Data: <span class="text-success">{{licitacao.date}}</span></li>
+            </div>
+        </div>
+    </div>
+        {% empty %}
+            <p>vazio!!</p>
+        {% endfor %}
+    </ul>
+    </label>
+  </div>
+
+{% endblock %}

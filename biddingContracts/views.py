@@ -19,8 +19,9 @@ import weasyprint
 def cadContrato(request):
     if request.method == "POST":
         form = formContrato(request.POST)
-
+        print("post")
         if form.is_valid():
+            print("formulario validado")
             form.save()
             
             return HttpResponseRedirect(reverse("biddingContracts:contratos"))
@@ -100,12 +101,13 @@ def listLicitacoes(request):
     """mostra todas as licitacoes"""
     licitacoes = Licitacao.objects.all()
     context = {"licitacoes": licitacoes}
-    print("listLicitacoes")
     return render(request, "list_licitacoes.html", context)
-   
-#View que cria as licitações
-# @method_decorator(login_required(login_url=reverse_lazy("user:login")), name="dispatch")
-# @method_decorator(user_complete_required, name="dispatch")
+#MODAL
+def modal_licitacao(request):
+    "mostra licitacao em um modal"
+    licitacoes = Licitacao.objects.all()
+    context = {"licitacoes": licitacoes}
+    return render(request, "modal_bidding.html", context)
 
 class BiddingCreateView(CreateView):
     """
@@ -115,7 +117,7 @@ class BiddingCreateView(CreateView):
     form_class = formLicitacao
     template_name = 'licitacoes.html'
     success_url = reverse_lazy('biddingContracts:licitacoes')
-   
+
 class BuscarView(View):
     """
     Faz a o filtro por licitações baseando-se no n° do mês digitado, de 1 a 12. 
