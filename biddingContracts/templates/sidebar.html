@@ -51,10 +51,10 @@
             </li>
             {% if user.is_authenticated %}
                 <li class="nav-item mb-3">
-                    <a class="nav-link text-danger" href="{% url 'usuarios:logout' %}">
-                        <i class="fa-solid fa-circle-xmark"></i>
-                        <i class="bi bi-file-earmark-text-fill me-2"></i>Sair do sistema
-                    </a>
+                    <form action="{% url 'logout' %}" method="post" class="">
+                        {% csrf_token %}
+                        <button class="nav-link link-danger text-danger" type="submit">Sair do Sistema</button>
+                      </form>
                 </li>
             {% endif %}
         </ul>
