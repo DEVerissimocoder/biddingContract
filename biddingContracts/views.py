@@ -16,19 +16,37 @@ import weasyprint
 
 
 # CONTRATOS + RELATORIOS
+# def cadContrato(request):
+#     if request.method == "POST":
+#         form = formContrato(request.POST)
+#         print("post")
+#         if form.is_valid():
+#             print("formulario validado")
+#             form.save()
+#             return HttpResponseRedirect(reverse("biddingContracts:contratos"))
+#         else:
+#             print(f"Deu errado!{form.errors}")
+#     else:
+#         form = formContrato()
+        
+
+#     return render(request, "contrato_new.html", {"form": form})
+
 def cadContrato(request):
     if request.method == "POST":
         form = formContrato(request.POST)
-        print("post")
+        print(f"Dados recebidos no POST: {request.POST}")  # Verifique o que está sendo enviado
         if form.is_valid():
             print("formulario validado")
             form.save()
-            
             return HttpResponseRedirect(reverse("biddingContracts:contratos"))
+        else:
+            print(f"Deu errado!{form.errors}")
     else:
         form = formContrato()
 
     return render(request, "contrato_new.html", {"form": form})
+    
 
 def listContratos(request):
     contratos = Contrato.objects.all()

@@ -140,11 +140,11 @@ class formFornecedor(forms.ModelForm):
 
 class formContrato(forms.ModelForm):
     
-    """licitacao_fk = forms.ModelChoiceField(
-        queryset=Licitacao.objects.all(),
-        label="Licitação",
-        widget=forms.Select(attrs={'class': 'form-select'})
-    )"""
+    # licitacao_fk = forms.ModelChoiceField(
+    #     queryset=Licitacao.objects.all(),
+    #     label="Licitação",
+    #     widget=forms.Select(attrs={'class': 'form-select'})
+    # )
   
     fornecedor_fk = forms.ModelChoiceField(
         queryset=Fornecedor.objects.all(),
