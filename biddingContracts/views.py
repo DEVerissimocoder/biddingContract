@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.views import View
 from django.views.generic import UpdateView
 from datetime import datetime
+from django.db.models import Q
 from  biddingContracts.forms import formLicitacao, formFornecedor, formContrato, formARP
 from django.urls import reverse, reverse_lazy
 from .models import Contrato, NotaFiscal, Fornecedor, Licitacao, AtaRegistroPreco
@@ -50,11 +51,43 @@ def cadContrato(request):
     return render(request, "contrato_new.html", {"form": form})
     
 
-def listContratos(request):
-    contratos = Contrato.objects.all()
-    context = {"contratos": contratos}
-    print("chamando view")
-    return render(request, "contratos.html", context)
+# def listContratos(request):
+#     contratos = Contrato.objects.all()
+#     context = {"contratos": contratos}
+#     print("chamando view")
+#     return render(request, "contratos.html", context)
+
+class ListContractsView(ListView):
+    """
+    Classe destinada a listar os contratos criados
+    """
+    model = Contrato
+    template_name = "contratos.html"
+    context_object_name = "contratos"
+
+    # Adicionando filtros ao object_list através do get_queryset
+    def get_queryset(self):
+        txt_contratos = self.request.GET.get("contratos")
+        txt_assunto = self.request.GET.get("assunto")
+        txt_fornecedor = self.request.GET.get("fornecedor")
+        txt_licitacao = self.request.GET.get("licitacao")
+
+        if txt_fornecedor:
+            queryset = Contrato.objects.filter(fornecedor_fk__nome__icontains=txt_fornecedor)
+            return queryset
+        elif txt_licitacao:
+            queryset = Contrato.objects.filter(licitacao_fk__numProcess__icontains=txt_licitacao)
+            return queryset
+        elif txt_contratos:
+            queryset = Contrato.objects.filter(numero__icontains=txt_contratos)
+            return queryset
+        elif txt_assunto:
+            queryset = Contrato.objects.filter(assuntoDetalhado__icontains=txt_assunto)
+            return queryset
+        else:
+            queryset = Contrato.objects.all()
+        return queryset
+
 
 def contratosRelatorio(request, id_contrato):
     contrato = Contrato.objects.get(id_contrato=id_contrato)
@@ -119,11 +152,11 @@ def listFornecedores(request):
     context = {"fornecedores": fornecedores}
     return render(request, "fornecedores.html", context)
 
-def listLicitacoes(request):
-    """mostra todas as licitacoes"""
-    licitacoes = Licitacao.objects.all()
-    context = {"licitacoes": licitacoes}
-    return render(request, "list_licitacoes.html", context)
+# def listLicitacoes(request):
+#     """mostra todas as licitacoes"""
+#     licitacoes = Licitacao.objects.all()
+#     context = {"licitacoes": licitacoes}
+#     return render(request, "list_licitacoes.html", context)
 #MODAL
 def modal_licitacao(request):
     "mostra licitacao em um modal"
@@ -138,7 +171,36 @@ class BiddingCreateView(CreateView):
     model = Licitacao
     form_class = formLicitacao
     template_name = 'licitacoes.html'
-    success_url = reverse_lazy('biddingContracts:licitacoes')
+    message_success = 'Licitação criada com sucesso!'
+    #success_url = reverse_lazy
+
+    def get_success_url(self) -> str:
+        messages.success(self.request, self.message_success)
+        return reverse_lazy('biddingContracts:list_bidding')
+
+
+
+
+class ListBiddingView(ListView):
+    """
+    Faz a listagem das licitações
+    """
+    model = Licitacao
+    template_name = "list_licitacoes.html"
+    context_object_name = "licitacoes"
+
+    def get_queryset(self):
+        txt_buscar = self.request.GET.get("buscar")
+        queryset = Licitacao.objects.all()
+        if txt_buscar:
+            queryset = queryset.filter(
+                Q(categoria__icontains=txt_buscar) |
+                Q(assunto__icontains=txt_buscar) |
+                Q(numProcess__icontains=txt_buscar)
+            )
+        return queryset
+    
+
 
 class BuscarView(View):
     """
