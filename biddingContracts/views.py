@@ -31,6 +31,8 @@ import weasyprint
         
 
 #     return render(request, "contrato_new.html", {"form": form})
+"""def teste(request):
+    return render(request, "modal_fornecedor_teste.html")"""
 
 def cadContrato(request):
     if request.method == "POST":
@@ -114,6 +116,12 @@ def listFornecedores(request):
     fornecedores = Fornecedor.objects.all()
     context = {"fornecedores": fornecedores}
     return render(request, "fornecedores.html", context)
+
+def modal_fornecedor(request):
+    "mostra fornecedor em um modal"
+    fornecedores = Fornecedor.objects.all()
+    context = {"fornecedores": fornecedores}
+    return render(request, "modal_fornecedores.html", context)
 
 def listLicitacoes(request):
     """mostra todas as licitacoes"""

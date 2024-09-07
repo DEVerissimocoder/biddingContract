@@ -90,24 +90,55 @@
                     {% if form.fornecedor_fk.errors %}
                         <div class="text-danger">{{ form.fornecedor_fk.errors }}</div>
                     {% endif %}
-                </div>
+                    <!-- TRIGGER -->
+                    <div class="d-flex">
+                        <i class="fa-solid fa-magnifying-glass mt-2 cursor-pointer" id="bot-fornecedor" data-bs-toggle="modal" data-bs-target="#fornecedor-modal" title="procurar fornecedor"></i>
+                    </div>
 
+                    <!-- Modal -->
+                    <div class="modal fade" id="fornecedor-modal" tabindex="-1" aria-labelledby="modal-forn-label" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modal-forn-label">Modal title</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body" id="modal-body-content-forn">
+                                ...
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancelar</button>
+                                    <button type="button" class="btn btn-primary" id="btn-confirmar-forn">confirmar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 <div class="col-12 text-center">
                     <button type="submit" class="btn btn-primary">Enviar</button>
                     <a class="btn btn-secondary mr-2" href="{% url 'biddingContracts:index' %}">Voltar</a>
                 </div>
             </form>
-            
         </div>
     </div>
 </div>
+
 <script>
+  
+
     document.getElementById('bot-licitacao').addEventListener('click', function() {
         fetch("{% url 'biddingContracts:modal-licitacao' %}")
             .then(response => response.text())
             .then(data => {
                 document.getElementById('modal-body-content').innerHTML = data;
             });
+    });
+    document.getElementById('bot-fornecedor').addEventListener('click', function(){
+        fetch("{% url 'biddingContracts:modal-fornecedor' %}")
+        .then(response => response.text())
+        .then(data=>{
+            document.getElementById('modal-body-content-forn').innerHTML = data;
+            console.log("dados carregado", data)
+        });
     });
 
     document.getElementById('btn-confirmar').addEventListener('click', function(){
@@ -118,5 +149,12 @@
         var modal = bootstrap.Modal.getInstance(document.getElementById('modal-licitacao')); 
         modal.hide();
 });
+    document.getElementById('btn-confirmar-forn').addEventListener('click', function(){
+        var selectedFornecedor = document.querySelector("input[name='flexRadioProvider']:checked");
+        document.getElementById('{{ form.fornecedor_fk.id_for_label }}').value = selectedFornecedor.value;
+        var modal = bootstrap.Modal.getInstance(document.getElementById('fornecedor-modal')); 
+        modal.hide();
+
+    }); 
 </script> 
 {% endblock %}
