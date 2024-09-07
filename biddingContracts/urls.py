@@ -11,6 +11,7 @@ urlpatterns = [
     path('criar-fornecedor/', views.BiddingFornecedor.as_view(), name='fornecedor_new'),
     path('licitacoes/', views.listLicitacoes, name='licitacoes'),
     path('criar-licitacoes/', views.BiddingCreateView.as_view(), name='create-bidding'),
+    path('modal-licitacao', views.modal_licitacao, name='modal-licitacao'),
     path('contrato/', views.cadContrato, name="cadContrato"),
     path('buscar/', views.BuscarView.as_view(), name='buscar'),
     path('export-pdf/', views.export_pdf, name='export-pdf'),

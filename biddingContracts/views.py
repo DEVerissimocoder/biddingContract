@@ -18,22 +18,42 @@ from django.contrib.auth.decorators import login_required
 
 
 # CONTRATOS + RELATORIOS
+# def cadContrato(request):
+#     if request.method == "POST":
+#         form = formContrato(request.POST)
+#         print("post")
+#         if form.is_valid():
+#             print("formulario validado")
+#             form.save()
+#             return HttpResponseRedirect(reverse("biddingContracts:contratos"))
+#         else:
+#             print(f"Deu errado!{form.errors}")
+#     else:
+#         form = formContrato()
+        
+
+#     return render(request, "contrato_new.html", {"form": form})
+
 def cadContrato(request):
     if request.method == "POST":
         form = formContrato(request.POST)
-
+        print(f"Dados recebidos no POST: {request.POST}")  # Verifique o que está sendo enviado
         if form.is_valid():
+            print("formulario validado")
             form.save()
-            
             return HttpResponseRedirect(reverse("biddingContracts:contratos"))
+        else:
+            print(f"Deu errado!{form.errors}")
     else:
         form = formContrato()
 
     return render(request, "contrato_new.html", {"form": form})
+    
 
 def listContratos(request):
     contratos = Contrato.objects.all()
     context = {"contratos": contratos}
+    print("chamando view")
     return render(request, "contratos.html", context)
 
 def contratosRelatorio(request, id_contrato):
@@ -91,7 +111,6 @@ class BiddingFornecedor(CreateView):
     model = Fornecedor
     form_class = formFornecedor
     template_name = 'fornecedor_new.html'
-    print("BiddingFornecedor")
     success_url = reverse_lazy('biddingContracts:fornecedores')
 
 
@@ -105,10 +124,12 @@ def listLicitacoes(request):
     licitacoes = Licitacao.objects.all()
     context = {"licitacoes": licitacoes}
     return render(request, "list_licitacoes.html", context)
-
-#View que cria as licitações
-# @method_decorator(login_required(login_url=reverse_lazy("user:login")), name="dispatch")
-# @method_decorator(user_complete_required, name="dispatch")
+#MODAL
+def modal_licitacao(request):
+    "mostra licitacao em um modal"
+    licitacoes = Licitacao.objects.all()
+    context = {"licitacoes": licitacoes}
+    return render(request, "modal_bidding.html", context)
 
 class BiddingCreateView(CreateView):
     """
@@ -118,7 +139,7 @@ class BiddingCreateView(CreateView):
     form_class = formLicitacao
     template_name = 'licitacoes.html'
     success_url = reverse_lazy('biddingContracts:licitacoes')
-   
+
 class BuscarView(View):
     """
     Faz a o filtro por licitações baseando-se no n° do mês digitado, de 1 a 12. 
