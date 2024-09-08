@@ -328,7 +328,10 @@ class NotaFiscalForm(forms.ModelForm):
                     "class": "form-control",
                 }
             ),
-            
-
+            "contrato_fk": forms.Select(
+                attrs={
+                    "class": "form-select"
+                }
+            ),
         }
             
