@@ -3,33 +3,41 @@
 {% block title %} notas fiscais {% endblock %}
 
 {% block content %}
-    
+
+<div class="d-flex">
+  {% include "sidebar.html" %}
+  <div class="container my-5">
+    <h2 class="text-center mb-4">NOTAS FISCAIS ELETRÔNICAS</h2>
     <table class="table">
-        <thead>
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">NÚMERO</th>
+          <th scope="col">SÉRIE</th>
+          <th scope="col">VALOR</th>
+          <th scope="col">TIPO</th>
+          <th scope="col">DATA EMISSAO</th>
+          <th scope="col">CONTRATO</th>
+        </tr>
+      </thead>
+      <tbody>
+          {% for notafiscal in notafiscal_list %}
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">NÚMERO</th>
-            <th scope="col">SÉRIE</th>
-            <th scope="col">VALOR</th>
-            <th scope="col">TIPO</th>
-            <th scope="col">DATA EMISSAO</th>
-            <th scope="col">CONTRATO</th>
+              <th scope="row">{{ notafiscal.pk }}</th>
+              <td>{{ notafiscal.num}}</td>
+              <td>{{ notafiscal.serie }}</td>
+              <td>{{ notafiscal.valor }}</td>
+              <td>{{ notafiscal.tipo }}</td>
+              <td>{{ notafiscal.dataEmissao }}</td>
+              <td>{{ notafiscal.contrato_fk }}</td>
           </tr>
-        </thead>
-        <tbody>
-            {% for notafiscal in notafiscal_list %}
-            <tr>
-                <th scope="row">{{ notafiscal.pk }}</th>
-                <td>{{ notafiscal.num}}</td>
-                <td>{{ notafiscal.serie }}</td>
-                <td>{{ notafiscal.valor }}</td>
-                <td>{{ notafiscal.tipo }}</td>
-                <td>{{ notafiscal.dataEmissao }}</td>
-                <td>{{ notafiscal.contrato_fk }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
+          {% endfor %}
+      </tbody>
     </table>
+  </div>
+</div>
+    
+    
 {% endblock content %}
 
 
