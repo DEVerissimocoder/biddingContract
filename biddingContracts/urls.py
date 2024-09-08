@@ -19,6 +19,8 @@ urlpatterns = [
     path('licitacoes/<int:pk>/editar/', views.BiddingUpdateView.as_view(), name='update_bidding'),
     path('criar-ARP/', views.createArp, name='create-ARP'),#ARP - SIGLA PARA (ATA DE REGISTRO DE PREÇOS)
     path('atas/', views.listARPs.as_view(), name="atas"),
+    path('criar-notafiscal/', views.NotasFiscaisView.as_view(), name='nfe'),
+    path('notasfiscais/', views.ListNfe.as_view(), name='notasfiscais')
     #path('teste/', views.teste, name='teste')
 
 ]

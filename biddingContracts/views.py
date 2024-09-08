@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.views import View
 from django.views.generic import UpdateView
 from datetime import datetime
-from  biddingContracts.forms import formLicitacao, formFornecedor, formContrato, formARP
+from  biddingContracts.forms import formLicitacao, formFornecedor, formContrato, formARP, NotaFiscalForm
 from django.urls import reverse, reverse_lazy
 from .models import Contrato, NotaFiscal, Fornecedor, Licitacao, AtaRegistroPreco
 from datetime import datetime, timedelta, date
@@ -239,3 +239,15 @@ def export_pdf(request):
         output.seek(0)
         response.write(output.read()) 
     return response
+
+class NotasFiscaisView(CreateView):
+    model= NotaFiscal
+    form_class = NotaFiscalForm
+    template_name = "notaFiscal_new.html"
+    print("notas fiscais view")
+    success_url = reverse_lazy("biddingContracts:notasfiscais")
+
+class ListNfe(ListView):
+    model = NotaFiscal
+    template_name = "notasFiscais.html"
+    success_url = reverse_lazy("biddingContracts:notasfiscais")
