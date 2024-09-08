@@ -119,7 +119,16 @@
                 </ul> 
               </div>
             </div>
-          </nav>   
+            {% if object_list %}
+                <div class="d-flex ">
+                    <p class="text-muted small">{{ object_list.count }} Contratos Existentes</p>
+                </div>
+            {% else %}
+                <div class="d-flex">
+                    <p class="text-muted small">Nenhum Contrato Existente</p>
+                </div>
+            {% endif %}
+          </nav>   <!-- Fim do navbar -->
 
         {% if contratos %}
             <div class="list-group">
