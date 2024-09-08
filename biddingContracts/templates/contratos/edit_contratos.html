@@ -7,7 +7,7 @@
     <div class="row">
       <div class="col-md-10 mx-auto">
         <div class="card">
-          <h4 class="font-weight-normal text-center m-3">Atualizar informações da Licitação de n°: {{contrato.numero}}</h4>
+          <h4 class="font-weight-normal text-center m-3">Atualizar informações do contrato de n°: {{contrato.numero}}</h4>
           <form action="{% url 'biddingContracts:update_contracts' contrato.pk %}" method="post" class="needs-validation" novalidate>
             {% csrf_token %}
             {{ form.media }}
