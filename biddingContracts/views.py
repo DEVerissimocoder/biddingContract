@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.views import View
 from django.views.generic import UpdateView
@@ -7,7 +7,7 @@ from django.db.models import Q
 from  biddingContracts.forms import formLicitacao, formFornecedor, formContrato, formARP
 from django.urls import reverse, reverse_lazy
 from .models import Contrato, NotaFiscal, Fornecedor, Licitacao, AtaRegistroPreco
-from datetime import datetime, timedelta, date
+from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 from django.template.loader import render_to_string
 from django.views.generic import CreateView, ListView
@@ -88,6 +88,31 @@ class ListContractsView(ListView):
             queryset = Contrato.objects.all()
         return queryset
 
+# View que atualiza os ocntratos
+class ContractsUpdateView(UpdateView):
+    """
+    Classe destinada a atualizar os contratos já criados
+    """
+    model = Contrato
+    template_name = "contratos/edit_contratos.html"
+    form_class = formContrato
+    context_object_name = "contrato"
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Contrato editado com sucesso!')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Erro ao editar Contrato. Verifique os campos do formulário.')
+        return render(self.request, self.template_name, {"form": form})
+
+    def get_success_url(self):
+        return reverse_lazy("biddingContracts:contratos")
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
 
 def contratosRelatorio(request, id_contrato):
     contrato = Contrato.objects.get(id_contrato=id_contrato)
@@ -114,6 +139,8 @@ def contratosRelatorio(request, id_contrato):
         }
     return render(request, "contratos_relatorio.html", context)
 
+
+
 def verifica_prazo_validade_contrato(prazoRestante, dataFinal, hoje):
     mensagem = " "
     if dataFinal > hoje:
@@ -134,6 +161,7 @@ def verifica_prazo_validade_ARP(prazoRestante, dataFinal, hoje):
     else:
         mensagem =  "O prazo de validade do contrato já expirou."
     return mensagem
+
 
 # INDEX
 @login_required
@@ -164,6 +192,8 @@ def modal_licitacao(request):
     context = {"licitacoes": licitacoes}
     return render(request, "modal_bidding.html", context)
 
+
+
 class BiddingCreateView(CreateView):
     """
     Faz o cadastro das licitações
@@ -177,8 +207,6 @@ class BiddingCreateView(CreateView):
     def get_success_url(self) -> str:
         messages.success(self.request, self.message_success)
         return reverse_lazy('biddingContracts:list_bidding')
-
-
 
 
 class ListBiddingView(ListView):
@@ -233,6 +261,7 @@ class BuscarView(View):
     form_class = formARP
     template_name = 'ataRegistroPreco_new.html'
     success_url = reverse_lazy('biddingContracts:create-ARP')"""
+
 
 def createArp(request):
     if request.method == "POST":

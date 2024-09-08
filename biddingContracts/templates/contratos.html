@@ -149,8 +149,9 @@
                     </div>
                     <div class="d-flex"><small>Licitação: {{ contrato.licitacao_fk.numProcess }}</small></div>
                     <div class="mt-2">
-                        <span class="badge badge-primary">Valor: {{ contrato.valor }}</span>
+                        <span class="badge bg-primary me-2">Valor do contrato: R${{ contrato.valor }}</span>
                         <a href="{% url 'biddingContracts:relatorio' contrato.pk %}" class="btn btn-sm btn-outline-primary ml-3">Mais detalhes</a>
+                        <a href="{% url 'biddingContracts:update_contracts' contrato.pk %}" class="btn btn-sm btn-outline-info ml-3 ms-2">Editar</a>
                     </div>
                 </div>
                 {% endfor %}

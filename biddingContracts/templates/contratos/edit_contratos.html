@@ -1,20 +1,21 @@
-{% extends "base_template.html" %}
-{% load static %}
-{% block title %} Criar Contratos {% endblock title %}
-
-
+{% extends 'base_template.html' %}
 {% block content %}
+
 <div class="d-flex">
-    {% include "sidebar.html" %}
-    <div id="contrato" class="container mt-5">
-        <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <h5 class="card-title mb-0">Cadastro de Contrato</h5>
-            </div>
-            <div class="card-body">
-                <form action="{% url 'biddingContracts:cadContrato' %}" method="POST" class="row g-3">
-                    {% csrf_token %}
-    
+  {% include "sidebar.html" %}
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-md-10 mx-auto">
+        <div class="card">
+          <h4 class="font-weight-normal text-center m-3">Atualizar informações da Licitação de n°: {{contrato.numero}}</h4>
+          <form action="{% url 'biddingContracts:update_contracts' contrato.pk %}" method="post" class="needs-validation" novalidate>
+            {% csrf_token %}
+            {{ form.media }}
+            {% load static %}
+            <link href="{% static 'css/localStyle.css' %}" rel="stylesheet">
+            <div class="col-md-10 mx-auto">
+              <div class="card-body">
+                <div class="form-row">
                     <div class="col-md-6">
                         <label for="{{ form.numero.id_for_label }}" class="form-label">{{ form.numero.label }}</label>
                         {{ form.numero }}
@@ -22,7 +23,7 @@
                             <div class="text-danger">{{ form.numero.errors }}</div>
                         {% endif %}
                     </div>
-    
+
                     <div class="col-md-12">
                         <label for="{{ form.assuntoDetalhado.id_for_label }}" class="form-label">{{ form.assuntoDetalhado.label }}</label>
                         {{ form.assuntoDetalhado }}
@@ -30,7 +31,7 @@
                             <div class="text-danger">{{ form.assuntoDetalhado.errors }}</div>
                         {% endif %}
                     </div>
-    
+
                     <div class="col-md-6">
                         <label for="{{ form.dataInicial.id_for_label }}" class="form-label">{{ form.dataInicial.label }}</label>
                         {{ form.dataInicial }}
@@ -38,7 +39,7 @@
                             <div class="text-danger">{{ form.dataInicial.errors }}</div>
                         {% endif %}
                     </div>
-    
+
                     <div class="col-md-6">
                         <label for="{{ form.dataFinal.id_for_label }}" class="form-label">{{ form.dataFinal.label }}</label>
                         {{ form.dataFinal }}
@@ -46,7 +47,7 @@
                             <div class="text-danger">{{ form.dataFinal.errors }}</div>
                         {% endif %}
                     </div>
-    
+
                     <div class="col-md-6">
                         <label for="{{ form.valor.id_for_label }}" class="form-label">{{ form.valor.label }}</label>
                         {{ form.valor }}
@@ -54,17 +55,13 @@
                             <div class="text-danger">{{ form.valor.errors }}</div>
                         {% endif %}
                     </div>
-                    
+
                     <div class="col-md-6">
                         <label for="{{ form.licitacao_fk.id_for_label }}" class="form-label" value="{{ form.licitacao_fk.id_for_label }}">{{ form.licitacao_fk.label }}</label>
                         {{ form.licitacao_fk }}
                         <div class="d-flex">
                             <i class="fa-solid fa-magnifying-glass mt-2 cursor-pointer" id="bot-licitacao" data-bs-toggle="modal" data-bs-target="#modal-licitacao" title="Procurar Licitação"></i>
                         </div>
-    
-                        <!-- Input escondido para armazenar o valor da licitação selecionada -->
-                        {% comment %} <input type="hidden" id="licitacao-selecionada" name="licitacao_fk" value="{{ form.licitacao_fk.value }}"> O erro a princípio era esse input que estava enviando mais um campo para o campo de licitacao_fk {% endcomment %}
-    
     
                         <div class="modal fade" id="modal-licitacao" aria-labelledby="head" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
@@ -89,7 +86,7 @@
                             <div class="text-danger">{{ form.licitacao_fk.errors }}</div>
                         {% endif %}
                     </div>
-    
+
                     <div class="col-md-6">
                         <label for="{{ form.fornecedor_fk.id_for_label }}" class="form-label">{{ form.fornecedor_fk.label }}</label>
                         {{ form.fornecedor_fk }}
@@ -97,15 +94,20 @@
                             <div class="text-danger">{{ form.fornecedor_fk.errors }}</div>
                         {% endif %}
                     </div>
-    
-                    <div class="col-12 text-center">
-                        <button type="submit" class="btn btn-primary">Enviar</button>
-                        <a class="btn btn-secondary mr-2" href="{% url 'biddingContracts:index' %}">Voltar</a>
-                    </div>
-                </form>
-    
+
+                </div>
+              </div>
+              <div class="d-flex justify-content-start mt-3 mb-4 col-12">
+                <a href="{% url 'biddingContracts:contratos' %}" name="cancel"
+                  class="btn btn-secondary mr-2">Cancelar</a>
+                <button type="submit" class="btn btn-success ms-2">Salvar</button>
+              </div>
             </div>
+            <br>
+  
+          </form>
         </div>
+      </div>
     </div>
 </div>
 <script>
@@ -126,4 +128,4 @@
         modal.hide();
 });
 </script> 
-{% endblock %}
+  {% endblock content %}

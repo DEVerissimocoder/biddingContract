@@ -1,20 +1,22 @@
 <!-- Sidebar -->
-<div class="text-white p-4 flex-shrink-0 w-250" id="sidebar" style="width: 250px; min-height: 100vh; background-color: #55b058;">
+<div class="text-white p-4 flex-shrink-0 w-150" id="sidebar" style=" min-height: 100vh; background-color: #55b058;">
     <h4 class="text-center text-uppercase mb-4">Menu</h4>
-        <ul class="nav flex-column">
+        <ul class="nav flex-column d-flex flex-column align-items-center">
             <li class="nav-item mb-3">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:index' %}">
-                    <i class="bi bi-file-earmark-plus-fill me-2"></i> Início
+                    <i class="fa-solid fa-house" title="Inicio" ></i>
                 </a>
             </li>
             <li class="nav-item mb-3">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:cadContrato' %}">
-                    <i class="bi bi-file-earmark-plus-fill me-2"></i> Criar Contratos
+                    <!--<i class="bi bi-file-earmark-plus-fill me-2" ></i> Criar Contratos-->
+                    <i class="fa-solid fa-file-contract" title="Criar Contratos"></i>
                 </a>
             </li>
             <li class="nav-item mb-3">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:contratos' %}">
-                    <i class="bi bi-file-earmark-text-fill me-2"></i> Listar Contratos
+                    <!--<i class="bi bi-file-earmark-text-fill me-2"></i> Listar Contratos-->
+                    <i class="fa-solid fa-list" title="Listar Contratos"></i>
                 </a>
             </li>
             <!-- 
@@ -27,7 +29,8 @@
             
             <li class="nav-item mb-3">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:list_bidding' %}">
-                    <i class="bi bi-file-earmark-text-fill me-2"></i> Listar Licitações
+                    <!--<i class="bi bi-file-earmark-text-fill me-2"></i> Listar Licitações-->
+                    <i class="fa-solid fa-list-check" title="Listar Licitações"></i>
                 </a>
             </li>
             <!--
@@ -39,26 +42,30 @@
             -->
             <li class="nav-item mb-3">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:fornecedores' %}">
-                    <i class="bi bi-file-earmark-text-fill me-2"></i> Listar Fornecedores
+                    <!--<i class="bi bi-file-earmark-text-fill me-2"></i> Listar Fornecedores-->
+                    <i class="fa-solid fa-truck-field" title="Listar Fornecedores"></i>
                 </a>
             </li>
             <li class="nav-item mb-3">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:create-ARP' %}">
-                    <i class="bi bi-file-earmark-text-fill me-2"></i>Criar Atas de Registro de Preços
+                    <!--<i class="bi bi-file-earmark-text-fill me-2"></i>Criar Atas de Registro de Preços-->
+                    <i class="fa-solid fa-registered" title="Criar Atas de Registro de Preços"></i>
                 </a>
             </li>
 
             <li class="nav-item mb-3">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:atas' %}">
-                    <i class="bi bi-file-earmark-text-fill me-2"></i> Listar Atas de Registros de Preços
+                    <!--<i class="bi bi-file-earmark-text-fill me-2"></i> Listar Atas de Registros de Preços-->
+                    <i class="fa-solid fa-book" title="Listar Atas de Registros de Preços"></i>
                 </a>
             </li>
             {% if user.is_authenticated %}
                 <li class="nav-item mb-3">
                     <form action="{% url 'logout' %}" method="post" class="">
                         {% csrf_token %}
-                        <button class="nav-link link-danger text-danger" type="submit">Sair do Sistema</button>
-                      </form>
+                        <button class="nav-link link-danger text-danger" type="submit"><i class="fa-solid fa-circle-xmark" title="Sair do Sistema"></i>
+                        </button>
+                    </form>
                 </li>
             {% endif %}
         </ul>
