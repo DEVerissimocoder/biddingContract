@@ -18,8 +18,8 @@ from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
-STATIC_DIR= os.path.join(BASE_DIR, 'static')
+#TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
+#STATIC_DIR= os.path.join(BASE_DIR, 'static')
 
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 
@@ -31,7 +31,7 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-SECRET_KEY = 'django-insecure-64g@5u6!1v%c=q3%34w*4y&u25q57!09d%e5f'
+SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 DEBUG = os.getenv("DEBUG")
 
@@ -77,7 +77,7 @@ ROOT_URLCONF = 'biddingContract.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -159,15 +159,20 @@ STATICFILES_FINDERS = [
 
 ]
 
+STATIC_URL = 'static/'
+
+
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-    
+    os.path.join(BASE_DIR, 'biddingContract/static')
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATIC_URL = '/static/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+#STATIC_URL = '/static/'
+
+#Questões de mídia  
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 #MEDIA_URL = '/media/'
 
 # Default primary key field type
