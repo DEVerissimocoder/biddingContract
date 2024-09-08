@@ -5,11 +5,15 @@ app_name = 'biddingContracts'
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('contratos/', views.listContratos, name="contratos"),
+    #path('contratos/', views.listContratos, name="contratos"),
+    path("contratos/", views.ListContractsView.as_view(), name="contratos"),
     path('contratos/relatorio/<int:id_contrato>', views.contratosRelatorio, name='relatorio'),
+    #path('contratos/<int:id_contrato>/relatorio/', views.ContratoRelatorioView.as_view(), name='contrato_relatorio'),
+
     path('fornecedores/', views.listFornecedores, name="fornecedores"),
     path('criar-fornecedor/', views.BiddingFornecedor.as_view(), name='fornecedor_new'),
-    path('licitacoes/', views.listLicitacoes, name='licitacoes'),
+    #path('licitacoes/', views.listLicitacoes, name='licitacoes'),
+    path('licitacoes/', views.ListBiddingView.as_view(), name="list_bidding"),
     path('criar-licitacoes/', views.BiddingCreateView.as_view(), name='create-bidding'),
     path('modal-licitacao', views.modal_licitacao, name='modal-licitacao'),
     path('contrato/', views.cadContrato, name="cadContrato"),
