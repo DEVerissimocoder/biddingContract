@@ -120,7 +120,7 @@
                 </ul> 
               </div>
             </div>
-            {% if object_list %}
+            {% if object_list.existis %}
                 <div class="d-flex ">
                     <p class="text-muted small">{{ object_list.count }} Contratos Existentes</p>
                 </div>
@@ -131,7 +131,7 @@
             {% endif %}
           </nav>   <!-- Fim do navbar -->
 
-        {% if contratos %}
+        {% if contratos.existis %}
             <div class="list-group">
                 {% for contrato in contratos %}
                 <div class="list-group-item list-group-item-action flex-column align-items-start mb-3">
