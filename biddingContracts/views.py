@@ -222,8 +222,29 @@ class BiddingUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
-    
 
+class FornecedorUpdate(UpdateView):
+    model=Fornecedor
+    template_name = "fornecedor_update.html"
+    form_class = formFornecedor
+    context_object_name = "fornecedor"
+
+
+    def form_valid(self, form):
+        messages.success(self.request, 'fornecedor editado com sucesso!')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Erro ao editar fornecedor. Verifique os campos do formulário.')
+        return render(self.request, self.template_name, {"form": form})
+
+    def get_success_url(self):
+        return reverse_lazy("biddingContracts:fornecedores")
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+    
 #view para salvar as licitações como pdf
 def export_pdf(request): 
     biddings = Licitacao.objects.all() # lista todas as licitações 

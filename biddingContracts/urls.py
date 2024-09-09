@@ -9,6 +9,7 @@ urlpatterns = [
     path('contratos/relatorio/<int:id_contrato>', views.contratosRelatorio, name='relatorio'),
     path('fornecedores/', views.listFornecedores, name="fornecedores"),
     path('criar-fornecedor/', views.BiddingFornecedor.as_view(), name='fornecedor_new'),
+    path('updt-fornecedor/<int:pk>/', views.FornecedorUpdate.as_view(), name='updateforn'),
     path('modal-fornecedor/', views.modal_fornecedor, name="modal-fornecedor"),
     path('licitacoes/', views.listLicitacoes, name='licitacoes'),
     path('criar-licitacoes/', views.BiddingCreateView.as_view(), name='create-bidding'),

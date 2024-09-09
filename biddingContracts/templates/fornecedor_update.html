@@ -1,0 +1,64 @@
+{% extends "base_template.html" %}
+{% load static %}
+{% block title %} Cadastro de Fornecedores {% endblock %}
+
+{% block content %}
+ <div class="container my-5">
+    <form method="post" action="{% url 'biddingContracts:updateforn' fornecedor.pk %}">
+        {% csrf_token %}
+        {{ form.media }}
+        
+        {% block form_content %}
+        <div class="mb-3">
+            <label for="id_nome" class="form-label">Razão Social</label>
+            {{ form.nome }}
+        </div>
+        <div class="mb-3">
+            <label for="id_cnpj" class="form-label">CNPJ</label>
+            {{ form.cnpj }}
+        </div>
+        <div class="mb-3">
+            <label for="id_endereco" class="form-label">Endereço</label>
+            {{ form.endereco }}
+        </div>
+        <div class="mb-3">
+            <label for="id_num" class="form-label">Número</label>
+            {{ form.num }}
+        </div>
+        <div class="mb-3">
+            <label for="id_bairro" class="form-label">Bairro</label>
+            {{ form.bairro }}
+        </div>
+        <div class="mb-3">
+            <label for="id_cep" class="form-label">CEP</label>
+            {{ form.cep }}
+        </div>
+        <div class="mb-3">
+            <label for="id_cidade" class="form-label">Cidade</label>
+            {{ form.cidade }}
+        </div>
+        <div class="mb-3">
+            <label for="id_telefone" class="form-label">Telefone</label>
+            {{ form.telefone }}
+        </div>
+        {% endblock %}
+        
+        <div class="d-flex justify-content-end mt-5">
+            {% block form_buttons %}
+            <a href="{% url 'biddingContracts:index' %}" name="cancel" class="btn btn-secondary me-2">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            {% endblock %}
+        </div>
+    </form>
+ </div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-mask-plugin@1.14.16/dist/jquery.mask.min.js"></script>
+
+<script>
+    $('#cnpj').mask('00.000.000/0000-00', {reverse: true});
+    $('#phone').mask('(00) 00000-0000');
+    $('#cep').mask('00000-000');
+</script>
+{% endblock %}
