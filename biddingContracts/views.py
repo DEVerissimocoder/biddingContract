@@ -88,7 +88,7 @@ class ListContractsView(ListView):
             queryset = Contrato.objects.all()
         return queryset
 
-# View que atualiza os ocntratos
+# View que atualiza os contratos
 class ContractsUpdateView(UpdateView):
     """
     Classe destinada a atualizar os contratos já criados
