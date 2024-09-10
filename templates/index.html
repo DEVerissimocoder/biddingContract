@@ -1,22 +1,113 @@
 {% extends "base_template.html" %}
 {% load static %}
-{% block title %} Página Inicial  {% endblock %}
+{% block title %} Página Inicial {% endblock %}
 {% block content %}
-<div class="d-flex">
-    <!--sidebar-->
-    {% include "sidebar.html" %}
-    
-    <!-- Main Content -->
-    <div class="container-fluid mt-5">
-        <div class="d-flex flex-column align-items-center">
-            {% include "messages.html" %}
-            {% if user.is_authenticated%}
-                <h2 class="text-center text-muted">Olá, {{user.username.title}}! Seja bem vindo</h2>
-            {% endif %}
-            <h3 style="margin-top: 5rem;" class="text-center text-uppercase mb-4 text-muted">Sistema para Controle de Contratos Licitatórios da Prefeitura de <br> <span style="color: #188249;">Paranatama</span></h3>
-            <img class="w-50"  src="{% static 'imagens/para.jpeg' %}" alt="">
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+/>
+<style>
+    .swiper {
+        max-width: 100%;
+        height: auto;
+    }
+
+    main {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    span {
+        font-size: 1.5rem;
+        color: #188249;
+    }
+
+    img {
+        box-shadow: 0 1px 2px #0003;
+        max-width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+
+    .swiper-slide {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    h2, h3 {
+        color: #6c757d;
+    }
+</style>
+
+<div class="container-fluid g-0">
+    <div class="row g-0">
+        <!-- Sidebar -->
+        <div class="col-md-1">
+            {% include "sidebar.html" %}
         </div>
-        
+
+        <!-- Main Content -->
+        <main class="col-md-9">
+            <div class="container mt-5">
+                <div class="d-flex flex-column align-items-center">
+                    {% include "messages.html" %}
+                    {% if user.is_authenticated %}
+                        <h2 class="text-center">Olá, {{ user.username.title }}! Seja bem-vindo</h2>
+                    {% endif %}
+                    <h3 class="text-center text-uppercase mb-4">Sistema para Controle de Contratos Licitatórios da Prefeitura de <br> <span>Paranatama</span></h3>
+
+                    <!-- Slider -->
+                    <div class="swiper">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <img src="{% static 'imagens/para1.png' %}" alt="Imagem 1">
+                            </div>
+                            <div class="swiper-slide">
+                                <img src="{% static 'imagens/para.jpeg' %}" alt="Imagem 2">
+                            </div>
+                            <div class="swiper-slide">
+                                <img src="{% static 'imagens/para3.png' %}" alt="Imagem 3">
+                            </div>
+                        </div>
+
+                        {% comment %} <!-- Pagination -->
+                        <div class="swiper-pagination"></div> {% endcomment %}
+
+                        {% comment %} <!-- Navigation -->
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div> {% endcomment %}
+
+                        <!-- Scrollbar -->
+                        <!--<div class="swiper-scrollbar"></div>>-->
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+    const swiper = new Swiper('.swiper', {
+        direction: 'horizontal',
+        loop: true,
+        autoplay: {
+            delay: 3000, // Troca de slides a cada 3 segundos
+            disableOnInteraction: false, // Continua o autoplay mesmo após interação do usuário
+        },
+        pagination: {
+            el: '.swiper-pagination',
+        },
+        //navigation: {
+          //  nextEl: '.swiper-button-next',
+           // prevEl: '.swiper-button-prev',
+        //},
+        scrollbar: {
+            el: '.swiper-scrollbar',
+        },
+    });
+</script>
 {% endblock content %}
