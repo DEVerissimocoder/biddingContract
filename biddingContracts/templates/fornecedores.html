@@ -35,7 +35,7 @@
                                         <td>
                                             <ul class="nav">
                                                 <li class="nav-item">
-                                                    <a href="{% url 'biddingContracts:updateforn' fornecedor.pk %}" name="forn" value="{{ fornecedor.pk }}" id="bot-fornecedor"class="nav-link active" ariea-current="page" data-bs-toggle="modal" data-bs-target="#modal-upd-forn">editar</a>
+                                                    <a href="{% url 'biddingContracts:updateforn' fornecedor.id %}" data-id="{{ fornecedor.id }}" class="nav-link active bot-fornecedor" aria-current="page" data-bs-toggle="modal" data-bs-target="#modal-upd-forn">editar</a>
                                                 </li>
                                             </ul>
                                             <div class="modal fade" id="modal-upd-forn" aria-labelledby="head-mod-upd" aria-hidden="True">
@@ -55,8 +55,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </td>
-                                        <!-- MODAL AQUI!!-->
+                                        </td>        
                                         <td scope="row">{{fornecedor.pk}}</td>
                                         <td>{{ fornecedor.nome }}</td>
                                         <td>{{ fornecedor.cnpj }}</td>
@@ -84,16 +83,17 @@
 
 {% block javascript %}
     <script>
-        
-        document.getElementById('bot-fornecedor').addEventListener('click', function(){
-            var fornecedor_id = document.querySelector("input[name='forn']");
-            fetch("{% url 'biddingContracts:updateforn' 0 %}".replace(0, fornecedor_id.value))
-            .then(response => response.text())
-            .then(data=>{
+        document.querySelectorAll('.bot-fornecedor').forEach(function(element){
+            element.addEventListener('click', function(){
+                var fornecedor_id = this.getAttribute("data-id")
+                console.log(fornecedor_id);
+                fetch("{% url 'biddingContracts:updateforn' 0 %}".replace(0, fornecedor_id))
+                .then(response => response.text())
+                .then(data=>{
                 document.getElementById("modal-body-forn-upd").innerHTML = data;
+                });
             });
-        });
-        
+        });  
     </script>
 {% endblock %}
 

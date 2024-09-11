@@ -45,8 +45,8 @@
         
         <div class="d-flex justify-content-end mt-5">
             {% block form_buttons %}
-            <a href="{% url 'biddingContracts:index' %}" name="cancel" class="btn btn-secondary me-2">Cancelar</a>
-            <button type="submit" class="btn btn-primary">Salvar</button>
+            <a href="{% url 'biddingContracts:fornecedores' %}" name="cancel" class="btn btn-secondary me-2">Cancelar</a>
+            <button href="{% url 'biddingContracts:fornecedores' %}" type="submit" class="btn btn-primary">Salvar</button>
             {% endblock %}
         </div>
     </form>

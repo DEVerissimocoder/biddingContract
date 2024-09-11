@@ -2,7 +2,7 @@ from django.db import models
 
 #licitacao
 class Licitacao (models.Model):
-    id_licitacao = models.IntegerField(primary_key=True, auto_created=True)
+    #id_licitacao = models.IntegerField(primary_key=True, auto_created=True)
     numProcess = models.CharField(max_length=7, unique=True, blank=False, null=False)
     categoria = models.CharField(max_length=200, verbose_name="Categoria", null=False)
     assunto = models.CharField(max_length=200, verbose_name="Assunto",  null=False, blank=False)
@@ -64,7 +64,7 @@ class NotaFiscal(models.Model):
 
 
 class AtaRegistroPreco(models.Model):
-    id_arp = models.BigAutoField(primary_key=True, auto_created=True, serialize=True)
+    #id_arp = models.BigAutoField(primary_key=True, auto_created=True, serialize=True)
     numero = models.CharField( max_length=7, null=False, blank=False)
     assuntoDetalhado = models.TextField(max_length=200, verbose_name="Detalhe do contrato", null=False, blank=False)
     dataInicial = models.DateField()
