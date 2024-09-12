@@ -4,7 +4,7 @@ from django.views import View
 from django.views.generic import UpdateView
 from datetime import datetime
 from django.db.models import Q
-from  biddingContracts.forms import formLicitacao, formFornecedor, formContrato, formARP
+from  biddingContracts.forms import formLicitacao, formFornecedor, formContrato, formARP, NotaFiscalForm
 from django.urls import reverse, reverse_lazy
 from .models import Contrato, NotaFiscal, Fornecedor, Licitacao, AtaRegistroPreco
 from datetime import datetime, date
