@@ -1,5 +1,5 @@
 from django import forms
-from .models import Licitacao, Fornecedor, Contrato, AtaRegistroPreco
+from .models import Licitacao, Fornecedor, Contrato, AtaRegistroPreco, NotaFiscal
 
 class formLicitacao(forms.ModelForm):
     class Meta:
@@ -146,11 +146,11 @@ class formContrato(forms.ModelForm):
     #     widget=forms.Select(attrs={'class': 'form-select'})
     # )
   
-    fornecedor_fk = forms.ModelChoiceField(
+    """fornecedor_fk = forms.ModelChoiceField(
         queryset=Fornecedor.objects.all(),
         label="Fornecedor",
         widget=forms.Select(attrs={'class': 'form-select'})
-    )
+    )"""
 
     class Meta:
         model = Contrato
@@ -180,6 +180,14 @@ class formContrato(forms.ModelForm):
                     "placeholder": "licitacoes ao lado",
                 }
             ),
+            "fornecedor_fk": forms.TextInput(
+                attrs={
+                    "type": "text",
+                    "class": "form-control",
+                    "placeholder": "fornecedor",
+                }
+            ),
+
             "numero": forms.TextInput(
                 attrs={
                     "type": "text",
@@ -275,3 +283,55 @@ class formARP(forms.ModelForm):
                 }
             ),
         }
+
+class NotaFiscalForm(forms.ModelForm):
+    class Meta:
+        model = NotaFiscal
+        fields=["num", "serie", "valor", "tipo", "dataEmissao", "contrato_fk"]
+        labels={
+                "num": "NÚMERO",
+                "serie": "SERIE",
+                "valor": "VALOR",
+                "tipo": "TIPO", #acho que este campo poderia sair, já que que tem o campo serie.
+                "dataEmissao": "DATA DE EMISSÃO",
+                "contrato_fk": "CONTRATO"
+                }
+        
+        widgets={
+            "num":forms.NumberInput(
+                attrs={
+                    "type":"number",
+                    "class":"form-control",
+                }
+            ),
+            "serie": forms.TextInput(
+                attrs={
+                    "type": "text",
+                    "class": "form-control"
+                }
+            ),
+            "valor": forms.NumberInput(
+                attrs={
+                    "type":"number",
+                    "class": "form-control",
+                }
+            ),
+            "tipo": forms.TextInput(
+                attrs={
+                    "type":"text",
+                    "class": "form-control",
+                }
+            ),
+            "dataEmissao": forms.DateInput(
+                attrs={
+                    "type": "date",
+                    "class": "form-control",
+                }
+            ),
+            "contrato_fk": forms.Select(
+                attrs={
+                    "class": "form-select"
+                }
+            ),
+        }
+            
