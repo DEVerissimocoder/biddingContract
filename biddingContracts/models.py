@@ -2,7 +2,7 @@ from django.db import models
 
 #licitacao
 class Licitacao(models.Model):
-    id = models.AutoField(primary_key=True)
+    id_licitacao = models.IntegerField(primary_key=True, auto_created=True)
     numProcess = models.CharField(max_length=7, unique=True, blank=False, null=False)
     categoria = models.CharField(max_length=200, verbose_name="Categoria", null=False)
     assunto = models.CharField(max_length=200, verbose_name="Assunto",  null=False, blank=False)
