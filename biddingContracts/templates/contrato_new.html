@@ -7,7 +7,7 @@
             <h5 class="card-title mb-0">Cadastro de Contrato</h5>
         </div>
         <div class="card-body">
-            <form action="{% url 'biddingContracts:cadContrato' %}" method="POST" class="row g-3">
+            <form action="{% url 'biddingContracts:cadContrato' fornecedor_id=fornecedor_id %}" method="POST" class="row g-3">
                 {% csrf_token %}
                 
                 <div class="col-md-6">
@@ -85,7 +85,7 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label for="{{ form.fornecedor_fk.id_for_label }}" class="form-label">{{ form.fornecedor_fk.label }}</label>
+                    <label for="{{ form.fornecedor_fk.id_for_label }}" class="form-label" value="{{fornecedor_id}}">{{ form.fornecedor_fk.label }}</label>
                     {{ form.fornecedor_fk }}
                     {% if form.fornecedor_fk.errors %}
                         <div class="text-danger">{{ form.fornecedor_fk.errors }}</div>
@@ -100,7 +100,10 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="modal-forn-label">Modal title</h5>
+                                <!--
+                                    <h5 class="modal-title" id="modal-forn-label">Fornecedor</h5>
+                                -->
+                                    <a href="{% url 'biddingContracts:fornecedor_new' %}" id="modal-forn-label">novo</a>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body" id="modal-body-content-forn">
