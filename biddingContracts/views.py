@@ -4,7 +4,7 @@ from django.views import View
 from django.views.generic import UpdateView
 from datetime import datetime
 from django.db.models import Q
-from  biddingContracts.forms import formLicitacao, formFornecedor, formContrato, formARP
+from  biddingContracts.forms import formLicitacao, formFornecedor, formContrato, formARP, NotaFiscalForm
 from django.urls import reverse, reverse_lazy
 from .models import Contrato, NotaFiscal, Fornecedor, Licitacao, AtaRegistroPreco
 from datetime import datetime, date
@@ -34,6 +34,8 @@ from django.contrib.auth.decorators import login_required
         
 
 #     return render(request, "contrato_new.html", {"form": form})
+"""def teste(request):
+    return render(request, "modal_fornecedor_teste.html")"""
 
 def cadContrato(request):
     if request.method == "POST":
@@ -180,11 +182,17 @@ def listFornecedores(request):
     context = {"fornecedores": fornecedores}
     return render(request, "fornecedores.html", context)
 
-# def listLicitacoes(request):
-#     """mostra todas as licitacoes"""
-#     licitacoes = Licitacao.objects.all()
-#     context = {"licitacoes": licitacoes}
-#     return render(request, "list_licitacoes.html", context)
+def modal_fornecedor(request):
+    "mostra fornecedor em um modal"
+    fornecedores = Fornecedor.objects.all()
+    context = {"fornecedores": fornecedores}
+    return render(request, "modal_fornecedores.html", context)
+
+def listLicitacoes(request):
+    """mostra todas as licitacoes"""
+    licitacoes = Licitacao.objects.all()
+    context = {"licitacoes": licitacoes}
+    return render(request, "list_licitacoes.html", context)
 #MODAL
 def modal_licitacao(request):
     "mostra licitacao em um modal"
@@ -309,8 +317,29 @@ class BiddingUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
-    
 
+class FornecedorUpdate(UpdateView):
+    model=Fornecedor
+    template_name = "fornecedor_update.html"
+    form_class = formFornecedor
+    context_object_name = "fornecedor"
+
+
+    def form_valid(self, form):
+        messages.success(self.request, 'fornecedor editado com sucesso!')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Erro ao editar fornecedor. Verifique os campos do formulário.')
+        return render(self.request, self.template_name, {"form": form})
+
+    def get_success_url(self):
+        return reverse_lazy("biddingContracts:fornecedores")
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+    
 #view para salvar as licitações como pdf
 def export_pdf(request): 
     biddings = Licitacao.objects.all() # lista todas as licitações 
@@ -326,3 +355,15 @@ def export_pdf(request):
         output.seek(0)
         response.write(output.read()) 
     return response
+
+class NotasFiscaisView(CreateView):
+    model= NotaFiscal
+    form_class = NotaFiscalForm
+    template_name = "notaFiscal_new.html"
+    print("notas fiscais view")
+    success_url = reverse_lazy("biddingContracts:notasfiscais")
+
+class ListNfe(ListView):
+    model = NotaFiscal
+    template_name = "notasFiscais.html"
+    success_url = reverse_lazy("biddingContracts:notasfiscais")

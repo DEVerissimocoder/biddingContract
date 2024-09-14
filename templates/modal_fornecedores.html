@@ -1,0 +1,40 @@
+{% extends "base_template.html" %}
+
+{% load static %}
+
+
+{% block content %}
+<div class="form-check">
+    
+    {% for fornecedor in fornecedores %}
+<div class="form-check">
+    <input class="form-check-input inputs" type="radio" name="flexRadioProvider" id="fornecedor-{{ fornecedor.pk }}" value="{{ fornecedor.pk }}">
+    <label class="form-check-label" for="fornecedor-{{ fornecedor.pk }}" value="{{ fornecedor.pk }}">
+        <div class="accordion-item accordion-flush mt-4">
+            <h2 class="accordion-header" id="headingOne-{{ fornecedor.pk }}">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProvider-{{ fornecedor.pk }}" aria-expanded="true" aria-controls="collapseProvider-{{ fornecedor.pk }}">
+                    <li class="list-group-item" aria-current="true">Fornecedor: {{ fornecedor.nome }}</li>
+                </button>
+            </h2>
+            <div id="collapseProvider-{{ fornecedor.pk }}" class="accordion-collapse collapse" aria-labelledby="headingOne-{{ fornecedor.pk }}">
+                <div class="accordion-body">
+                    <li class="list-group-item"> cnpj: <span class="text-success">{{ fornecedor.cnpj }}</span></li>
+                    <li class="list-group-item"> rua: <span class="text-success">{{ fornecedor.endereco }}</span></li>
+                    <li class="list-group-item"> numero: <span class="text-success">{{ fornecedor.num }}</span></li>
+                    <li class="list-group-item"> bairro: <span class="text-success">{{ fornecedor.bairro }}</span></li>
+                    <li class="list-group-item"> cep: <span class="text-success">{{ fornecedor.cep }}</span></li>
+                    <li class="list-group-item"> cidade: <span class="text-success">{{ fornecedor.cidade }}</span></li>
+                    <li class="list-group-item"> telefone: <span class="text-success">{{ fornecedor.telefone }}</span></li>
+                </div>
+            </div>
+        </div>
+    </label>
+</div>
+{% empty %}
+    <p>Vazio!!</p>
+{% endfor %}
+    </ul>
+    </label>
+  </div>
+
+{% endblock %}

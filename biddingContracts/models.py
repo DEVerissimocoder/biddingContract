@@ -45,7 +45,7 @@ class Contrato(models.Model):
     fornecedor_fk = models.ForeignKey("Fornecedor", on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.assuntoDetalhado}"
+        return f"{self.numero}"
 
 class NotaFiscal(models.Model):
     id_notafiscal = models.BigAutoField(primary_key=True, auto_created=True, serialize=True)
@@ -64,7 +64,7 @@ class NotaFiscal(models.Model):
 
 
 class AtaRegistroPreco(models.Model):
-    id_arp = models.BigAutoField(primary_key=True, auto_created=True, serialize=True)
+    #id_arp = models.BigAutoField(primary_key=True, auto_created=True, serialize=True)
     numero = models.CharField( max_length=7, null=False, blank=False)
     assuntoDetalhado = models.TextField(max_length=200, verbose_name="Detalhe do contrato", null=False, blank=False)
     dataInicial = models.DateField()
