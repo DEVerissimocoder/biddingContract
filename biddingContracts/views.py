@@ -18,39 +18,30 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 
 
-# CONTRATOS + RELATORIOS
-# def cadContrato(request):
-#     if request.method == "POST":
-#         form = formContrato(request.POST)
-#         print("post")
-#         if form.is_valid():
-#             print("formulario validado")
-#             form.save()
-#             return HttpResponseRedirect(reverse("biddingContracts:contratos"))
-#         else:
-#             print(f"Deu errado!{form.errors}")
-#     else:
-#         form = formContrato()
-        
-
-#     return render(request, "contrato_new.html", {"form": form})
-"""def teste(request):
-    return render(request, "modal_fornecedor_teste.html")"""
-
-def cadContrato(request):
+def cadContrato(request, fornecedor_id):
     if request.method == "POST":
         form = formContrato(request.POST)
-        print(f"Dados recebidos no POST: {request.POST}")  # Verifique o que está sendo enviado
+        print(f"Dados recebidos no POST: {request.POST}") 
         if form.is_valid():
-            print("formulario validado")
             form.save()
             return HttpResponseRedirect(reverse("biddingContracts:contratos"))
         else:
             print(f"Deu errado!{form.errors}")
+    
+    # fluxo 2-> segunda requisição, ou seja, quando ele vem da tela de cadastro de fornecedor.
+    if fornecedor_id!='0':
+        #consulta o fornecedor vindo do banco através do ID e cria um objeto com os dados retornado da tabela fornecedor
+        fornecedor = Fornecedor.objects.get(id = fornecedor_id)
+        
+        form = formContrato()
+        context={'form':form, 'fornecedor_id':fornecedor.id}
+        return render(request, 'contrato_new.html', context)
+    
+    # fluxo 1 -> primeira requisição get
     else:
         form = formContrato()
-
-    return render(request, "contrato_new.html", {"form": form})
+        context={'form':form,'fornecedor_id':fornecedor_id}
+        return render(request, "contrato_new.html", context)
     
 
 # def listContratos(request):
@@ -128,7 +119,7 @@ def contratosRelatorio(request, id_contrato):
     dataFinalContrato = contrato.dataFinal  
     prazoRestante = relativedelta(dataFinalContrato, hoje)
     mensagem = verifica_prazo_validade_contrato(prazoRestante, dataFinalContrato, hoje)
-
+    
     for notas in notasFiscais:
         if notas.contrato_fk.numero == contrato.numero:
             saldoAtual -= notas.valor
@@ -170,13 +161,21 @@ def verifica_prazo_validade_ARP(prazoRestante, dataFinal, hoje):
 def index(request):
     return render(request, 'index.html')
 
-class BiddingFornecedor(CreateView):
-    model = Fornecedor
-    form_class = formFornecedor
-    template_name = 'fornecedor_new.html'
-    success_url = reverse_lazy('biddingContracts:fornecedores')
-
-
+#cadastro de fornecedor
+def fornecedor_new(request):
+    if request.method=='POST':
+        form = formFornecedor(request.POST)
+        if form.is_valid():
+            fornecedor=form.save() 
+            print(f"id do fornecedor = {fornecedor.id}")
+            #redirecionar de volta para a tela de cadastro fornecendo o ID do fornecedor 
+            return redirect('biddingContracts:cadContrato', fornecedor_id = fornecedor.id)
+        else:
+            print('ocorreu um erro no fomulario', form.errors)
+    else:
+        form = formFornecedor()
+        return render(request, 'fornecedor_new.html', {'form': form})
+    
 def listFornecedores(request):
     fornecedores = Fornecedor.objects.all()
     context = {"fornecedores": fornecedores}

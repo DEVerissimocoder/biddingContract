@@ -27,7 +27,7 @@
                     <h3 class="text-center text-primary mb-4">Cadastro de Fornecedores</h3>
                     {% endblock %}
                     
-                    <form method="post">
+                    <form method="post" action="{% url 'biddingContracts:fornecedor_new' %}">
                         {% csrf_token %}
                         {{ form.media }}
                         
