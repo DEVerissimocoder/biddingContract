@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.views import View
 from django.views.generic import UpdateView
@@ -39,6 +39,14 @@ from django.contrib.auth.decorators import login_required
 
 def cadContrato(request):
     if request.method == "POST":
+        # request.session["contrato_numero"] = request.POST.get('numero')
+        # request.session["contrato_assuntoDetalhado"] = request.POST.get('assuntoDetalhado')
+        # request.session["contrato_dataInicial"] = request.POST.get('dataInicial')
+        # request.session["contrato_dataFinal"] = request.POST.get('dataFinal')
+        # request.session["contrato_valor"] = request.POST.get('valor')
+        # request.session["contrato_licitacao_fk"] = request.get('licitacao_fk')
+        # print(f"reqhkjhk {request.session["contrato_valor"]}")
+        # return redirect("biddingContracts:fornecedores")
         form = formContrato(request.POST)
         print(f"Dados recebidos no POST: {request.POST}")  # Verifique o que está sendo enviado
         if form.is_valid():
@@ -48,6 +56,12 @@ def cadContrato(request):
         else:
             print(f"Deu errado!{form.errors}")
     else:
+        # numero = request.session.get('contrato_numero')
+        # assuntoDetalhado = request.session.get('contrato_assuntoDetalhado')
+        # dataInicial = request.session.get('contrato_dataInicial')
+        # dataFinal = request.session.get('contrato_dataFinal')
+        # valor = request.session.get('contrato_valor')
+        # licitacao_fk = request.session.get('contrato_licitacao_fk')
         form = formContrato()
 
     return render(request, "contrato_new.html", {"form": form})
@@ -174,8 +188,7 @@ class BiddingFornecedor(CreateView):
     model = Fornecedor
     form_class = formFornecedor
     template_name = 'fornecedor_new.html'
-    success_url = reverse_lazy('biddingContracts:fornecedores')
-
+    success_url = reverse_lazy('biddingContracts:cadContrato')
 
 def listFornecedores(request):
     fornecedores = Fornecedor.objects.all()
