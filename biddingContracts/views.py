@@ -237,32 +237,6 @@ class ListBiddingView(ListView):
         return queryset
     
 
-
-class BuscarView(View):
-    """
-    Faz a o filtro por licitações baseando-se no n° do mês digitado, de 1 a 12. 
-    """
-    template_name = 'buscar.html'
-
-    def get(self, request):
-        if "buscar" in request.GET:
-            mes_to_search = request.GET['buscar']
-            if mes_to_search:
-                try:
-                    mes_to_search = int(mes_to_search)
-                    if 1 <= mes_to_search <= 12:
-                        biddings = Licitacao.objects.filter(date__month=mes_to_search)
-                        context = {"licitacoes": biddings}
-                    else:
-                        context = {"error_message": "Mês inválido. Digite um número entre 1 e 12."}
-                except ValueError:
-                    context = {"error_message": "Mês inválido. Digite um número entre 1 e 12."}
-            else:
-                context = {"error_message": "Por favor, digite um mês válido."}
-        else:
-            context = {}
-        return render(request, self.template_name, context)
-
  
 """class BiddingCreateArp(CreateView):
     model=AtaRegistroPreco
