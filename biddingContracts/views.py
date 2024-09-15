@@ -108,7 +108,7 @@ class ContractsUpdateView(UpdateView):
 
 
 def contratosRelatorio(request, id_contrato):
-    contrato = Contrato.objects.get(id_contrato=id_contrato)
+    contrato = Contrato.objects.get(id=id_contrato)
     notasFiscais = NotaFiscal.objects.filter(contrato_fk = id_contrato)
     saldoAtual = contrato.valor
     #tipo datetime.datetime
@@ -193,14 +193,12 @@ def listLicitacoes(request):
     context = {"licitacoes": licitacoes}
     return render(request, "list_licitacoes.html", context)
 #MODAL
-def modal_licitacao(request):
+"""def modal_licitacao(request):
     "mostra licitacao em um modal"
     licitacoes = Licitacao.objects.all()
     context = {"licitacoes": licitacoes}
     return render(request, "modal_bidding.html", context)
-
-
-
+"""
 class BiddingCreateView(CreateView):
     """
     Faz o cadastro das licitações
