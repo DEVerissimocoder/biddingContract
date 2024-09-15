@@ -18,6 +18,7 @@
           <th scope="col">TIPO</th>
           <th scope="col">DATA EMISSAO</th>
           <th scope="col">CONTRATO</th>
+          <th scope="col"> FORNECEDOR</th>
         </tr>
       </thead>
       <tbody>
@@ -30,6 +31,7 @@
               <td>{{ notafiscal.tipo }}</td>
               <td>{{ notafiscal.dataEmissao }}</td>
               <td>{{ notafiscal.contrato_fk }}</td>
+              <td>{{ notafiscal.fornecedor_fk }}</td>
           </tr>
           {% endfor %}
       </tbody>

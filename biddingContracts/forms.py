@@ -287,12 +287,12 @@ class formARP(forms.ModelForm):
 class NotaFiscalForm(forms.ModelForm):
     class Meta:
         model = NotaFiscal
-        fields=["num", "serie", "valor", "tipo", "dataEmissao", "contrato_fk"]
+        fields=["num", "serie", "valor", "tipo", "dataEmissao", "contrato_fk", "fornecedor_fk"]
         labels={
                 "num": "NÚMERO",
                 "serie": "SERIE",
                 "valor": "VALOR",
-                "tipo": "TIPO", #acho que este campo poderia sair, já que que tem o campo serie.
+                "tipo": "TIPO", 
                 "dataEmissao": "DATA DE EMISSÃO",
                 "contrato_fk": "CONTRATO"
                 }
@@ -329,6 +329,12 @@ class NotaFiscalForm(forms.ModelForm):
                 }
             ),
             "contrato_fk": forms.Select(
+                attrs={
+                    "class": "form-select"
+                }
+            ),
+
+            "fornecedor_fk": forms.Select(
                 attrs={
                     "class": "form-select"
                 }
