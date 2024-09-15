@@ -35,7 +35,7 @@ class Fornecedor(models.Model):
 
 #Contrato
 class Contrato(models.Model):
-    id_contrato = models.BigAutoField(primary_key=True, auto_created=True, serialize=True)
+    #id_contrato = models.BigAutoField(primary_key=True, auto_created=True, serialize=True)
     numero = models.CharField(max_length=7, null=False, unique=True, blank=False)
     assuntoDetalhado = models.TextField(max_length=200, verbose_name="Detalhe do contrato", null=False, blank=False)
     dataInicial = models.DateField()
