@@ -11,6 +11,7 @@ from dateutil.relativedelta import relativedelta
 from django.template.loader import render_to_string
 from django.views.generic import CreateView, ListView
 from django.contrib import messages
+
 import tempfile
 import weasyprint
 
@@ -260,14 +261,34 @@ def export_pdf(request):
         response.write(output.read()) 
     return response
 
-class NotasFiscaisView(CreateView):
-    model= NotaFiscal
-    form_class = NotaFiscalForm
-    template_name = "notaFiscal_new.html"
-    print("notas fiscais view")
-    success_url = reverse_lazy("biddingContracts:notasfiscais")
+def notafiscal_new(request):
+    #requisição post
+    if request.method=='POST':
+        form = NotaFiscalForm(request.POST)
+        
+        if form.is_valid():
+            contrato = Contrato.objects.get(numero=form.cleaned_data['contrato_fk'])
+            #pega do banco todas as notas fiscais relacionado ao contrato em questão
+            notasfiscais = NotaFiscal.objects.filter(contrato_fk_id = contrato.id)
+            #soma os valores das notas fiscais do contrato, que já estão armazenadas no banco, mais a nota que está tentando cadastrar
+            soma = sum(nota.valor for nota in notasfiscais) + form.cleaned_data.get('valor')
+            # valida se o resultado da soma ultrapassa o valor total do contrato.
+            if soma > contrato.valor:
+                messages.add_message(request, messages.INFO, "NÃO FOI POSSÍVEL CADASTRAR A NOTA FISCAL, VALOR DA NOTA MAIOR DO QUE O SALDO RESTANTO DO CONTRATO")
+                return HttpResponseRedirect(reverse('biddingContracts:nfe'))
+            else:
+                form.save()
+                messages.add_message(request, messages.SUCCESS, "SALVO COM SUCESSO")
+                return HttpResponseRedirect(reverse('biddingContracts:notasfiscais'))
+
+            #fazer validação do período vigente do contrato aqui
+            
+    #requisição get.
+    form = NotaFiscalForm()
+    return render(request, 'notaFiscal_new.html', {"form":form})
 
 class ListNfe(ListView):
     model = NotaFiscal
     template_name = "notasFiscais.html"
     success_url = reverse_lazy("biddingContracts:notasfiscais")
+

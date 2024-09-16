@@ -285,6 +285,7 @@ class formARP(forms.ModelForm):
         }
 
 class NotaFiscalForm(forms.ModelForm):
+
     class Meta:
         model = NotaFiscal
         fields=["num", "serie", "valor", "tipo", "dataEmissao", "contrato_fk", "fornecedor_fk"]
@@ -297,6 +298,7 @@ class NotaFiscalForm(forms.ModelForm):
                 "contrato_fk": "CONTRATO"
                 }
         
+
         widgets={
             "num":forms.NumberInput(
                 attrs={
@@ -328,6 +330,7 @@ class NotaFiscalForm(forms.ModelForm):
                     "class": "form-control",
                 }
             ),
+          
             "contrato_fk": forms.Select(
                 attrs={
                     "class": "form-select"
