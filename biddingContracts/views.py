@@ -45,7 +45,6 @@ def cadContrato(request, fornecedor_id):
 def listContratos(request):
     contratos = Contrato.objects.all()
     context = {"contratos": contratos}
-    print("chamando view")
     return render(request, "contratos.html", context)
 
 def contratosRelatorio(request, id_contrato):
@@ -276,13 +275,19 @@ def notafiscal_new(request):
             if soma > contrato.valor:
                 messages.add_message(request, messages.INFO, "NÃO FOI POSSÍVEL CADASTRAR A NOTA FISCAL, VALOR DA NOTA MAIOR DO QUE O SALDO RESTANTO DO CONTRATO")
                 return HttpResponseRedirect(reverse('biddingContracts:nfe'))
-            else:
-                form.save()
-                messages.add_message(request, messages.SUCCESS, "SALVO COM SUCESSO")
-                return HttpResponseRedirect(reverse('biddingContracts:notasfiscais'))
-
-            #fazer validação do período vigente do contrato aqui
             
+
+            hoje = datetime.today()
+            dhoje= hoje.date()
+            print(contrato.dataFinal<dhoje)
+            if contrato.dataFinal<dhoje:
+                messages.add_message(request, messages.INFO, "NÃO FOI POSSIVEL CADASTRAR NOTAS, CONSULTE O VALOR RESTANTE DO CONTRATO")
+                return HttpResponseRedirect(reverse("biddingContracts:nfe"))
+            
+            form.save()
+            messages.add_message(request, messages.SUCCESS, "SALVO COM SUCESSO")
+            return HttpResponseRedirect(reverse('biddingContracts:notasfiscais'))
+        
     #requisição get.
     form = NotaFiscalForm()
     return render(request, 'notaFiscal_new.html', {"form":form})
