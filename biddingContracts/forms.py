@@ -225,17 +225,8 @@ class formContrato(forms.ModelForm):
         }
 
 class formARP(forms.ModelForm):
-    licitacao_fk = forms.ModelChoiceField(
-        queryset=Licitacao.objects.all(),
-        label="Licitação",
-        #widget=forms.Select(attrs={'class': 'form-select'})
-    )
-
-    fornecedor_fk = forms.ModelChoiceField(
-        queryset=Fornecedor.objects.all(),
-        label="Fornecedor",
-        #widget=forms.Select(attrs={'class': 'form-select'})
-    )
+    #licitacao_fk = forms.ModelChoiceField( queryset=Licitacao.objects.all(), label="Licitação")
+    #fornecedor_fk = forms.ModelChoiceField(queryset=Fornecedor.objects.all(), label="Fornecedor")
     
     class Meta:
         model = AtaRegistroPreco
@@ -282,6 +273,21 @@ class formARP(forms.ModelForm):
                     "placeholder": "Valor da Ata de Registro de Preços",
                 }
             ),
+
+            "licitao_fk": forms.Select(
+                attrs={
+                    "class":"form-select"
+                }
+            ),
+
+            "fornecedor_fk": forms.TextInput(
+                attrs={
+                    "type":"text",
+                    "class":"form-control"
+
+                }
+            ),
+                           
         }
 
 class NotaFiscalForm(forms.ModelForm):

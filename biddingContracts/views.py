@@ -198,8 +198,14 @@ class listARPs(ListView):
     model=AtaRegistroPreco
     template_name='atas.html'
     success_url= reverse_lazy('biddingContracts:atas')
-
- 
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['atas'] = AtaRegistroPreco.objects.all()
+        return context
+    
+    
+    
  # View que atualiza as licitações
 class BiddingUpdateView(UpdateView):
     model = Licitacao
