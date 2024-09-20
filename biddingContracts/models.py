@@ -54,8 +54,9 @@ class NotaFiscal(models.Model):
     valor = models.FloatField()
     tipo = models.CharField(max_length=50)
     dataEmissao = models.DateField()
-    contrato_fk = models.ForeignKey("Contrato", on_delete=models.CASCADE)
+    contrato_fk = models.ForeignKey("Contrato", null=True, on_delete=models.CASCADE)
     fornecedor_fk = models.ForeignKey("Fornecedor", on_delete=models.CASCADE)
+    ataregistropreco_fk = models.ForeignKey('AtaRegistroPreco', null=True, on_delete=models.CASCADE)
     
     class Meta:
         verbose_name_plural = "Notas Fiscais"

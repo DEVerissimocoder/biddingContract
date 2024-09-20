@@ -1,31 +1,31 @@
 {% extends "base_template.html" %}
 {% block title %} Lista de ARP {% endblock title %}
 {% block content %}
+
 <div class="d-flex">
     {% include "sidebar.html" %}
-   
+    <div class="container my-5">
+        <h2 class="text-center mb-4">Lista de Atas de Registros de Preços </h2>
     {% if atas %}
-        
-        {% for ata in atas %}
-            <div class="list-group">
-                <div class="list-group-item list-group-item-action flex-column align-items-start mb-3">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">{{ ata.assuntoDetalhado }}</h5> 
-                        <h5 class="mb-1">NÚMERO: {{ ata.numero }}</h5><br>
-                        <small>DATA DE INICIO: {{ ata.dataInicial }}</small>
-                    </div>
-                    <small>FORNECEDOR: {{ ata.fornecedor_fk.nome }}</small>
-                    <div class="mt-2">
-                        <span calss="badge badge-primary">{{ ata.valor }}</span>
-                        <a href="#"> link para ver mais detalhes </a>
-                    </div>   
-                    
+        <div class="list-group">
+        {% for ata in atas %}           
+            <div class="list-group-item list-group-item-action flex-column align-items-start mb-3">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Objeto: {{ ata.assuntoDetalhado }}</h5> 
+                    <h5 class="mb-1">Número: {{ ata.numero }}</h5>
+                    <small>Registrada em: {{ ata.dataInicial }}</small>
                 </div>
-                
-            </div>
-        {% endfor %}
+                <span>Fornecedor: {{ ata.fornecedor_fk.nome }}</span>
+                <span class="badge badge-primary"> Valor da Ata é: {{ ata.valor }}</span>
+                <div class="mt-2">
+                    <a href="{% url 'biddingContracts:relatorioARP' ata.pk %}"> mais informações </a>
+                </div>   
+            </div>  
+        {% endfor %}           
+        </div>
+        
     {% endif %}
-   
+    </div>
 </div> 
 {% endblock content %}   
  

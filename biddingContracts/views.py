@@ -1,3 +1,4 @@
+from django.db.models.query import QuerySet
 from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.views import View
@@ -69,6 +70,7 @@ def contratosRelatorio(request, id_contrato):
         "vigencia": mensagem,
         "hoje": hoje,
         "dataFinal": dataFinalContrato,
+        "chave":True
         }
     return render(request, "contratos_relatorio.html", context)
 
@@ -84,13 +86,16 @@ def verifica_prazo_validade_contrato(prazoRestante, dataFinal, hoje):
         mensagem =  "O prazo de validade do contrato já expirou."
     return mensagem
 
-def verifica_prazo_validade_ARP(prazoRestante, dataFinal, hoje):
+def verifica_prazo_validade_arp(prazoRestante, dataFinal, hoje):
     mensagem = " "
-    if dataFinal >= hoje:
-        mensagem = f"O contrato é válido por mais {prazoRestante.years} anos, {prazoRestante.months} meses e {prazoRestante.days} dias."
+    if dataFinal > hoje:
+        mensagem = f"Esta ARP é válida por mais {prazoRestante.years} anos, {prazoRestante.months} meses e {prazoRestante.days} dias."
         return mensagem
-    else:
-        mensagem =  "O prazo de validade do contrato já expirou."
+    elif dataFinal == hoje:
+        mensagem = f"Esta ARP é válido até hoje dia: {dataFinal.strftime('%d/%m/%y')}"
+        return mensagem
+    elif dataFinal < hoje:
+        mensagem =  "O prazo de validade desta ARP já expirou."
     return mensagem
 # INDEX
 def index(request):
@@ -203,9 +208,41 @@ class listARPs(ListView):
         context = super().get_context_data(**kwargs)
         context['atas'] = AtaRegistroPreco.objects.all()
         return context
-    
-    
-    
+
+
+class RelatorioARPs(ListView):
+    model = AtaRegistroPreco
+    template_name = 'contratos_relatorio.html'
+    success_url = reverse_lazy('biddingContracts:relatorioarp') #não ta servindo pra nada
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        ata_id = self.kwargs.get('pk')  #captura a ata pelo id na url
+        print("ata_id=", ata_id)
+        notasfiscais = NotaFiscal.objects.filter(ataregistropreco_fk_id = ata_id)
+        print(notasfiscais)
+        ata = AtaRegistroPreco.objects.get(id=ata_id) # captura o objeto inteiro
+
+        hoje = datetime.today()
+        hoje = hoje.date()
+        dataInicial = ata.dataInicial
+        dataFinal = ata.dataFinal
+        # calculo de quanto tempo falta para o fim da ARP
+        prazoRestante = relativedelta(dataInicial - dataFinal)
+        #mensagem que será levada para o template
+        mensagem=verifica_prazo_validade_arp(prazoRestante, dataFinal, hoje)
+        
+        context["mensagem"] = mensagem
+        context["dataInicial"]=dataInicial
+        context["dataFinal"] = dataFinal
+        context["prazoRestante"] = prazoRestante
+        context["notasfiscais"] = notasfiscais
+        context["chave"] = False
+        return context
+
+def calcula_saldo_restante(id):
+    notasfiscais = NotaFiscal.objects.filter(id = id)
+    pass
  # View que atualiza as licitações
 class BiddingUpdateView(UpdateView):
     model = Licitacao
