@@ -1,70 +1,91 @@
 <!-- Sidebar -->
-<div class="text-white p-4 flex-shrink-0 w-150" id="sidebar" style=" min-height: 100vh; background-color: #55b058;">
+<div class="text-white p-4 flex-shrink-0 w-150 d-flex flex-column align-items-center" id="sidebar" style=" min-height: 100vh; background-color: #55b058;">
     <h4 class="text-center text-uppercase mb-4">Menu</h4>
-        <ul class="nav flex-column d-flex flex-column align-items-center">
+        <ul class="nav d-flex flex-column align-items-center justify-content-start-0">
             <li class="nav-item mb-3">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:index' %}">
-                    <i class="fa-solid fa-house" title="Inicio" ></i>
+                    <div class="d-flex flex-column align-items-center">
+                        <i class="fa-solid fa-house" title="Inicio" ></i>
+                        <p style="font-size:0.9rem;" class="text-small text-muted">Início</p>
+                    </div>
                 </a>
             </li>
-            <li class="nav-item mb-3">
+            <li class="nav-item mb-3 ">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:cadContrato' %}">
-                    <!--<i class="bi bi-file-earmark-plus-fill me-2" ></i> Criar Contratos-->
-                    <i class="fa-solid fa-file-contract" title="Criar Contratos"></i>
+                    <div class="d-flex flex-column align-items-center">
+                        <i class="fa-solid fa-file-contract" title="Criar Contratos"></i>
+                        <p style="font-size:0.9rem;" class="text-small text-muted text-center">Criar Contratos</p>
+                    </div> 
                 </a>
             </li>
             <li class="nav-item mb-3">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:contratos' %}">
-                    <!--<i class="bi bi-file-earmark-text-fill me-2"></i> Listar Contratos-->
-                    <i class="fa-solid fa-list" title="Listar Contratos"></i>
+                    <div class="d-flex flex-column align-items-center">
+                        <i class="fa-solid fa-list" title="Listar Contratos"></i>
+                        <p style="font-size:0.9rem;" class="text-small text-muted text-center">Listar contratos</p>
+                    </div>
                 </a>
             </li>
            
             <li class="nav-item mb-3">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:notasfiscais' %}">
-                    <i class="bi bi-file-earmark-plus-fill me-2"></i> notas fiscais
+                <a class="nav-link text-white" href="{% url 'biddingContracts:notasfiscais' %}"> 
+                    <div class="d-flex flex-column align-items-center">
+                        <i class="fa-solid fa-file-invoice-dollar" title="Notas Fiscais"></i>
+                        <p style="font-size:0.9rem;" class="text-small text-muted text-center">Notas fiscais</p>
+                    </div>
                 </a>
             </li>
-            
+            <li class="nav-item mb-3">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:nfe' %}">
+                    <div class="d-flex flex-column align-items-center">
+                        <i class="fa-solid fa-square-plus" title="Criar nota fiscal"></i>
+                        <p style="font-size:0.9rem;" class="text-small text-muted text-center">Criar nota fiscal</p>
+                    </div>
+                </a>
+            </li>
             
             <li class="nav-item mb-3">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:list_bidding' %}">
-                    <!--<i class="bi bi-file-earmark-text-fill me-2"></i> Listar Licitações-->
-                    <i class="fa-solid fa-list-check" title="Listar Licitações"></i>
+                    <div class="d-flex flex-column align-items-center">
+                        <i class="fa-solid fa-list-check" title="Listar Licitações"></i>
+                        <p style="font-size:0.9rem;" class="text-small text-muted text-center">Listar licitações</p>
+                    </div>
                 </a>
-            </li>
-            
-            <li class="nav-item mb-3">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:nfe' %}">
-                    <i class="bi bi-file-earmark-text-fill me-2"></i> Criar nota fiscal
-                </a>
-            </li>
-           
+            </li>           
             <li class="nav-item mb-3">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:fornecedores' %}">
-                    <!--<i class="bi bi-file-earmark-text-fill me-2"></i> Listar Fornecedores-->
-                    <i class="fa-solid fa-truck-field" title="Listar Fornecedores"></i>
+                    <div class="d-flex flex-column align-items-center">
+                        <i class="fa-solid fa-truck-field" title="Listar Fornecedores"></i>
+                        <p style="font-size:0.9rem;" class="text-small text-muted text-center">Listar fornecedores</p>
+                    </div>
                 </a>
             </li>
             <li class="nav-item mb-3">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:create-ARP' %}">
-                    <!--<i class="bi bi-file-earmark-text-fill me-2"></i>Criar Atas de Registro de Preços-->
-                    <i class="fa-solid fa-registered" title="Criar Atas de Registro de Preços"></i>
+                    <div class="d-flex flex-column align-items-center">
+                        <i class="fa-solid fa-registered" title="Criar Atas de Registro de Preços"></i>
+                        <p style="font-size:0.9rem;" class="text-small text-muted text-center">Criar ARPs</p>
+                    </div>
                 </a>
             </li>
 
             <li class="nav-item mb-3">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:atas' %}">
-                    <!--<i class="bi bi-file-earmark-text-fill me-2"></i> Listar Atas de Registros de Preços-->
-                    <i class="fa-solid fa-book" title="Listar Atas de Registros de Preços"></i>
+                    <div class="d-flex flex-column align-items-center">
+                        <i class="fa-solid fa-book" title="Listar Atas de Registros de Preços"></i>
+                        <p style="font-size:0.9rem;" class="text-small text-muted text-center">Listar ARPs</p>
+                    </div>
                 </a>
             </li>
             {% if user.is_authenticated %}
                 <li class="nav-item mb-3">
                     <form action="{% url 'logout' %}" method="post" class="">
                         {% csrf_token %}
-                        <button class="nav-link link-danger text-danger" type="submit"><i class="fa-solid fa-circle-xmark" title="Sair do Sistema"></i>
-                        </button>
+                        <div class="d-flex flex-column align-items-center">
+                            <button class="nav-link link-danger text-danger" type="submit"><i class="fa-solid fa-circle-xmark" title="Sair do Sistema"></i>
+                            </button>
+                            <p style="font-size:0.9rem;" class="text-small text-muted text-center">Sair do sistema</p>
+                        </div>
                     </form>
                 </li>
             {% endif %}

@@ -13,7 +13,7 @@ from django.template.loader import render_to_string
 from django.views.generic import CreateView, ListView
 from django.contrib import messages
 import tempfile
-import weasyprint
+#import weasyprint
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 
@@ -327,21 +327,21 @@ class FornecedorUpdate(UpdateView):
         context = super().get_context_data(**kwargs)
         return context
     
-#view para salvar as licitações como pdf
-def export_pdf(request): 
-    biddings = Licitacao.objects.all() # lista todas as licitações 
-    html_index = render_to_string('pdf/export-pdf.html', {'licitacoes': biddings})  
-    weasyprint_html = weasyprint.HTML(string=html_index, base_url='http://127.0.0.1:8000/media')
-    pdf = weasyprint_html.write_pdf(stylesheets=[weasyprint.CSS(string='body { font-family: serif} img {margin: 10px; width: 50px;}')]) 
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=Products'+str(date.today())+'.pdf'
-    response['Content-Transfer-Encoding'] = 'binary'
-    with tempfile.NamedTemporaryFile(delete=True) as output:
-        output.write(pdf)
-        output.flush() 
-        output.seek(0)
-        response.write(output.read()) 
-    return response
+# #view para salvar as licitações como pdf
+# def export_pdf(request): 
+#     biddings = Licitacao.objects.all() # lista todas as licitações 
+#     html_index = render_to_string('pdf/export-pdf.html', {'licitacoes': biddings})  
+#     weasyprint_html = weasyprint.HTML(string=html_index, base_url='http://127.0.0.1:8000/media')
+#     pdf = weasyprint_html.write_pdf(stylesheets=[weasyprint.CSS(string='body { font-family: serif} img {margin: 10px; width: 50px;}')]) 
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = 'attachment; filename=Products'+str(date.today())+'.pdf'
+#     response['Content-Transfer-Encoding'] = 'binary'
+#     with tempfile.NamedTemporaryFile(delete=True) as output:
+#         output.write(pdf)
+#         output.flush() 
+#         output.seek(0)
+#         response.write(output.read()) 
+#     return response
 
 class NotasFiscaisView(CreateView):
     model= NotaFiscal

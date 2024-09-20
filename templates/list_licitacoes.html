@@ -35,7 +35,9 @@
                     <div class="accordion-body">
                         <li class="list-group-item"> Objeto: <span class="text-success">{{licitacao.assunto}}</span></li>
                         <li class="list-group-item"> Modalidade: <span class="text-success">{{licitacao.categoria}}</span></li>
-                        <li class="list-group-item"> Data: <span class="text-success">{{licitacao.date}}</span></li>
+                        <li class="list-group-item"> Data: <span class="text-success">{{licitacao.date}}</span>
+                            <a class="btn btn-light ms-3" href="{% url "biddingContracts:update_bidding" licitacao.pk %}">Editar</a>
+                        </li>
                     </div>
                 </div>
             </div>
@@ -48,7 +50,7 @@
                 <a class="btn btn-secondary " href="{% url 'biddingContracts:index' %}">Voltar</a>
                 <a class="btn btn-success ms-2" href="{% url 'biddingContracts:create-bidding' %}">Criar Licitação</a>
             </div>
-            <a class="btn btn-danger flex-row-reverse" href="{% url 'biddingContracts:export-pdf' %}">ExportPDF</a>
+            {% comment %} <a class="btn btn-danger flex-row-reverse" href="{% url 'biddingContracts:export-pdf' %}">ExportPDF</a> {% endcomment %}
         </div>
     </div>
 </div>

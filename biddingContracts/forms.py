@@ -42,6 +42,7 @@ class formLicitacao(forms.ModelForm):
                 }
             ),
             "date": forms.DateInput(
+                format=('%Y-%m-%d'),
                 attrs={
                     "type": "date",
                     "class": "form-control",
