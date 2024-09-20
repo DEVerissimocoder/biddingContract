@@ -204,12 +204,14 @@ class formContrato(forms.ModelForm):
                 }
             ),
             "dataInicial": forms.DateInput(
+                format=("%Y-%m-%d"),
                 attrs={
                     "type": "date",
                     "class": "form-control",
                 }
             ),
             "dataFinal": forms.DateInput(
+                format=("%Y-%m-%d"),
                 attrs={
                     "type": "date",
                     "class": "form-control",

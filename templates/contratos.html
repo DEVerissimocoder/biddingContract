@@ -10,6 +10,7 @@
     <div class="container my-5 mt-1">
         {% include "messages.html" %}
         <h2 class="text-center mb-4 mt-4">Lista de Contratos</h2>
+        {% if contratos %}
         <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3"> <!-- Início do navbar -->
             <div class="container-fluid">
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -122,7 +123,7 @@
             </div>
             {% if object_list %}
                 <div class="d-flex ">
-                    <p class="text-muted small">{{ object_list.count }} Contratos Existentes</p>
+                    <p class="text-muted small">{{ object_list.count }} Contrato(s) Existente(s)</p>
                 </div>
             {% else %}
                 <div class="d-flex">
@@ -131,7 +132,6 @@
             {% endif %}
           </nav>   <!-- Fim do navbar -->
 
-        {% if contratos %}
             <div class="list-group">
                 {% for contrato in contratos %}
                 <div class="list-group-item list-group-item-action flex-column align-items-start mb-3">
@@ -160,8 +160,9 @@
         {% else %}
             <p class="text-center">Não há contratos!</p>
         {% endif %}
-        <div class="d-flex">
+        <div class="d-flex justify-content-center">
             <a class="btn btn-secondary mt-2" href="{% url "biddingContracts:index" %}">Voltar</a>
+            <a class="btn btn-success mt-2 ms-4" href="{% url "biddingContracts:cadContrato" %}">Criar contratos</a>
         </div>
     </div>
 </div>

@@ -7,7 +7,8 @@
 <div class="d-flex">
   {% include "sidebar.html" %}
   <div class="container my-5">
-    <h2 class="text-center mb-4">NOTAS FISCAIS ELETRÔNICAS</h2>
+    <h2 class="text-center mb-4 text-uppercase">Notas Fiscais Eletrônicas</h2>
+    {% if notafiscal_list %}
     <table class="table">
       <thead>
         <tr>
@@ -21,6 +22,7 @@
         </tr>
       </thead>
       <tbody>
+        
           {% for notafiscal in notafiscal_list %}
           <tr>
               <th scope="row">{{ notafiscal.pk }}</th>
@@ -32,6 +34,9 @@
               <td>{{ notafiscal.contrato_fk }}</td>
           </tr>
           {% endfor %}
+        {% else %}
+        <h3 class="text-center text-uppercase">Sem notas Fiscais!</h3>
+        {% endif %}
       </tbody>
     </table>
   </div>

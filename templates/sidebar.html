@@ -10,6 +10,7 @@
                     </div>
                 </a>
             </li>
+
             <li class="nav-item mb-3 ">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:cadContrato' %}">
                     <div class="d-flex flex-column align-items-center">
@@ -18,6 +19,7 @@
                     </div> 
                 </a>
             </li>
+
             <li class="nav-item mb-3">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:contratos' %}">
                     <div class="d-flex flex-column align-items-center">
@@ -26,20 +28,21 @@
                     </div>
                 </a>
             </li>
-           
-            <li class="nav-item mb-3">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:notasfiscais' %}"> 
-                    <div class="d-flex flex-column align-items-center">
-                        <i class="fa-solid fa-file-invoice-dollar" title="Notas Fiscais"></i>
-                        <p style="font-size:0.9rem;" class="text-small text-muted text-center">Notas fiscais</p>
-                    </div>
-                </a>
-            </li>
+
             <li class="nav-item mb-3">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:nfe' %}">
                     <div class="d-flex flex-column align-items-center">
                         <i class="fa-solid fa-square-plus" title="Criar nota fiscal"></i>
                         <p style="font-size:0.9rem;" class="text-small text-muted text-center">Criar nota fiscal</p>
+                    </div>
+                </a>
+            </li>
+           
+            <li class="nav-item mb-3">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:notasfiscais' %}"> 
+                    <div class="d-flex flex-column align-items-center">
+                        <i class="fa-solid fa-file-invoice-dollar" title="Notas Fiscais"></i>
+                        <p style="font-size:0.9rem;" class="text-small text-muted text-center">Listar notas fiscais</p>
                     </div>
                 </a>
             </li>
@@ -51,7 +54,8 @@
                         <p style="font-size:0.9rem;" class="text-small text-muted text-center">Listar licitações</p>
                     </div>
                 </a>
-            </li>           
+            </li> 
+
             <li class="nav-item mb-3">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:fornecedores' %}">
                     <div class="d-flex flex-column align-items-center">
@@ -60,6 +64,7 @@
                     </div>
                 </a>
             </li>
+
             <li class="nav-item mb-3">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:create-ARP' %}">
                     <div class="d-flex flex-column align-items-center">
@@ -77,6 +82,7 @@
                     </div>
                 </a>
             </li>
+            
             {% if user.is_authenticated %}
                 <li class="nav-item mb-3">
                     <form action="{% url 'logout' %}" method="post" class="">
