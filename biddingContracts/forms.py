@@ -42,6 +42,7 @@ class formLicitacao(forms.ModelForm):
                 }
             ),
             "date": forms.DateInput(
+                format=('%Y-%m-%d'),
                 attrs={
                     "type": "date",
                     "class": "form-control",
@@ -203,12 +204,14 @@ class formContrato(forms.ModelForm):
                 }
             ),
             "dataInicial": forms.DateInput(
+                format=("%Y-%m-%d"),
                 attrs={
                     "type": "date",
                     "class": "form-control",
                 }
             ),
             "dataFinal": forms.DateInput(
+                format=("%Y-%m-%d"), #Adicionando format para a data vir no template de edição
                 attrs={
                     "type": "date",
                     "class": "form-control",
@@ -323,6 +326,7 @@ class NotaFiscalForm(forms.ModelForm):
                 }
             ),
             "dataEmissao": forms.DateInput(
+                format=("%Y-%m-%d"),
                 attrs={
                     "type": "date",
                     "class": "form-control",

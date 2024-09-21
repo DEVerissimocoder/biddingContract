@@ -1,6 +1,5 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect, HttpResponse
-from django.views import View
 from django.views.generic import UpdateView
 from datetime import datetime
 from django.db.models import Q
@@ -9,17 +8,25 @@ from django.urls import reverse, reverse_lazy
 from .models import Contrato, NotaFiscal, Fornecedor, Licitacao, AtaRegistroPreco
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
-from django.template.loader import render_to_string
 from django.views.generic import CreateView, ListView
 from django.contrib import messages
 import tempfile
-import weasyprint
+from django.utils import timezone
+#import weasyprint
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 
 
 def cadContrato(request, fornecedor_id):
     if request.method == "POST":
+        # request.session["contrato_numero"] = request.POST.get('numero')
+        # request.session["contrato_assuntoDetalhado"] = request.POST.get('assuntoDetalhado')
+        # request.session["contrato_dataInicial"] = request.POST.get('dataInicial')
+        # request.session["contrato_dataFinal"] = request.POST.get('dataFinal')
+        # request.session["contrato_valor"] = request.POST.get('valor')
+        # request.session["contrato_licitacao_fk"] = request.get('licitacao_fk')
+        # print(f"reqhkjhk {request.session["contrato_valor"]}")
+        # return redirect("biddingContracts:fornecedores")
         form = formContrato(request.POST)
         print(f"Dados recebidos no POST: {request.POST}") 
         if form.is_valid():
@@ -39,6 +46,12 @@ def cadContrato(request, fornecedor_id):
     
     # fluxo 1 -> primeira requisição get
     else:
+        # numero = request.session.get('contrato_numero')
+        # assuntoDetalhado = request.session.get('contrato_assuntoDetalhado')
+        # dataInicial = request.session.get('contrato_dataInicial')
+        # dataFinal = request.session.get('contrato_dataFinal')
+        # valor = request.session.get('contrato_valor')
+        # licitacao_fk = request.session.get('contrato_licitacao_fk')
         form = formContrato()
         context={'form':form,'fornecedor_id':fornecedor_id}
         return render(request, "contrato_new.html", context)
@@ -80,6 +93,18 @@ class ListContractsView(ListView):
         else:
             queryset = Contrato.objects.all()
         return queryset
+    
+     # Adicionando o cálculo de vencimento ao contexto
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        contratos = context['contratos']
+        today = timezone.now().date()  # Obtém a data atual
+
+        # Adiciona um atributo 'vencido' a cada contrato
+        for contrato in contratos:
+            contrato.vencido = today > contrato.dataFinal  # Verifica se o contrato já venceu
+
+        return context
 
 # View que atualiza os contratos
 class ContractsUpdateView(UpdateView):
@@ -161,21 +186,12 @@ def verifica_prazo_validade_ARP(prazoRestante, dataFinal, hoje):
 def index(request):
     return render(request, 'index.html')
 
-#cadastro de fornecedor
-def fornecedor_new(request):
-    if request.method=='POST':
-        form = formFornecedor(request.POST)
-        if form.is_valid():
-            fornecedor=form.save() 
-            print(f"id do fornecedor = {fornecedor.id}")
-            #redirecionar de volta para a tela de cadastro fornecendo o ID do fornecedor 
-            return redirect('biddingContracts:cadContrato', fornecedor_id = fornecedor.id)
-        else:
-            print('ocorreu um erro no fomulario', form.errors)
-    else:
-        form = formFornecedor()
-        return render(request, 'fornecedor_new.html', {'form': form})
-    
+class BiddingFornecedor(CreateView):
+    model = Fornecedor
+    form_class = formFornecedor
+    template_name = 'fornecedor_new.html'
+    success_url = reverse_lazy('biddingContracts:cadContrato')
+
 def listFornecedores(request):
     fornecedores = Fornecedor.objects.all()
     context = {"fornecedores": fornecedores}
@@ -233,32 +249,6 @@ class ListBiddingView(ListView):
             )
         return queryset
     
-
-
-class BuscarView(View):
-    """
-    Faz a o filtro por licitações baseando-se no n° do mês digitado, de 1 a 12. 
-    """
-    template_name = 'buscar.html'
-
-    def get(self, request):
-        if "buscar" in request.GET:
-            mes_to_search = request.GET['buscar']
-            if mes_to_search:
-                try:
-                    mes_to_search = int(mes_to_search)
-                    if 1 <= mes_to_search <= 12:
-                        biddings = Licitacao.objects.filter(date__month=mes_to_search)
-                        context = {"licitacoes": biddings}
-                    else:
-                        context = {"error_message": "Mês inválido. Digite um número entre 1 e 12."}
-                except ValueError:
-                    context = {"error_message": "Mês inválido. Digite um número entre 1 e 12."}
-            else:
-                context = {"error_message": "Por favor, digite um mês válido."}
-        else:
-            context = {}
-        return render(request, self.template_name, context)
 
  
 """class BiddingCreateArp(CreateView):
@@ -337,21 +327,21 @@ class FornecedorUpdate(UpdateView):
         context = super().get_context_data(**kwargs)
         return context
     
-#view para salvar as licitações como pdf
-def export_pdf(request): 
-    biddings = Licitacao.objects.all() # lista todas as licitações 
-    html_index = render_to_string('pdf/export-pdf.html', {'licitacoes': biddings})  
-    weasyprint_html = weasyprint.HTML(string=html_index, base_url='http://127.0.0.1:8000/media')
-    pdf = weasyprint_html.write_pdf(stylesheets=[weasyprint.CSS(string='body { font-family: serif} img {margin: 10px; width: 50px;}')]) 
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename=Products'+str(date.today())+'.pdf'
-    response['Content-Transfer-Encoding'] = 'binary'
-    with tempfile.NamedTemporaryFile(delete=True) as output:
-        output.write(pdf)
-        output.flush() 
-        output.seek(0)
-        response.write(output.read()) 
-    return response
+# #view para salvar as licitações como pdf
+# def export_pdf(request): 
+#     biddings = Licitacao.objects.all() # lista todas as licitações 
+#     html_index = render_to_string('pdf/export-pdf.html', {'licitacoes': biddings})  
+#     weasyprint_html = weasyprint.HTML(string=html_index, base_url='http://127.0.0.1:8000/media')
+#     pdf = weasyprint_html.write_pdf(stylesheets=[weasyprint.CSS(string='body { font-family: serif} img {margin: 10px; width: 50px;}')]) 
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = 'attachment; filename=Products'+str(date.today())+'.pdf'
+#     response['Content-Transfer-Encoding'] = 'binary'
+#     with tempfile.NamedTemporaryFile(delete=True) as output:
+#         output.write(pdf)
+#         output.flush() 
+#         output.seek(0)
+#         response.write(output.read()) 
+#     return response
 
 class NotasFiscaisView(CreateView):
     model= NotaFiscal
@@ -364,3 +354,26 @@ class ListNfe(ListView):
     model = NotaFiscal
     template_name = "notasFiscais.html"
     success_url = reverse_lazy("biddingContracts:notasfiscais")
+
+
+class NotasFiscaisUpdate(UpdateView):
+    model=NotaFiscal
+    template_name = "notafiscal/notafiscal_update.html"
+    form_class = NotaFiscalForm
+    context_object_name = "notas"
+
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Nota Fiscal editada com sucesso!')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Erro ao editar nota fiscal . Verifique os campos do formulário.')
+        return render(self.request, self.template_name, {"form": form})
+
+    def get_success_url(self):
+        return reverse_lazy("biddingContracts:notasfiscais")
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context

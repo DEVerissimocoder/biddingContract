@@ -50,14 +50,14 @@
         </div>
 
         <!-- Main Content -->
-        <main class="col-md-9">
+        <main class="col-md-9 d-flex flex-column align-items-center h-100">
             <div class="container mt-5">
                 <div class="d-flex flex-column align-items-center">
                     {% include "messages.html" %}
                     {% if user.is_authenticated %}
                         <h2 class="text-center">Olá, {{ user.username.title }}! Seja bem-vindo</h2>
                     {% endif %}
-                    <h3 class="text-center text-uppercase mb-4">Sistema para Controle de Contratos Licitatórios da Prefeitura de <br> <span>Paranatama</span></h3>
+                    <h3 class="text-center text-uppercase mb-4">Sistema para Controle de Contratos Licitatórios da Prefeitura de <br> <span class="text-uppercase">Paranatama</span></h3>
 
                     <!-- Slider -->
                     <div class="swiper">

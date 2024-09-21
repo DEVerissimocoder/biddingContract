@@ -107,6 +107,17 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.getenv('NAME_DB'),
+#         'USER': os.getenv('USER_DB'),
+#         'PASSWORD': os.getenv('PASSWORD_DB'),
+#         'HOST': os.getenv('HOST_DB'),
+#         'PORT': os.getenv('PORT_DB'),
+#     }
+# }
+
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
