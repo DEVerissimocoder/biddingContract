@@ -25,5 +25,6 @@ urlpatterns = [
     path('atas/', views.listARPs.as_view(), name="atas"),
     path('criar-notafiscal/', views.NotasFiscaisView.as_view(), name='nfe'),
     path('notasfiscais/', views.ListNfe.as_view(), name='notasfiscais'),
+    path('editarnfe/<int:pk>/', views.NotasFiscaisUpdate.as_view(), name='updatenfe')
     #path('teste/', views.teste, name='teste')
 ]

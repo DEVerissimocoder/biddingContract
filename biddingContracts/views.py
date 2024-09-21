@@ -1,6 +1,5 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect, HttpResponse
-from django.views import View
 from django.views.generic import UpdateView
 from datetime import datetime
 from django.db.models import Q
@@ -9,10 +8,10 @@ from django.urls import reverse, reverse_lazy
 from .models import Contrato, NotaFiscal, Fornecedor, Licitacao, AtaRegistroPreco
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
-from django.template.loader import render_to_string
 from django.views.generic import CreateView, ListView
 from django.contrib import messages
 import tempfile
+from django.utils import timezone
 #import weasyprint
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
@@ -103,6 +102,18 @@ class ListContractsView(ListView):
         else:
             queryset = Contrato.objects.all()
         return queryset
+    
+     # Adicionando o cálculo de vencimento ao contexto
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        contratos = context['contratos']
+        today = timezone.now().date()  # Obtém a data atual
+
+        # Adiciona um atributo 'vencido' a cada contrato
+        for contrato in contratos:
+            contrato.vencido = today > contrato.dataFinal  # Verifica se o contrato já venceu
+
+        return context
 
 # View que atualiza os contratos
 class ContractsUpdateView(UpdateView):
@@ -354,3 +365,26 @@ class ListNfe(ListView):
     model = NotaFiscal
     template_name = "notasFiscais.html"
     success_url = reverse_lazy("biddingContracts:notasfiscais")
+
+
+class NotasFiscaisUpdate(UpdateView):
+    model=NotaFiscal
+    template_name = "notafiscal/notafiscal_update.html"
+    form_class = NotaFiscalForm
+    context_object_name = "notas"
+
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Nota Fiscal editada com sucesso!')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Erro ao editar nota fiscal . Verifique os campos do formulário.')
+        return render(self.request, self.template_name, {"form": form})
+
+    def get_success_url(self):
+        return reverse_lazy("biddingContracts:notasfiscais")
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context

@@ -16,13 +16,7 @@
                     </div>
                     <div class="card-body p-4">
                         {% block messages %}
-                            {% if messages %}
-                                <div class="alert alert-success alert-dismissible fade show" role="">
-                                    {% for message in messages %}
-                                        <p class="{{message.tags}}">{{message}}</p>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
+                            {% include "messages.html" %}
                         {% endblock %}
                         
                         <form method="post" action="{% url 'biddingContracts:nfe' %}">

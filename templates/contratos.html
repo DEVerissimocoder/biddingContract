@@ -132,18 +132,17 @@
             {% endif %}
           </nav>   <!-- Fim do navbar -->
 
-            <div class="list-group">
-                {% for contrato in contratos %}
-                <div class="list-group-item list-group-item-action flex-column align-items-start mb-3">
+          <div class="list-group">
+            {% for contrato in contratos %}
+                <div class="list-group-item list-group-item-action flex-column align-items-start mb-3" 
+                     style="background-color: {% if contrato.vencido %}#f5d9d7{% else %}#d7f5dd{% endif %};">
                     <div class="d-flex w-100 justify-content-between">
                         <h5 class="mb-1">Contrato Nº: {{ contrato.numero }} </h5> 
                         <small>De: {{ contrato.dataInicial }} - até - {{ contrato.dataFinal }}</small>
-                        <small>valor: {{ contrato.valor }}</small>
+                        <small>Valor: R${{ contrato.valor }}</small>
                     </div>
                     <div class="d-flex">
-                        <small>
-                            Assunto Detalhado: {{ contrato.assuntoDetalhado }}
-                        </small>
+                        <small>Assunto Detalhado: {{ contrato.assuntoDetalhado }}</small>
                     </div>
                     <div class="d-flex">
                         <small>Fornecedor: {{ contrato.fornecedor_fk.nome }}</small>
@@ -155,8 +154,9 @@
                         <a href="{% url 'biddingContracts:update_contracts' contrato.pk %}" class="btn btn-sm btn-outline-info ml-3 ms-2">Editar</a>
                     </div>
                 </div>
-                {% endfor %}
-            </div>
+            {% endfor %}
+        </div>
+        
         {% else %}
             <p class="text-center">Não há contratos!</p>
         {% endif %}
