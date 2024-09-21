@@ -10,11 +10,11 @@
     {% include "sidebar.html" %}
     <div class="container my-5">
         {% if chave %}
-            <p>contratos</p>
+            
             <div class="row">          
                 <div class="col-md-6">
                     <div class="alert alert-info" role="alert">
-                        <strong>Saldo Atual:</strong> {{ saldoAtual }}
+                        <strong>Saldo Atual do Contrato:</strong> {{ saldoAtual }}
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -61,11 +61,11 @@
             </div>
                
         {% else %} <!-- se não existe contrato, ou seja, quando for atas de registros de preço -->
-            <p>ARPS</p>
+            
             <div class="row">          
                 <div class="col-md-6">
                     <div class="alert alert-info" role="alert">
-                    <strong>Saldo Atual:</strong> {{ saldoAtual }}
+                    <strong>Saldo Atual da Ata de Registro de Preços:</strong> {{ saldoAtual }}
                 </div>
             </div>
             <div class="col-md-6">

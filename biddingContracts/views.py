@@ -218,9 +218,7 @@ class RelatorioARPs(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         ata_id = self.kwargs.get('pk')  #captura a ata pelo id na url
-        print("ata_id=", ata_id)
         notasfiscais = NotaFiscal.objects.filter(ataregistropreco_fk_id = ata_id)
-        print(notasfiscais)
         ata = AtaRegistroPreco.objects.get(id=ata_id) # captura o objeto inteiro
 
         hoje = datetime.today()
@@ -231,18 +229,26 @@ class RelatorioARPs(ListView):
         prazoRestante = relativedelta(dataInicial - dataFinal)
         #mensagem que será levada para o template
         mensagem=verifica_prazo_validade_arp(prazoRestante, dataFinal, hoje)
-        
-        context["mensagem"] = mensagem
+        #saldo restante da ARP
+        saldoAtual = calcula_saldo_restante(notasfiscais, ata.valor)
+
+        print(mensagem, saldoAtual)
+
+        context["vigencia"] = mensagem
         context["dataInicial"]=dataInicial
         context["dataFinal"] = dataFinal
         context["prazoRestante"] = prazoRestante
         context["notasfiscais"] = notasfiscais
+        context['saldoAtual']=saldoAtual
         context["chave"] = False
         return context
 
-def calcula_saldo_restante(id):
-    notasfiscais = NotaFiscal.objects.filter(id = id)
-    pass
+def calcula_saldo_restante(notasfiscais, valorARP):
+    soma=0
+    for nota in notasfiscais:
+        soma+=nota.valor  
+    return valorARP - soma
+    
  # View que atualiza as licitações
 class BiddingUpdateView(UpdateView):
     model = Licitacao
