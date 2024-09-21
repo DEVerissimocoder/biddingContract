@@ -28,8 +28,19 @@ class CustomLoginView(LoginView):
     template_name = 'login.html'
     fields = ["username", "password"]
     redirect_authenticated_user = True
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Erro de login: usuário ou senha inválidos.')
+        return super(CustomLoginView, self).form_invalid(form)
+
     def get_success_url(self):
+        messages.success(self.request, 'Usuário logado com sucesso!')
         return reverse_lazy('biddingContracts:index')  # redireciona para a página inicial após o login
     
+
 class CustomLogoutView(LogoutView):
     next_page = reverse_lazy('biddingContracts:index')
+
+    def get_next_url(self):
+        messages.info(self.request, 'Você foi deslogado com sucesso!')
+        return super(CustomLogoutView, self).get_next_url()
