@@ -294,14 +294,15 @@ class NotaFiscalForm(forms.ModelForm):
 
     class Meta:
         model = NotaFiscal
-        fields=["num", "serie", "valor", "tipo", "dataEmissao", "contrato_fk", "fornecedor_fk"]
+        fields=["num", "serie", "valor", "tipo", "dataEmissao", "contrato_fk", "fornecedor_fk", "ataregistropreco_fk"]
         labels={
                 "num": "NÚMERO",
                 "serie": "SERIE",
                 "valor": "VALOR",
                 "tipo": "TIPO", 
                 "dataEmissao": "DATA DE EMISSÃO",
-                "contrato_fk": "CONTRATO"
+                "contrato_fk": "CONTRATO",
+                "ataregistropreco_fk": "ARP"
                 }
         
 
@@ -339,14 +340,21 @@ class NotaFiscalForm(forms.ModelForm):
           
             "contrato_fk": forms.Select(
                 attrs={
+                    "blank": "true",
                     "class": "form-select"
                 }
             ),
 
             "fornecedor_fk": forms.Select(
-                attrs={
+                attrs={                  
                     "class": "form-select"
                 }
             ),
+            "ataregistropreco_fk": forms.Select(
+                attrs={
+                    "blank": "true",
+                    "class": "form-select"
+                }
+            )
         }
             

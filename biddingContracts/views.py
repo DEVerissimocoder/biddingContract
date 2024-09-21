@@ -95,7 +95,11 @@ def verifica_prazo_validade_arp(prazoRestante, dataFinal, hoje):
         mensagem = f"Esta ARP é válido até hoje dia: {dataFinal.strftime('%d/%m/%y')}"
         return mensagem
     elif dataFinal < hoje:
-        mensagem =  "O prazo de validade desta ARP já expirou."
+        #Aqui eu vi uma utilidade de ser armazenado no banco de dados o valor atual da ARP para quando 
+        # for cadastrar o contrato já inserir o valor automaticamente para evitar possíveis erros do 
+        # usuário de digitar um valor diferente do valor atual do contrato.
+        mensagem =  "O prazo de validade desta ARP expirou, cadastre-a como contrato usando o saldo atual, clique aqui:" 
+        
     return mensagem
 # INDEX
 def index(request):
@@ -226,16 +230,15 @@ class RelatorioARPs(ListView):
         dataInicial = ata.dataInicial
         dataFinal = ata.dataFinal
         # calculo de quanto tempo falta para o fim da ARP
-        prazoRestante = relativedelta(dataInicial - dataFinal)
+        prazoRestante = relativedelta(dataFinal,hoje)
+        print(hoje)
         #mensagem que será levada para o template
         mensagem=verifica_prazo_validade_arp(prazoRestante, dataFinal, hoje)
         #saldo restante da ARP
         saldoAtual = calcula_saldo_restante(notasfiscais, ata.valor)
 
-        print(mensagem, saldoAtual)
-
         context["vigencia"] = mensagem
-        context["dataInicial"]=dataInicial
+        context["hoje"]=hoje
         context["dataFinal"] = dataFinal
         context["prazoRestante"] = prazoRestante
         context["notasfiscais"] = notasfiscais
@@ -312,27 +315,40 @@ def export_pdf(request):
 def notafiscal_new(request):
     #requisição post
     if request.method=='POST':
+        hoje = datetime.today()
+        dhoje= hoje.date()
         form = NotaFiscalForm(request.POST)
         
         if form.is_valid():
-            contrato = Contrato.objects.get(numero=form.cleaned_data['contrato_fk'])
-            #pega do banco todas as notas fiscais relacionado ao contrato em questão
-            notasfiscais = NotaFiscal.objects.filter(contrato_fk_id = contrato.id)
-            #soma os valores das notas fiscais do contrato, que já estão armazenadas no banco, mais a nota que está tentando cadastrar
-            soma = sum(nota.valor for nota in notasfiscais) + form.cleaned_data.get('valor')
-            # valida se o resultado da soma ultrapassa o valor total do contrato.
-            if soma > contrato.valor:
-                messages.add_message(request, messages.INFO, "NÃO FOI POSSÍVEL CADASTRAR A NOTA FISCAL, VALOR DA NOTA MAIOR DO QUE O SALDO RESTANTO DO CONTRATO")
-                return HttpResponseRedirect(reverse('biddingContracts:nfe'))
+            if form.cleaned_data['contrato_fk']:
+                contrato = Contrato.objects.get(numero=form.cleaned_data['contrato_fk'])
+                #pega do banco todas as notas fiscais relacionado ao contrato em questão
+                notasfiscais = NotaFiscal.objects.filter(contrato_fk_id = contrato.id)
+                #soma os valores das notas fiscais do contrato, que já estão armazenadas no banco, mais a nota que está tentando cadastrar
+                soma = sum(nota.valor for nota in notasfiscais) + form.cleaned_data.get('valor')
             
-
-            hoje = datetime.today()
-            dhoje= hoje.date()
-            print(contrato.dataFinal<dhoje)
-            if contrato.dataFinal<dhoje:
-                messages.add_message(request, messages.INFO, "NÃO FOI POSSIVEL CADASTRAR NOTAS, CONSULTE O VALOR RESTANTE DO CONTRATO")
-                return HttpResponseRedirect(reverse("biddingContracts:nfe"))
+                # valida se o resultado da soma ultrapassa o valor total do contrato.
+                if soma > contrato.valor:
+                    messages.add_message(request, messages.INFO, "NÃO FOI POSSÍVEL CADASTRAR A NOTA FISCAL, VALOR DA NOTA MAIOR DO QUE O SALDO RESTANTO DO CONTRATO")
+                    return HttpResponseRedirect(reverse('biddingContracts:nfe'))
+                #verificação da data de vigência
+                if contrato.dataFinal<dhoje:
+                    messages.add_message(request, messages.INFO, "NÃO FOI POSSIVEL CADASTRAR NOTAS, CONSULTE O VALOR RESTANTE DO CONTRATO")
+                    return HttpResponseRedirect(reverse("biddingContracts:nfe"))
+            else: 
+                arp = AtaRegistroPreco.objects.get(numero=form.cleaned_data['ataregistropreco_fk'])
+                #pega do banco todas as notas fiscais relacionado a ARP em questão
+                notasfiscais = NotaFiscal.objects.filter(ataregistropreco_fk_id = arp.id)
+                soma = sum(nota.valor for nota in notasfiscais) + form.cleaned_data.get('valor')
             
+                # valida se o resultado da soma ultrapassa o valor total da ARP
+                if soma > arp.valor:
+                    messages.add_message(request, messages.INFO, "NÃO FOI POSSÍVEL CADASTRAR A NOTA FISCAL, VALOR DA NOTA MAIOR DO QUE O SALDO RESTANTE DA ATA DE REGISTRO DE PREÇOS")
+                    return HttpResponseRedirect(reverse('biddingContracts:nfe'))
+                #verificação da data de vigência
+                if arp.dataFinal<dhoje:
+                    messages.add_message(request, messages.INFO, "NÃO FOI POSSIVEL CADASTRAR NOTAS, CONSULTE O VALOR RESTANTE DA ATA DE REGISTRO DE PREÇO")
+                    return HttpResponseRedirect(reverse("biddingContracts:nfe"))
             form.save()
             messages.add_message(request, messages.SUCCESS, "SALVO COM SUCESSO")
             return HttpResponseRedirect(reverse('biddingContracts:notasfiscais'))
@@ -345,4 +361,3 @@ class ListNfe(ListView):
     model = NotaFiscal
     template_name = "notasFiscais.html"
     success_url = reverse_lazy("biddingContracts:notasfiscais")
-

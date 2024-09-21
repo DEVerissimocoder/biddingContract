@@ -69,19 +69,13 @@
                 </div>
             </div>
             <div class="col-md-6">
-                {% if dataFinal > hoje %}
-                    <div class="alert alert-success" role="alert">
-                        <strong>Prazo Restante:</strong> {{ vigencia }}
-                    </div>
-                {% elif dataFinal == hoje %}
-                    <div class="alert alert-warning" role="alert">
-                        <strong>Prazo Restante:</strong> {{ vigencia }}
-                    </div>
-                {% else %}
-                    <div class="alert alert-danger" role="alert">
-                        <strong>Prazo Restante:</strong> {{ vigencia }}
-                    </div>
-                {% endif %}
+                
+                <div class="alert alert-danger" role="alert">
+                    <strong>vigência:</strong> {{ vigencia }}
+                    {% if hoje > dataFinal %}
+                        <a href="{% url 'biddingContracts:create-ARP'%}">cadastrar contrato</a>
+                    {% endif %}
+                </div>  
             </div>   
                 <h3 class="text-center mb-4">Notas Fiscais</h3>
             <div class="table-responsive">
@@ -108,7 +102,7 @@
                     </tbody>
                 </table>
             </div>
-        {% endif %} <!-- fecha o a validação se for contrato ou notas fiscais -->
+        {% endif %} <!-- fecha o a validação se for contrato ou ata de registro de preços -->
     </div>
 </div>
 {% endblock %}

@@ -54,9 +54,9 @@ class NotaFiscal(models.Model):
     valor = models.FloatField()
     tipo = models.CharField(max_length=50)
     dataEmissao = models.DateField()
-    contrato_fk = models.ForeignKey("Contrato", null=True, on_delete=models.CASCADE)
+    contrato_fk = models.ForeignKey("Contrato", blank=True, null=True, on_delete=models.CASCADE)
     fornecedor_fk = models.ForeignKey("Fornecedor", on_delete=models.CASCADE)
-    ataregistropreco_fk = models.ForeignKey('AtaRegistroPreco', null=True, on_delete=models.CASCADE)
+    ataregistropreco_fk = models.ForeignKey('AtaRegistroPreco', blank=True, null=True, on_delete=models.CASCADE)
     
     class Meta:
         verbose_name_plural = "Notas Fiscais"
@@ -74,6 +74,9 @@ class AtaRegistroPreco(models.Model):
     valor = models.FloatField(null=False)
     licitacao_fk= models.ForeignKey("Licitacao", on_delete=models.CASCADE)
     fornecedor_fk = models.ForeignKey("Fornecedor", on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f'{self.numero}'
     
     class Meta:
         verbose_name_plural = 'Atas de Registros de Preços'

@@ -55,7 +55,11 @@
                         <label for="{{ form.fornecedor_fk.id_for_label }}" class="form-label">FORNECEDOR</label>
                         {{ form.fornecedor_fk }}
                     </div>
-
+                    <div class="mb-3">
+                        <label for="{{ form.ataregistropreco_fk.id_for_label }}" class="form-label"> ATA DE REGISTRO DE PRECO</label>
+                        {{ form.ataregistropreco_fk }}
+                    </div>
+                    
                     <div class="mb-3">
                         <a href="{% url 'biddingContracts:index' %}" type="button" class="btn btn-secondary">Cancelar</a>
                         <button type="submit" class="btn btn-primary">Salvar</button>
