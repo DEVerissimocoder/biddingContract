@@ -317,6 +317,7 @@ class ARPsUpdate(UpdateView):
         return context
 
 
+# View que deleta as ARPs
 class ARPsDeleteView(DeleteView):
     model = AtaRegistroPreco
     template_name = "ARPs/ata_delete.html"
@@ -325,6 +326,7 @@ class ARPsDeleteView(DeleteView):
     def get_success_url(self):
         messages.success(self.request, 'ARP excluída com sucesso!')
         return reverse_lazy("biddingContracts:atas")
+ 
  
  # View que atualiza as licitações
 class BiddingUpdateView(UpdateView):
