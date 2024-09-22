@@ -27,11 +27,10 @@ class formLicitacao(forms.ModelForm):
                     "id": "proc",
                 }
             ),
-            "categoria": forms.TextInput(
+            "categoria": forms.Select(
                 attrs={
                     "type": "text",
                     "class": "form-control",
-                    "placeholder": "Modalidade"
                 }
             ),
             "assunto": forms.Textarea(
