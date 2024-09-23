@@ -35,6 +35,7 @@ from django.contrib.auth.decorators import login_required
 """def teste(request):
     return render(request, "modal_fornecedor_teste.html")"""
 
+@login_required
 def cadContrato(request):
     if request.method == "POST":
         form = formContrato(request.POST)
@@ -57,7 +58,7 @@ def cadContrato(request):
 #     print("chamando view")
 #     return render(request, "contratos.html", context)
 
-class ListContractsView(ListView):
+class ListContractsView(LoginRequiredMixin, ListView):
     """
     Classe destinada a listar os contratos criados
     """
@@ -101,7 +102,7 @@ class ListContractsView(ListView):
         return context
 
 # View que atualiza os contratos
-class ContractsUpdateView(UpdateView):
+class ContractsUpdateView(LoginRequiredMixin, UpdateView):
     """
     Classe destinada a atualizar os contratos já criados
     """
@@ -125,7 +126,7 @@ class ContractsUpdateView(UpdateView):
         context = super().get_context_data(**kwargs)
         return context
 
-
+@login_required
 def contratosRelatorio(request, id_contrato):
     contrato = Contrato.objects.get(id_contrato=id_contrato)
     notasFiscais = NotaFiscal.objects.filter(contrato_fk = id_contrato)
@@ -152,7 +153,7 @@ def contratosRelatorio(request, id_contrato):
     return render(request, "contratos_relatorio.html", context)
 
 
-
+@login_required
 def verifica_prazo_validade_contrato(prazoRestante, dataFinal, hoje):
     mensagem = " "
     if dataFinal > hoje:
@@ -182,13 +183,14 @@ def index(request):
 
 
 # View que Cria os fornecedores
-class BiddingFornecedor(CreateView):
+class BiddingFornecedor(LoginRequiredMixin, CreateView):
     model = Fornecedor
     form_class = formFornecedor
     template_name = 'fornecedor_new.html'
     success_url = reverse_lazy('biddingContracts:cadContrato')
 
 
+@login_required
 # View que lista os fornecedores
 def listFornecedores(request):
     fornecedores = Fornecedor.objects.all()
@@ -196,6 +198,7 @@ def listFornecedores(request):
     return render(request, "fornecedores.html", context)
 
 
+@login_required
 # View que mostra fornecedor em um modal
 def modal_fornecedor(request):
     "mostra fornecedor em um modal"
@@ -204,6 +207,7 @@ def modal_fornecedor(request):
     return render(request, "modal_fornecedores.html", context)
 
 
+@login_required
 # View que lista as Licitações
 def listLicitacoes(request):
     """mostra todas as licitacoes"""
@@ -212,6 +216,7 @@ def listLicitacoes(request):
     return render(request, "list_licitacoes.html", context)
 
 
+@login_required
 # View que mostra a licitação em um modal
 def modal_licitacao(request):
     "mostra licitacao em um modal"
@@ -221,7 +226,7 @@ def modal_licitacao(request):
 
 
 # View que faz o cadastro das licitações
-class BiddingCreateView(CreateView):
+class BiddingCreateView(LoginRequiredMixin, CreateView):
     """
     Faz o cadastro das licitações
     """
@@ -237,7 +242,7 @@ class BiddingCreateView(CreateView):
 
 
 # View que faz a listagem das licitações com a pesquisa 
-class ListBiddingView(ListView):
+class ListBiddingView(LoginRequiredMixin, ListView):
     """
     Faz a listagem das licitações
     """
@@ -245,7 +250,35 @@ class ListBiddingView(ListView):
     template_name = "list_licitacoes.html"
     context_object_name = "licitacoes"
 
+    # Adicionando filtros ao object_list através do get_queryset
     def get_queryset(self):
+        txt_licitacao = self.request.GET.get("licitacao")
+        txt_assunto = self.request.GET.get("assunto")
+        txt_datas = self.request.GET.get("datas")
+        txt_categorias = self.request.GET.get("categorias")
+        
+
+        if txt_licitacao:
+            queryset = Licitacao.objects.filter(numProcess__icontains=txt_licitacao)
+            return queryset
+        
+        elif txt_categorias:
+            queryset = Licitacao.objects.filter(categoria__icontains=txt_categorias)
+            return queryset
+        
+        elif txt_datas:
+            try:
+                data_formatada = datetime.strptime(txt_datas, '%d/%m/%Y').date()
+                queryset = Licitacao.objects.filter(date=data_formatada)
+                return queryset
+            except ValueError:
+                messages.error(self.request, 'Data inválida! Por favor, insira uma data no formato dd/mm/yyyy.')
+                return redirect('biddingContracts:licitacoes')
+        
+        elif txt_assunto:
+            queryset = Licitacao.objects.filter(assunto__icontains=txt_assunto)
+            return queryset
+            
         txt_buscar = self.request.GET.get("buscar")
         queryset = Licitacao.objects.all()
         if txt_buscar:
@@ -254,6 +287,8 @@ class ListBiddingView(ListView):
                 Q(assunto__icontains=txt_buscar) |
                 Q(numProcess__icontains=txt_buscar)
             )
+        else:
+            queryset = Licitacao.objects.all()
         return queryset
     
 
@@ -264,6 +299,8 @@ class ListBiddingView(ListView):
     template_name = 'ataRegistroPreco_new.html'
     success_url = reverse_lazy('biddingContracts:create-ARP')"""
 
+
+@login_required
 # Função que cria as ARPs
 def createArp(request):
     if request.method == "POST":
@@ -286,7 +323,7 @@ def createArp(request):
 
 
 # View que lista as ARPs
-class listARPs(ListView):
+class listARPs(LoginRequiredMixin, ListView):
     model=AtaRegistroPreco
     template_name='atas.html'
     success_url= reverse_lazy('biddingContracts:atas')
@@ -294,7 +331,7 @@ class listARPs(ListView):
 
 
 # View que edita ARPs
-class ARPsUpdate(UpdateView):
+class ARPsUpdate(LoginRequiredMixin, UpdateView):
     model=AtaRegistroPreco
     template_name = "ARPs/ata_update.html"
     form_class = formARP
@@ -318,7 +355,7 @@ class ARPsUpdate(UpdateView):
 
 
 # View que deleta as ARPs
-class ARPsDeleteView(DeleteView):
+class ARPsDeleteView(LoginRequiredMixin, DeleteView):
     model = AtaRegistroPreco
     template_name = "ARPs/ata_delete.html"
     context_object_name = "ata"
@@ -329,7 +366,7 @@ class ARPsDeleteView(DeleteView):
  
  
  # View que atualiza as licitações
-class BiddingUpdateView(UpdateView):
+class BiddingUpdateView(LoginRequiredMixin, UpdateView):
     model = Licitacao
     template_name = "licitacoes/edit_licitacoes.html"
     form_class = formLicitacao
@@ -353,7 +390,7 @@ class BiddingUpdateView(UpdateView):
 
 
 # View que edita os fornecedores
-class FornecedorUpdate(UpdateView):
+class FornecedorUpdate(LoginRequiredMixin, UpdateView):
     model=Fornecedor
     template_name = "fornecedor_update.html"
     form_class = formFornecedor
@@ -394,7 +431,7 @@ class FornecedorUpdate(UpdateView):
 
 
 # View que cria as notas fiscais
-class NotasFiscaisView(CreateView):
+class NotasFiscaisView(LoginRequiredMixin, CreateView):
     model= NotaFiscal
     form_class = NotaFiscalForm
     template_name = "notaFiscal_new.html"
@@ -403,14 +440,14 @@ class NotasFiscaisView(CreateView):
 
 
 # View que lista as Notas Fiscais
-class ListNfe(ListView):
+class ListNfe(LoginRequiredMixin, ListView):
     model = NotaFiscal
     template_name = "notasFiscais.html"
     success_url = reverse_lazy("biddingContracts:notasfiscais")
 
 
 # View que edita as Notas fiscais
-class NotasFiscaisUpdate(UpdateView):
+class NotasFiscaisUpdate(LoginRequiredMixin, UpdateView):
     model=NotaFiscal
     template_name = "notafiscal/notafiscal_update.html"
     form_class = NotaFiscalForm
