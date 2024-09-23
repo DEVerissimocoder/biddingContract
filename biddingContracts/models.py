@@ -1,10 +1,15 @@
 from django.db import models
 
-#licitacao
-class Licitacao(models.Model):
-    #id = models.IntegerField(primary_key=True, auto_created=True)
+class Modalidade(models.TextChoices):
+    CONCORRENCIA = 'concorrência', 'Concorrência'
+    PREGAO = 'pregao', 'Pregão'
+    LEILAO = 'leilao', 'Leilão'
+    CONCURSO = 'concurso', 'Concurso'
+    DIALOGO_COMPETITIVO = 'dialogo_competitivo', 'Diálogo Competitivo'
+
+class Licitacao (models.Model):
     numProcess = models.CharField(max_length=7, unique=True, blank=False, null=False)
-    categoria = models.CharField(max_length=200, verbose_name="Categoria", null=False)
+    categoria = models.CharField(max_length=150, choices=Modalidade.choices)
     assunto = models.CharField(max_length=200, verbose_name="Assunto",  null=False, blank=False)
     date = models.DateField()
     
