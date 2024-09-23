@@ -18,8 +18,8 @@ from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
-STATIC_DIR= os.path.join(BASE_DIR, 'static')
+#TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
+#STATIC_DIR= os.path.join(BASE_DIR, 'static')
 
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 
@@ -31,7 +31,7 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-SECRET_KEY = 'django-insecure-64g@5u6!1v%c=q3%34w*4y&u25q57!09d%e5f'
+SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 DEBUG = os.getenv("DEBUG")
 
@@ -59,7 +59,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'biddingContracts',
-    
+    'usuarios',
 ]
 
 MIDDLEWARE = [
@@ -77,7 +77,7 @@ ROOT_URLCONF = 'biddingContract.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -106,6 +106,17 @@ DATABASES = {
                 #'PORT':os.getenv('PORT_DB')
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.getenv('NAME_DB'),
+#         'USER': os.getenv('USER_DB'),
+#         'PASSWORD': os.getenv('PASSWORD_DB'),
+#         'HOST': os.getenv('HOST_DB'),
+#         'PORT': os.getenv('PORT_DB'),
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -143,10 +154,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-    
-]
+
+#----- urls de redirecionamento -----
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = 'usuarios:login'
+
 
 
 STATICFILES_FINDERS = [
@@ -157,11 +170,21 @@ STATICFILES_FINDERS = [
 
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'biddingContract/static')
+]
+
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+#STATIC_URL = '/static/'
+
+#Questões de mídia  
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+#MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -177,3 +200,4 @@ MESSAGE_TAGS = {
     messages.WARNING: "warning",
     messages.DEBUG: "secondary",
 }
+

@@ -76,6 +76,10 @@
         </div>
         {% else %}
             <p class="text-center">Nenhum fornecedor encontrado!</p>
+            <div class="d-flex justify-content-center">
+                <a class="btn btn-success me-4" href="{% url "biddingContracts:fornecedor_new" %}">Cadastrar Fornecedor</a>
+                <a class="btn btn-secondary" href="{% url "biddingContracts:index" %}">Voltar</a>
+            </div>
         {% endif %}
     </div>
 </div>

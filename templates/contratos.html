@@ -1,0 +1,170 @@
+{% extends "base_template.html" %}
+{% load static %}
+{% block title %} Contratos  {% endblock %}
+
+
+
+{% block content %}
+<div class="d-flex">
+    {% include "sidebar.html" %}
+    <div class="container my-5 mt-1">
+        {% include "messages.html" %}
+        <h2 class="text-center mb-4 mt-4">Lista de Contratos</h2>
+        {% if contratos %}
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3"> <!-- Início do navbar -->
+            <div class="container-fluid">
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <form action="?" method="GET">
+                        <li class="nav-item dropdown">
+                              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              N° de Contrato:
+                              </a>
+                              <div class="dropdown-menu p-3 collapse" id="filtro-fornecedor">
+                                  <div class="d-flex">
+                                      <label for=""><strong>Pesquisar Contratos:</strong></label>
+                                  </div>
+                                  <div class="input-group d-flex flex-column">
+                                      <div class="d-flex"><input type="text" class="form-control w-100" name="contratos" id="" value="{{ request.GET.contratos }}"></div>
+                                      <div class="d-flex">
+                                          <button class="btn btn-success mt-2" type="submit">
+                                              Buscar
+                                          </button>
+                                      </div>
+                                      <div class="d-flex">
+                                          <a class="btn btn-light mt-2"  href=".">Limpar Campo</a>
+                                      </div>
+                                  </div>
+                              </div> 
+                        </li>
+                      </form> <!-- Fim colapse n° de contrato -->
+
+                      <form action="?" method="GET">
+                        <li class="nav-item dropdown">
+                              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              Assunto:
+                              </a>
+                              <div class="dropdown-menu p-3 collapse" id="filtro-fornecedor">
+                                  <div class="d-flex">
+                                      <label for=""><strong>Pesquisar Assunto:</strong></label>
+                                  </div>
+                                  <div class="input-group d-flex flex-column">
+                                      <div class="d-flex"><input type="text" class="form-control w-100" name="assunto" id="" value="{{ request.GET.assunto }}"></div>
+                                      <div class="d-flex">
+                                          <button class="btn btn-success mt-2" type="submit">
+                                              Buscar
+                                          </button>
+                                      </div>
+                                      <div class="d-flex">
+                                          <a class="btn btn-light mt-2"  href=".">Limpar Campo</a>
+                                      </div>
+                                  </div>
+                              </div> 
+                        </li>
+                      </form> <!-- Fim colapse de Assunto detalhado -->
+
+                    <form action="?" method="GET">
+                      <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Fornecedor:
+                            </a>
+                            <div class="dropdown-menu p-3 collapse" id="filtro-fornecedor">
+                                <div class="d-flex">
+                                    <label for=""><strong>Pesquisar Fornecedores:</strong></label>
+                                </div>
+                                <div class="input-group d-flex flex-column">
+                                    <div class="d-flex"><input type="text" class="form-control w-100" name="fornecedor" id="" value="{{ request.GET.fornecedor }}"></div>
+                                    <div class="d-flex">
+                                        <button class="btn btn-success mt-2" type="submit">
+                                            Buscar
+                                        </button>
+                                    </div>
+                                    <div class="d-flex">
+                                        <a class="btn btn-light mt-2"  href=".">Limpar Campo</a>
+                                    </div>
+                                </div>
+                            </div> 
+                      </li>
+                    </form> <!-- Fim colapse fornecedor -->
+
+                    <form action="?" method="GET">
+                        <li class="nav-item dropdown">
+                              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              Licitação:
+                              </a>
+                              <div class="dropdown-menu p-3 collapse" id="filtro-fornecedor">
+                                  <div class="d-flex">
+                                      <label for=""><strong>Pesquisar Licitações:</strong></label>
+                                  </div>
+                                  <div class="input-group d-flex flex-column">
+                                      <div class="d-flex"><input type="text" class="form-control w-100" name="licitacao" id="" value="{{ request.GET.licitacao }}"></div>
+                                      <div class="d-flex">
+                                          <button class="btn btn-success mt-2" type="submit">
+                                              Buscar
+                                          </button>
+                                      </div>
+                                      <div class="d-flex">
+                                          <a class="btn btn-light mt-2"  href=".">Limpar Campo</a>
+                                          
+                                      </div>
+                                  </div>
+                              </div>   
+                        </li>
+                      </form> <!-- Fim colapse licitação -->
+
+                      <div class="d-flex">
+                        <a class="text-muted mt-2" style="text-decoration:none;" href="."><i title="Resetar página" class="fa-solid fa-arrows-rotate"></i></a> <!-- ícone de resetar página -->
+                    </div>
+                </ul> 
+              </div>
+            </div>
+            
+            {% if object_list %}
+                <div class="d-flex ">
+                    <p class="text-muted small">{{ object_list.count }} Contrato(s) Existente(s)</p>
+                </div>
+            {% else %}
+                <div class="d-flex">
+                    <p class="text-muted small">Nenhum Contrato Existente</p>
+                </div>
+            {% endif %}
+          </nav>   <!-- Fim do navbar -->
+
+          <div class="list-group">
+            {% for contrato in contratos %}
+                <div class="list-group-item list-group-item-action flex-column align-items-start mb-3" 
+                     style="background-color: {% if contrato.vencido %}#f5d9d7{% else %}#d7f5dd{% endif %};">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">Contrato Nº: {{ contrato.numero }} </h5> 
+                        <small>De: {{ contrato.dataInicial }} - até - {{ contrato.dataFinal }}</small>
+                        <small>Valor: R${{ contrato.valor }}</small>
+                    </div>
+                    <div class="d-flex">
+                        <small>Assunto Detalhado: {{ contrato.assuntoDetalhado }}</small>
+                    </div>
+                    <div class="d-flex">
+                        <small>Fornecedor: {{ contrato.fornecedor_fk.nome }}</small>
+                    </div>
+                    <div class="d-flex"><small>Licitação: {{ contrato.licitacao_fk.numProcess }}</small></div>
+                    <div class="mt-2">
+                        <span class="badge bg-primary me-2">Valor do contrato: R${{ contrato.valor }}</span>
+                        <a href="{% url 'biddingContracts:relatorio' contrato.pk %}" class="btn btn-sm btn-outline-primary ml-3">Mais detalhes</a>
+                        <a href="{% url 'biddingContracts:update_contracts' contrato.pk %}" class="btn btn-sm btn-outline-info ml-3 ms-2">Editar</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        {% else %}
+            <p class="text-center">Não há contratos!</p>
+        {% endif %}
+        <div class="d-flex justify-content-center">
+            <a class="btn btn-secondary mt-2" href="{% url "biddingContracts:index" %}">Voltar</a>
+            <a class="btn btn-success mt-2 ms-4" href="{% url "biddingContracts:cadContrato" %}">Criar contratos</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}
