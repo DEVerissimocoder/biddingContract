@@ -18,61 +18,31 @@ from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 
-
-# CONTRATOS + RELATORIOS
-# def cadContrato(request):
-#     if request.method == "POST":
-#         form = formContrato(request.POST)
-#         print("post")
-#         if form.is_valid():
-#             print("formulario validado")
-#             form.save()
-#             return HttpResponseRedirect(reverse("biddingContracts:contratos"))
-#         else:
-#             print(f"Deu errado!{form.errors}")
-#     else:
-#         form = formContrato()
-        
-
-#     return render(request, "contrato_new.html", {"form": form})
-"""def teste(request):
-    return render(request, "modal_fornecedor_teste.html")"""
-
-def cadContrato(request):
+def cadContrato(request, fornecedor_id):
     if request.method == "POST":
-        # request.session["contrato_numero"] = request.POST.get('numero')
-        # request.session["contrato_assuntoDetalhado"] = request.POST.get('assuntoDetalhado')
-        # request.session["contrato_dataInicial"] = request.POST.get('dataInicial')
-        # request.session["contrato_dataFinal"] = request.POST.get('dataFinal')
-        # request.session["contrato_valor"] = request.POST.get('valor')
-        # request.session["contrato_licitacao_fk"] = request.get('licitacao_fk')
-        # print(f"reqhkjhk {request.session["contrato_valor"]}")
-        # return redirect("biddingContracts:fornecedores")
         form = formContrato(request.POST)
-        print(f"Dados recebidos no POST: {request.POST}")  # Verifique o que está sendo enviado
+        print(f"Dados recebidos no POST: {request.POST}") 
         if form.is_valid():
-            print("formulario validado")
             form.save()
             return HttpResponseRedirect(reverse("biddingContracts:contratos"))
         else:
             print(f"Deu errado!{form.errors}")
-    else:
-        # numero = request.session.get('contrato_numero')
-        # assuntoDetalhado = request.session.get('contrato_assuntoDetalhado')
-        # dataInicial = request.session.get('contrato_dataInicial')
-        # dataFinal = request.session.get('contrato_dataFinal')
-        # valor = request.session.get('contrato_valor')
-        # licitacao_fk = request.session.get('contrato_licitacao_fk')
-        form = formContrato()
-
-    return render(request, "contrato_new.html", {"form": form})
     
-# def listContratos(request):
-#     contratos = Contrato.objects.all()
-#     context = {"contratos": contratos}
-#     print("chamando view")
-#     return render(request, "contratos.html", context)
-
+    # fluxo 2-> segunda requisição, ou seja, quando ele vem da tela de cadastro de fornecedor.
+    if fornecedor_id!=0:
+        #consulta o fornecedor vindo do banco através do ID e cria um objeto com os dados retornado da tabela fornecedor
+        fornecedor = Fornecedor.objects.get(id = fornecedor_id)
+        
+        form = formContrato()
+        context={'form':form, 'fornecedor_id':fornecedor.id}
+        return render(request, 'contrato_new.html', context)
+    
+    # fluxo 1 -> primeira requisição get
+    else:
+        form = formContrato()
+        context={'form':form,'fornecedor_id':fornecedor_id}
+        return render(request, "contrato_new.html", context)
+    
 class ListContractsView(ListView):
     """
     Classe destinada a listar os contratos criados
@@ -142,7 +112,7 @@ class ContractsUpdateView(UpdateView):
         return context
 
 def contratosRelatorio(request, id_contrato):
-    contrato = Contrato.objects.get(id_contrato=id_contrato)
+    contrato = Contrato.objects.get(id=id_contrato)
     notasFiscais = NotaFiscal.objects.filter(contrato_fk = id_contrato)
     saldoAtual = contrato.valor
     #tipo datetime.datetime
@@ -203,11 +173,19 @@ def verifica_prazo_validade_arp(prazoRestante, dataFinal, hoje):
 def index(request):
     return render(request, 'index.html')
 
-class BiddingFornecedor(CreateView):
-    model = Fornecedor
-    form_class = formFornecedor
-    template_name = 'fornecedor_new.html'
-    success_url = reverse_lazy('biddingContracts:cadContrato')
+def fornecedor_new(request):
+    if request.method=='POST':
+        form = formFornecedor(request.POST)
+        if form.is_valid():
+            fornecedor=form.save() 
+            print(f"id do fornecedor = {fornecedor.id}")
+            #redirecionar de volta para a tela de cadastro fornecendo o ID do fornecedor 
+            return redirect('biddingContracts:cadContrato', fornecedor_id = fornecedor.id)
+        else:
+            print('ocorreu um erro no fomulario', form.errors)
+    else:
+        form = formFornecedor()
+        return render(request, 'fornecedor_new.html', {'form': form})
 
 def listFornecedores(request):
     fornecedores = Fornecedor.objects.all()
@@ -267,21 +245,13 @@ class ListBiddingView(ListView):
                 Q(numProcess__icontains=txt_buscar)
             )
         return queryset
-    
-
- 
-"""class BiddingCreateArp(CreateView):
-    model=AtaRegistroPreco
-    form_class = formARP
-    template_name = 'ataRegistroPreco_new.html'
-    success_url = reverse_lazy('biddingContracts:create-ARP')"""
 
 
 def createArp(request):
     if request.method == "POST":
         form = formARP(request.POST)
         print("enviando método POST")
-        if form.is_valid(): #por que o formulário não está sendo validaddo?
+        if form.is_valid():
             arp = form.save(commit=False)
             dataInicial = arp.dataInicial
             print("formulario valido", dataInicial)
@@ -389,22 +359,6 @@ class FornecedorUpdate(UpdateView):
         context = super().get_context_data(**kwargs)
         return context
     
-# #view para salvar as licitações como pdf
-# def export_pdf(request): 
-#     biddings = Licitacao.objects.all() # lista todas as licitações 
-#     html_index = render_to_string('pdf/export-pdf.html', {'licitacoes': biddings})  
-#     weasyprint_html = weasyprint.HTML(string=html_index, base_url='http://127.0.0.1:8000/media')
-#     pdf = weasyprint_html.write_pdf(stylesheets=[weasyprint.CSS(string='body { font-family: serif} img {margin: 10px; width: 50px;}')]) 
-#     response = HttpResponse(content_type='application/pdf')
-#     response['Content-Disposition'] = 'attachment; filename=Products'+str(date.today())+'.pdf'
-#     response['Content-Transfer-Encoding'] = 'binary'
-#     with tempfile.NamedTemporaryFile(delete=True) as output:
-#         output.write(pdf)
-#         output.flush() 
-#         output.seek(0)
-#         response.write(output.read()) 
-#     return response
-
 def notafiscal_new(request):
     #requisição post
     if request.method=='POST':
@@ -413,7 +367,9 @@ def notafiscal_new(request):
         form = NotaFiscalForm(request.POST)
         
         if form.is_valid():
+            print("formulario valido")
             if form.cleaned_data['contrato_fk']:
+                print("nota fiscal - contrato")
                 contrato = Contrato.objects.get(numero=form.cleaned_data['contrato_fk'])
                 #pega do banco todas as notas fiscais relacionado ao contrato em questão
                 notasfiscais = NotaFiscal.objects.filter(contrato_fk_id = contrato.id)
@@ -429,8 +385,10 @@ def notafiscal_new(request):
                     messages.add_message(request, messages.INFO, "NÃO FOI POSSIVEL CADASTRAR NOTAS, CONSULTE O VALOR RESTANTE DO CONTRATO")
                     return HttpResponseRedirect(reverse("biddingContracts:nfe"))
             else: 
+                print("notafiscal - ata de registro de preços")
                 arp = AtaRegistroPreco.objects.get(numero=form.cleaned_data['ataregistropreco_fk'])
                 #pega do banco todas as notas fiscais relacionado a ARP em questão
+                
                 notasfiscais = NotaFiscal.objects.filter(ataregistropreco_fk_id = arp.id)
                 soma = sum(nota.valor for nota in notasfiscais) + form.cleaned_data.get('valor')
             
@@ -445,8 +403,10 @@ def notafiscal_new(request):
             form.save()
             messages.add_message(request, messages.SUCCESS, "SALVO COM SUCESSO")
             return HttpResponseRedirect(reverse('biddingContracts:notasfiscais'))
-        
+        else:
+            print(form.errors)
     #requisição get.
+    print("formulario vazio")
     form = NotaFiscalForm()
     return render(request, 'notaFiscal_new.html', {"form":form})
 

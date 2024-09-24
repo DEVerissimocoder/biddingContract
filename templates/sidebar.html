@@ -12,7 +12,7 @@
             </li>
 
             <li class="nav-item mb-3 ">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:cadContrato' %}">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:cadContrato' fornecedor_id=0%}">
                     <div class="d-flex flex-column align-items-center">
                         <i class="fa-solid fa-file-contract" title="Criar Contratos"></i>
                         <p style="font-size:0.9rem;" class="text-small text-muted text-center">Criar Contratos</p>
@@ -66,7 +66,7 @@
             </li>
 
             <li class="nav-item mb-3">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:create-ARP' %}">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:create-ARP'%}">
                     <div class="d-flex flex-column align-items-center">
                         <i class="fa-solid fa-registered" title="Criar Atas de Registro de Preços"></i>
                         <p style="font-size:0.9rem;" class="text-small text-muted text-center">Criar ARPs</p>
