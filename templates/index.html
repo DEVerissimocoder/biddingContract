@@ -42,12 +42,9 @@
     }
 </style>
 
-<div class="container-fluid g-0">
-    <div class="row g-0">
+<div class="d-flex"> 
         <!-- Sidebar -->
-        <div class="col-md-1">
-            {% include "sidebar.html" %}
-        </div>
+        {% include "sidebar.html" %}
 
         <!-- Main Content -->
         <main class="col-md-9 d-flex flex-column align-items-center h-100">
@@ -72,21 +69,11 @@
                                 <img src="{% static 'imagens/para3.png' %}" alt="Imagem 3">
                             </div>
                         </div>
-
-                        {% comment %} <!-- Pagination -->
-                        <div class="swiper-pagination"></div> {% endcomment %}
-
-                        {% comment %} <!-- Navigation -->
-                        <div class="swiper-button-prev"></div>
-                        <div class="swiper-button-next"></div> {% endcomment %}
-
-                        <!-- Scrollbar -->
-                        <!--<div class="swiper-scrollbar"></div>>-->
                     </div>
                 </div>
             </div>
         </main>
-    </div>
+    
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
