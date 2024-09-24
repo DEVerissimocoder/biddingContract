@@ -36,6 +36,7 @@ class CustomLoginView(LoginView):
 
     def get_success_url(self):
         messages.success(self.request, 'Usuário logado com sucesso!')
+        self.request.session['messages'] = messages.get_messages(self.request)
         return reverse_lazy('biddingContracts:index')  # redireciona para a página inicial após o login
     
 

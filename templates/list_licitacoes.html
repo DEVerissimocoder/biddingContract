@@ -164,8 +164,11 @@
                         <li class="list-group-item"> Objeto: <span class="text-success">{{licitacao.assunto}}</span></li>
                         <li class="list-group-item"> Modalidade: <span class="text-success">{{licitacao.categoria}}</span></li>
                         <li class="list-group-item"> Data: <span class="text-success">{{licitacao.date}}</span>
-                            <a class="btn btn-light ms-3" href="{% url "biddingContracts:update_bidding" licitacao.pk %}">Editar</a>
+                           
                         </li>
+                        {% if licitacao %}
+                        <a class="btn btn-light ms-3" href="{% url "biddingContracts:update_bidding" licitacao.pk %}">Editar</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
