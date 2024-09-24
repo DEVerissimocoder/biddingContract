@@ -469,3 +469,13 @@ class NotasFiscaisUpdate(LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         return context
     
+# View que deleta as Notas fiscais
+class NotesDeleteView(LoginRequiredMixin, DeleteView):
+    model = NotaFiscal
+    template_name = "notafiscal/nota_delete.html"
+    context_object_name = "note"
+
+    def get_success_url(self):
+        messages.success(self.request, 'Nota Fiscal excluída com sucesso!')
+        return reverse_lazy("biddingContracts:notasfiscais")
+    
