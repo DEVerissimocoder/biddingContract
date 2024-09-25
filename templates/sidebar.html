@@ -41,18 +41,20 @@
 
 
 <!-- Sidebar -->
-<div class="text-white p-4 flex-shrink-0 d-flex flex-column align-items-center text-center" id="sidebar" style="min-height: 100vh; background-color: #1d1d1d;">
+<div class="text-white p-4 flex-shrink-0 d-flex flex-column align-items-center" id="sidebar" style="min-height: 100vh; background-color: #1d1d1d;">
     <i id="sidebarToggle" class="fa-solid fa-chevron-left mb-3" style="cursor: pointer;" title="Toggle Sidebar"></i>
     <h4 class="text-center text-uppercase mb-4 menu">Menu</h4>
-    <ul class="nav d-flex flex-column align-items-center justify-content-start-0" id="navItems">
-        <div class="d-flex flex-column align-items-center">
-            <li class="nav-item mb-3">
+    <hr class="w-100" style="background-color:#fff5f5" heigth="1px"> 
+    <ul class="nav d-flex flex-column align-items-center justify-content-start" id="navItems">
+    
+        <li class="nav-item mb-3">
+            <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:index' %}">
                     <i class="fa-solid fa-house" title="Inicio"></i>
                     <span class="nav-text text-white text-small">Início</span>
                 </a>
-            </li>
-        </div>
+            </div>
+        </li>
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:cadContrato' fornecedor_id=0%}">
