@@ -22,9 +22,12 @@ urlpatterns = [
     #path('export-pdf/', views.export_pdf, name='export-pdf'),
     path('licitacoes/<int:pk>/editar/', views.BiddingUpdateView.as_view(), name='update_bidding'),
     path('criar-ARP/', views.createArp, name='create-ARP'),#ARP - SIGLA PARA (ATA DE REGISTRO DE PREÇOS)
-    path('atas/', views.listARPs.as_view(), name="atas"),
+    path('atas/', views.listARPs.as_view(), name="atas"), #Listar ARPs
+    path('atas-edit/<int:pk>/', views.ARPsUpdate.as_view(), name="updateARP"), #Editar ARPS
+    path('atas-delete/<int:pk>/', views.ARPsDeleteView.as_view(), name="deleteARP"), #Deletar ARPS
     path('criar-notafiscal/', views.NotasFiscaisView.as_view(), name='nfe'),
-    path('notasfiscais/', views.ListNfe.as_view(), name='notasfiscais'),
-    path('editarnfe/<int:pk>/', views.NotasFiscaisUpdate.as_view(), name='updatenfe')
+    path('notasfiscais/', views.ListNfe.as_view(), name='notasfiscais'), #Listar Notas Fiscais
+    path('editarnfe/<int:pk>/', views.NotasFiscaisUpdate.as_view(), name='updatenfe'), #Editar Notas Fiscais
+    path('deletenfe/<int:pk>/', views.NotesDeleteView.as_view(), name='deletenfe')
     #path('teste/', views.teste, name='teste')
 ]
