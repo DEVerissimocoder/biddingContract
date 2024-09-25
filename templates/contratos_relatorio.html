@@ -58,7 +58,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                <a href="{% url "biddingContracts:atas" %}" class="btn btn-dark">Voltar</a>
+                <a href="{% url "biddingContracts:contratos" %}" class="btn btn-dark">Voltar</a>
             </div>
                
         {% else %} <!-- se não existe contrato, ou seja, quando for atas de registros de preço -->
@@ -111,7 +111,7 @@
                 </table>
                 <a href="{% url "biddingContracts:atas" %}" class="btn btn-dark">Voltar</a>
             </div>
-        {% endif %} <!-- fecha o a validação se for contrato ou ata de registro de preços -->
+        {% endif %} <!-- fecha a validação se for contrato ou ata de registro de preços -->
     </div>
 </div>
 {% endblock %}

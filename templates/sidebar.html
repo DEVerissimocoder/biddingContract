@@ -41,7 +41,7 @@
 
 
 <!-- Sidebar -->
-<div class="text-white p-4 flex-shrink-0 d-flex flex-column align-items-center" id="sidebar" style="min-height: 100vh; background-color: #1d1d1d;">
+<div class="text-white p-4 flex-shrink-0 d-flex flex-column align-items-center collapsed" id="sidebar" style="min-height: 100vh; background-color: #1d1d1d;">
     <i id="sidebarToggle" class="fa-solid fa-chevron-left mb-3" style="cursor: pointer;" title="Toggle Sidebar"></i>
     <h4 class="text-center text-uppercase mb-4 menu">Menu</h4>
     <hr class="w-100" style="background-color:#fff5f5" heigth="1px"> 
@@ -135,7 +135,7 @@
                         <button class="nav-link link-danger text-danger" type="submit">
                             <i class="fa-solid fa-circle-xmark" title="Sair do Sistema"></i>
                         </button>
-                        <span class="nav-text text-white text-small" style="display: inline;">Sair do sistema</span>
+                        <span class="nav-text text-white text-small">Sair do sistema</span>
                     </div>
                 </form>
             </li>
@@ -148,13 +148,13 @@
         document.getElementById('sidebarToggle').addEventListener('click', function () {
             const sidebar = document.getElementById('sidebar');
             const navItems = document.querySelectorAll('#navItems .sidebar-text');
-    
+        
             sidebar.classList.toggle('collapsed');
-    
+        
             navItems.forEach(item => {
                 item.classList.toggle('d-none');
             });
-    
+        
             // Mudar a direção do ícone
             if (sidebar.classList.contains('collapsed')) {
                 this.classList.remove('fa-chevron-left');
@@ -164,7 +164,21 @@
                 this.classList.add('fa-chevron-left');
             }
         });
-
+        
+        // Verificar o estado inicial do sidebar para ajustar o ícone corretamente
+        window.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleIcon = document.getElementById('sidebarToggle');
+        
+            if (sidebar.classList.contains('collapsed')) {
+                toggleIcon.classList.remove('fa-chevron-left');
+                toggleIcon.classList.add('fa-chevron-right');
+            } else {
+                toggleIcon.classList.remove('fa-chevron-right');
+                toggleIcon.classList.add('fa-chevron-left');
+            }
+        });
+        
         
     </script>
     

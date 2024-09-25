@@ -156,8 +156,10 @@ def contratosRelatorio(request, id_contrato):
     hoje = hoje.date()
     # tipo datetime.date
     dataFinalContrato = contrato.dataFinal  
+    
     prazoRestante = relativedelta(dataFinalContrato, hoje)
-    mensagem = verifica_prazo_validade_contrato(prazoRestante, dataFinalContrato, hoje)
+    
+    #mensagem = verifica_prazo_validade(prazoRestante, dataFinalContrato, hoje)
 
     for notas in notasFiscais:
         if notas.contrato_fk.numero == contrato.numero:
@@ -165,7 +167,7 @@ def contratosRelatorio(request, id_contrato):
     context = {
         "notasfiscais": notasFiscais,
         "saldoAtual": saldoAtual,
-        "vigencia": mensagem,
+        #"vigencia": mensagem,
         "hoje": hoje,
         "dataFinal": dataFinalContrato,
         "chave":True
@@ -174,20 +176,21 @@ def contratosRelatorio(request, id_contrato):
 
 
 @login_required
-def verifica_prazo_validade_contrato(prazoRestante, dataFinal, hoje):
-    mensagem = " "
+def verifica_prazo_validade(dataFinal, hoje, tipo="contrato", prazoRestante=None):
+    mensagem = ""
     if dataFinal > hoje:
-        mensagem = f"O contrato é válido por mais {prazoRestante.years} anos, {prazoRestante.months} meses e {prazoRestante.days} dias."
+        mensagem = f"O {tipo} é válido por mais {prazoRestante.years} anos, {prazoRestante.months} meses e {prazoRestante.days} dias."
         return mensagem
     elif dataFinal == hoje:
-        mensagem = f"O contrato é válido até hoje dia: {dataFinal.strftime('%d/%m/%y')}"
+        mensagem = f"O {tipo} é válido até hoje dia: {dataFinal.strftime('%d/%m/%y')}"
         return mensagem
     elif dataFinal < hoje:
-        mensagem =  "O prazo de validade do contrato já expirou."
+        mensagem =  f"O prazo de validade do {tipo} já expirou."
     return mensagem
 
 def verifica_prazo_validade_arp(prazoRestante, dataFinal, hoje):
-    mensagem = " "
+    # return verifica_prazo_validade(prazoRestante, dataFinal, hoje, tipo="ARP")
+    mensagem = ""
     if dataFinal > hoje:
         mensagem = f"Esta ARP é válida por mais {prazoRestante.years} anos, {prazoRestante.months} meses e {prazoRestante.days} dias."
         return mensagem

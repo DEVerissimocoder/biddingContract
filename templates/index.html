@@ -19,6 +19,11 @@
         align-items: center;
     }
 
+    .container {
+        max-width: 900px; /* Define uma largura máxima */
+        width: 100%; /* Largura total até o limite de 900px */
+    }
+
     span {
         font-size: 1.5rem;
         color: #188249;
@@ -43,37 +48,36 @@
 </style>
 
 <div class="d-flex"> 
-        <!-- Sidebar -->
-        {% include "sidebar.html" %}
+    <!-- Sidebar -->
+    {% include "sidebar.html" %}
 
-        <!-- Main Content -->
-        <main class="col-md-9 d-flex flex-column align-items-center justify-ocntent-center h-100">
-            <div class="container mt-5">
-                <div class="d-flex flex-column align-items-center">
-                    {% include "messages.html" %}
-                    {% if user.is_authenticated %}
-                        <h2 class="text-center">Olá, {{ user.username.title }}! Seja bem-vindo</h2>
-                    {% endif %}
-                    <h3 class="text-center text-uppercase mb-4">Sistema para Controle de Contratos Licitatórios da Prefeitura de <br> <span class="text-uppercase">Paranatama</span></h3>
+    <!-- Main Content -->
+    <main class="col-md-9 d-flex flex-column align-items-center justify-content-center h-100">
+        <div class="container mt-5 text-center">
+            <div class="d-flex flex-column align-items-center">
+                {% include "messages.html" %}
+                {% if user.is_authenticated %}
+                    <h2 class="text-center">Olá, {{ user.username.title }}! Seja bem-vindo</h2>
+                {% endif %}
+                <h3 class="text-center text-uppercase mb-4">Sistema para Controle de Contratos Licitatórios da Prefeitura de <br> <span class="text-uppercase">Paranatama</span></h3>
 
-                    <!-- Slider -->
-                    <div class="swiper">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <img src="{% static 'imagens/para1.png' %}" alt="Imagem 1">
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="{% static 'imagens/para.jpeg' %}" alt="Imagem 2">
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="{% static 'imagens/para3.png' %}" alt="Imagem 3">
-                            </div>
+                <!-- Slider -->
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="{% static 'imagens/para1.png' %}" alt="Imagem 1">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="{% static 'imagens/para.jpeg' %}" alt="Imagem 2">
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="{% static 'imagens/para3.png' %}" alt="Imagem 3">
                         </div>
                     </div>
                 </div>
             </div>
-        </main>
-    
+        </div>
+    </main>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -82,16 +86,12 @@
         direction: 'horizontal',
         loop: true,
         autoplay: {
-            delay: 3000, // Troca de slides a cada 3 segundos
-            disableOnInteraction: false, // Continua o autoplay mesmo após interação do usuário
+            delay: 3000,
+            disableOnInteraction: false,
         },
         pagination: {
             el: '.swiper-pagination',
         },
-        //navigation: {
-          //  nextEl: '.swiper-button-next',
-           // prevEl: '.swiper-button-prev',
-        //},
         scrollbar: {
             el: '.swiper-scrollbar',
         },

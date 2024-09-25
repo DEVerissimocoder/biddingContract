@@ -277,9 +277,9 @@ class formARP(forms.ModelForm):
                 }
             ),
 
-            "licitao_fk": forms.Select(
+            "licitacao_fk": forms.Select(
                 attrs={
-                    "class":"form-select"
+                    "class":"form-control",
                 }
             ),
 
