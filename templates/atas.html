@@ -1,57 +1,5 @@
 {% extends "base_template.html" %}
-<<<<<<< HEAD
-{% block title %} Lista de ARPs {% endblock title %}
-{% block content %}    
- 
-<div class="d-flex">
-  {% include "sidebar.html" %}
-  <div class="container my-5">
-    {% include "messages.html" %}
-    <h2 class="text-center mb-4 text-uppercase">Lista de ARPs - Atas de Registro de Preços</h2>
-    {% if atas %}
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Número</th>
-          <th class="text-uppercase" scope="col">Objeto Detalhado</th>
-          <th class="text-uppercase" scope="col">Valor</th>
-          <th class="text-uppercase" scope="col">Data Inicial</th>
-          <th class="text-uppercase" scope="col">Licitação</th>
-          <th class="text-uppercase" scope="col">Fornecedor</th>
-          <th class="text-uppercase text-center" scope="col">Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-          {% for ata in atas %}
-          <tr>
-              <th scope="row">{{ ata.pk }}</th>
-              <td>{{ ata.numero}}</td>
-              <td>{{ ata.assuntoDetalhado }}</td>
-              <td>{{ ata.valor }}</td>
-              <td>{{ ata.dataInicial }}</td>
-              <td>{{ ata.licitacao_fk }}</td>
-              <td>{{ ata.fornecedor_fk }}</td>
-              <td class="d-flex justify-content-between">
-                <a class="btn btn-info" href="{% url "biddingContracts:updateARP" ata.pk %}">Editar</a>
-                <a class="btn btn-danger" href="{% url "biddingContracts:deleteARP" ata.pk %}">Deletar</a>
-            </td>
-          </tr>
-          {% endfor %}
-        {% else %}
-        <h3 class="text-center text-uppercase">Sem ARPs Cadastradas!</h3>
-        {% endif %}
-      </tbody>
-    </table>
-  </div>
-</div>
-    
-    
-{% endblock content %}
 
-
-=======
 {% block title %} Lista de ARP {% endblock title %}
 {% block content %}
 
@@ -72,9 +20,13 @@
                 <span class="badge badge-primary"> Valor da Ata é: {{ ata.valor }}</span>
                 <div class="mt-2">
                     <a href="{% url 'biddingContracts:relatorioARP' ata.pk %}"> mais informações </a>
+                    <a class="btn btn-info" href="{% url "biddingContracts:updateARP" ata.pk %}">Editar</a>
+                    <a class="btn btn-danger" href="{% url "biddingContracts:deleteARP" ata.pk %}">Deletar</a>
                 </div>   
             </div>  
-        {% endfor %}           
+        {% endfor %}  
+        {% else %}
+        <h3 class="text-center text-uppercase">Sem ARPs Cadastradas!</h3>         
         </div>
         
     {% endif %}
@@ -82,4 +34,3 @@
 </div> 
 {% endblock content %}   
  
->>>>>>> 18f818388841c90b35b9792e49e160836263719b

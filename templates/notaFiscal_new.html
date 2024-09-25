@@ -19,7 +19,7 @@
                             {% include "messages.html" %}
                         {% endblock %}
                         
-                        <form method="post" action="{% url 'biddingContracts:nfe' %}">
+                        <form method="post" action="{% url 'biddingContracts:new_notas' %}">
                             {% csrf_token %}
                             {{ form.media }}
 

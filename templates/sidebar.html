@@ -52,24 +52,14 @@
                     <span class="nav-text text-white text-small">Início</span>
                 </a>
             </li>
-<<<<<<< HEAD
         </div>
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:cadContrato' %}">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:cadContrato' fornecedor_id=0%}">
                     <i class="fa-solid fa-file-contract" title="Criar Contratos"></i>
                     <span class="nav-text text-white text-small">Criar Contratos</span>
-=======
-
-            <li class="nav-item mb-3 ">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:cadContrato' fornecedor_id=0%}">
-                    <div class="d-flex flex-column align-items-center">
-                        <i class="fa-solid fa-file-contract" title="Criar Contratos"></i>
-                        <p style="font-size:0.9rem;" class="text-small text-muted text-center">Criar Contratos</p>
-                    </div> 
->>>>>>> 18f818388841c90b35b9792e49e160836263719b
                 </a>
-            </div>
+            <div>
         </li>
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
@@ -81,7 +71,7 @@
         </li>
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:nfe' %}">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:new_notas' %}">
                     <i class="fa-solid fa-square-plus" title="Criar nota fiscal"></i>
                     <span class="nav-text text-white text-small">Criar Nota Fiscal</span>
                 </a>
@@ -93,25 +83,18 @@
                     <i class="fa-solid fa-file-invoice-dollar" title="Notas Fiscais"></i>
                     <span class="nav-text text-white text-small">Listar Notas Fiscais</span>
                 </a>
-<<<<<<< HEAD
             </div>
         </li>
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
-=======
-            </li>
-            <li class="nav-item mb-3">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:create-bidding' %}">
-                    <div class="d-flex flex-column align-items-center">
-                        <i class="bi bi-file-earmark-text-fill me-2" title="licitacao_new"></i> 
-                        <p style="font-size:0.9rem;" class="text-small text-muted text-center">cadastrar licitação</p>
-                    </div>
-                    
+                    <i class="bi bi-file-earmark-text-fill me-2" title="licitacao_new"></i> 
+                    <span class="nav-text text-white text-small">Cadastrar Licitação</span> 
                 </a>
-            </li>
-             
-            <li class="nav-item mb-3">
->>>>>>> 18f818388841c90b35b9792e49e160836263719b
+            </div>
+        </li>
+        <li class="nav-item mb-3">
+            <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:list_bidding' %}">
                     <i class="fa-solid fa-list-check" title="Listar Licitações"></i>
                     <span class="nav-text text-white text-small">Listar Licitações</span>
@@ -124,7 +107,6 @@
                     <i class="fa-solid fa-truck-fast" title="Listar Fornecedores"></i>
                     <span class="nav-text text-white text-small">Listar Fornecedores</span>
                 </a>
-<<<<<<< HEAD
             </div>
         </li>
         <li class="nav-item mb-3">
@@ -132,16 +114,6 @@
                 <a class="nav-link text-white" href="{% url 'biddingContracts:create-ARP' %}">
                     <i class="fa-solid fa-registered" title="Criar Atas de Registro de Preços"></i>
                     <span class="nav-text text-white text-small">Criar ARPs</span>
-=======
-            </li>
-
-            <li class="nav-item mb-3">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:create-ARP'%}">
-                    <div class="d-flex flex-column align-items-center">
-                        <i class="fa-solid fa-registered" title="Criar Atas de Registro de Preços"></i>
-                        <p style="font-size:0.9rem;" class="text-small text-muted text-center">Criar ARPs</p>
-                    </div>
->>>>>>> 18f818388841c90b35b9792e49e160836263719b
                 </a>
             </div>
         </li>

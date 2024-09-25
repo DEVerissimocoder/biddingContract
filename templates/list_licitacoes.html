@@ -10,23 +10,6 @@
     <div class="container-sm">
         <h1 class="text-center mt-2 text-muted">Lista de licitações</h1>
         {% include "messages.html" %}
-        
-
-        {% comment %} <form action="?" method="GET"> <!-- Filtro de busca -->
-            <div class="d-flex flex-row-reverse mt-4 align-items-center">
-                <div class="d-flex">
-                    <button class="btn btn-primary ml-2" type="submit">
-                        Buscar
-                    </button>
-                </div>
-               
-                <input style=" border-radius: 5px; width: 20%;" placeholder="Digite o n° do mês" class="d-flex form-control me-2" autocomplete="off" type="text" name="buscar" id="" value="{{ request.GET.buscar }}">
-                <div class="d-flex me-2">
-                    <a href="." class="text-white btn btn-danger" style="text-decoration: none;">Limpar</a>
-                </div>
-            </div>
-            
-        </form> <!-- Fim do filtro de busca --> {% endcomment %}
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light mt-3 mb-3"> <!-- Início do navbar -->
             <div class="container-fluid">
@@ -148,7 +131,7 @@
                     <p class="text-muted small">Nenhum Contrato Existente</p>
                 </div>
             {% endif %}
-          </nav>   <!-- Fim do navbar -->
+        </nav>   <!-- Fim do navbar -->
 
         
         <ul class="list-group accordion">
@@ -167,7 +150,7 @@
                            
                         </li>
                         {% if licitacao %}
-                        <a class="btn btn-light ms-3" href="{% url "biddingContracts:update_bidding" licitacao.pk %}">Editar</a>
+                        <a class="btn btn-outline-success ms-3 mt-2" href="{% url "biddingContracts:update_bidding" licitacao.pk %}">Editar</a>
                         {% endif %}
                     </div>
                 </div>
