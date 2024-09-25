@@ -1,4 +1,5 @@
 {% extends "base_template.html" %}
+
 {% block title %} Lista de ARP {% endblock title %}
 {% block content %}
 
@@ -10,18 +11,26 @@
         <div class="list-group">
         {% for ata in atas %}           
             <div class="list-group-item list-group-item-action flex-column align-items-start mb-3">
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">Objeto: {{ ata.assuntoDetalhado }}</h5> 
-                    <h5 class="mb-1">Número: {{ ata.numero }}</h5>
+                <div class="d-flex w-100 justify-content-between">  
+                    <h5 class="mb-1">Objeto: {{ ata.assuntoDetalhado }}</h5>
+                    <h5 class="mb-1">Número: {{ ata.numero }}</h5> 
                     <small>Registrada em: {{ ata.dataInicial }}</small>
                 </div>
                 <span>Fornecedor: {{ ata.fornecedor_fk.nome }}</span>
                 <span class="badge badge-primary"> Valor da Ata é: {{ ata.valor }}</span>
-                <div class="mt-2">
-                    <a href="{% url 'biddingContracts:relatorioARP' ata.pk %}"> mais informações </a>
+                <div class="mt-2 d-flex justify-content-between">
+                    <div class="d-flex">
+                      <a class="text-primary" style="text-decoration: none;" href="{% url 'biddingContracts:relatorioARP' ata.pk %}"> Mais informações </a>
+                    </div>
+                    <div class="d-flex gap-3">
+                      <a class="btn btn-outline-info" href="{% url "biddingContracts:updateARP" ata.pk %}">Editar</a>
+                      <a class="btn btn-outline-danger" href="{% url "biddingContracts:deleteARP" ata.pk %}">Deletar</a>
+                    </div>
                 </div>   
             </div>  
-        {% endfor %}           
+        {% endfor %}  
+        {% else %}
+        <h3 class="text-center text-uppercase">Sem ARPs Cadastradas!</h3>         
         </div>
         
     {% endif %}

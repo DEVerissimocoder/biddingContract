@@ -20,7 +20,7 @@
           <th scope="col">DATA EMISSAO</th>
           <th scope="col">CONTRATO</th>
           <th scope="col">ARP</th>
-          <th scope="col">AÇÕES</th>
+          <th class="text-center" scope="col">AÇÕES</th>
         </tr>
       </thead>
       <tbody>
@@ -35,7 +35,12 @@
               <td>{{ notafiscal.dataEmissao }}</td>
               <td>{{ notafiscal.contrato_fk }}</td>
               <td>{{ notafiscal.ataregistropreco_fk }}</td>
-              <td><a href="{% url "biddingContracts:updatenfe" notafiscal.pk %}">Editar</a></td>
+              <td class="">
+                <div class="d-flex gap-3 justify-content-center">
+                  <a href="{% url "biddingContracts:updatenfe" notafiscal.pk %}">Editar</a>
+                  <a class="text-danger" href="{% url "biddingContracts:deletenfe" notafiscal.pk %}">Excluir</a>
+                </div>
+              </td>
           </tr>
           {% endfor %}
         {% else %}

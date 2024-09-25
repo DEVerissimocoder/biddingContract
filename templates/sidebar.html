@@ -1,108 +1,185 @@
 <!-- Sidebar -->
-<div class="text-white p-4 flex-shrink-0 w-150 d-flex flex-column align-items-center" id="sidebar" style=" min-height: 100vh; background-color: #55b058;">
-    <h4 class="text-center text-uppercase mb-4">Menu</h4>
-        <ul class="nav d-flex flex-column align-items-center justify-content-start-0">
-            <li class="nav-item mb-3">
+
+<style>
+    #sidebar {
+        width: 200px; /* Largura padrão do sidebar */
+        transition: width 0.3s ease; /* Transição suave para a largura */
+    }
+    
+    #sidebar.collapsed {
+        width: 60px; /* Largura do sidebar quando colapsado */
+    }
+    
+    #sidebar .sidebar-text {
+        transition: opacity 0.3s ease; /* Transição suave para a opacidade do texto */
+    }
+    
+    #sidebar.collapsed .sidebar-text {
+        opacity: 0; /* Oculta o texto quando colapsado */
+        pointer-events: none; /* Impede que os eventos de mouse afetem os itens ocultos */
+    }
+    
+    #navItems {
+        transition: transform 0.3s ease; /* Transição suave para a transformação do navItems */
+    }
+
+    .collapsed .nav-text {
+        display: none; /* Oculta o texto */
+    }
+
+    .collapsed .menu {
+        display: none;
+    }
+
+    .nav-text {
+        font-size:0.9rem
+    }
+    
+    
+</style>
+
+
+
+<!-- Sidebar -->
+<div class="text-white p-4 flex-shrink-0 d-flex flex-column align-items-center collapsed" id="sidebar" style="min-height: 100vh; background-color: #1d1d1d;">
+    <i id="sidebarToggle" class="fa-solid fa-chevron-left mb-3" style="cursor: pointer;" title="Toggle Sidebar"></i>
+    <h4 class="text-center text-uppercase mb-4 menu">Menu</h4>
+    <hr class="w-100" style="background-color:#fff5f5" heigth="1px"> 
+    <ul class="nav d-flex flex-column align-items-center justify-content-start" id="navItems">
+    
+        <li class="nav-item mb-3">
+            <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:index' %}">
-                    <div class="d-flex flex-column align-items-center">
-                        <i class="fa-solid fa-house" title="Inicio" ></i>
-                        <p style="font-size:0.9rem;" class="text-small text-muted">Início</p>
-                    </div>
+                    <i class="fa-solid fa-house" title="Inicio"></i>
+                    <span class="nav-text text-white text-small">Início</span>
                 </a>
-            </li>
-
-            <li class="nav-item mb-3 ">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:cadContrato' fornecedor_id=0%}">
-                    <div class="d-flex flex-column align-items-center">
-                        <i class="fa-solid fa-file-contract" title="Criar Contratos"></i>
-                        <p style="font-size:0.9rem;" class="text-small text-muted text-center">Criar Contratos</p>
-                    </div> 
+            </div>
+        </li>
+        <li class="nav-item mb-3">
+            <div class="d-flex flex-column align-items-center">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:cadContrato' fornecedor_id=0 %}">
+                    <i class="fa-solid fa-file-contract" title="Criar Contratos"></i>
+                    <span class="nav-text text-white text-small">Criar Contratos</span>
                 </a>
-            </li>
-
-            <li class="nav-item mb-3">
+            <div>
+        </li>
+        <li class="nav-item mb-3">
+            <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:contratos' %}">
-                    <div class="d-flex flex-column align-items-center">
-                        <i class="fa-solid fa-list" title="Listar Contratos"></i>
-                        <p style="font-size:0.9rem;" class="text-small text-muted text-center">Listar contratos</p>
-                    </div>
+                    <i class="fa-solid fa-list" title="Listar Contratos"></i>
+                    <span class="nav-text text-white text-small">Listar Contratos</span>
                 </a>
-            </li>
-
-            <li class="nav-item mb-3">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:nfe' %}">
-                    <div class="d-flex flex-column align-items-center">
-                        <i class="fa-solid fa-square-plus" title="Criar nota fiscal"></i>
-                        <p style="font-size:0.9rem;" class="text-small text-muted text-center">Criar nota fiscal</p>
-                    </div>
+            </div>
+        </li>
+        <li class="nav-item mb-3">
+            <div class="d-flex flex-column align-items-center">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:new_notas' %}">
+                    <i class="fa-solid fa-square-plus" title="Criar nota fiscal"></i>
+                    <span class="nav-text text-white text-small">Criar Nota Fiscal</span>
                 </a>
-            </li>
-           
-            <li class="nav-item mb-3">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:notasfiscais' %}"> 
-                    <div class="d-flex flex-column align-items-center">
-                        <i class="fa-solid fa-file-invoice-dollar" title="Notas Fiscais"></i>
-                        <p style="font-size:0.9rem;" class="text-small text-muted text-center">Listar notas fiscais</p>
-                    </div>
+            </div>
+        </li>
+        <li class="nav-item mb-3">
+            <div class="d-flex flex-column align-items-center">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:notasfiscais' %}">
+                    <i class="fa-solid fa-file-invoice-dollar" title="Notas Fiscais"></i>
+                    <span class="nav-text text-white text-small">Listar Notas Fiscais</span>
                 </a>
-            </li>
-            <li class="nav-item mb-3">
+            </div>
+        </li>
+        <li class="nav-item mb-3">
+            <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:create-bidding' %}">
-                    <div class="d-flex flex-column align-items-center">
-                        <i class="bi bi-file-earmark-text-fill me-2" title="licitacao_new"></i> 
-                        <p style="font-size:0.9rem;" class="text-small text-muted text-center">cadastrar licitação</p>
-                    </div>
-                    
+                    <i class="fa-solid fa-file" title="Cadastrar Licitação"></i> 
+                    <span class="nav-text text-white text-small">Cadastrar Licitação</span> 
                 </a>
-            </li>
-             
-            <li class="nav-item mb-3">
+            </div>
+        </li>
+        <li class="nav-item mb-3">
+            <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:list_bidding' %}">
-                    <div class="d-flex flex-column align-items-center">
-                        <i class="fa-solid fa-list-check" title="Listar Licitações"></i>
-                        <p style="font-size:0.9rem;" class="text-small text-muted text-center">Listar licitações</p>
-                    </div>
+                    <i class="fa-solid fa-list-check" title="Listar Licitações"></i>
+                    <span class="nav-text text-white text-small">Listar Licitações</span>
                 </a>
-            </li> 
-
-            <li class="nav-item mb-3">
+            </div>
+        </li>
+        <li class="nav-item mb-3">
+            <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:fornecedores' %}">
-                    <div class="d-flex flex-column align-items-center">
-                        <i class="fa-solid fa-truck-field" title="Listar Fornecedores"></i>
-                        <p style="font-size:0.9rem;" class="text-small text-muted text-center">Listar fornecedores</p>
-                    </div>
+                    <i class="fa-solid fa-truck-fast" title="Listar Fornecedores"></i>
+                    <span class="nav-text text-white text-small">Listar Fornecedores</span>
                 </a>
-            </li>
-
-            <li class="nav-item mb-3">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:create-ARP'%}">
-                    <div class="d-flex flex-column align-items-center">
-                        <i class="fa-solid fa-registered" title="Criar Atas de Registro de Preços"></i>
-                        <p style="font-size:0.9rem;" class="text-small text-muted text-center">Criar ARPs</p>
-                    </div>
+            </div>
+        </li>
+        <li class="nav-item mb-3">
+            <div class="d-flex flex-column align-items-center">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:create-ARP' %}">
+                    <i class="fa-solid fa-registered" title="Criar Atas de Registro de Preços"></i>
+                    <span class="nav-text text-white text-small">Criar ARPs</span>
                 </a>
-            </li>
-
-            <li class="nav-item mb-3">
+            </div>
+        </li>
+        <li class="nav-item mb-3">
+            <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:atas' %}">
-                    <div class="d-flex flex-column align-items-center">
-                        <i class="fa-solid fa-book" title="Listar Atas de Registros de Preços"></i>
-                        <p style="font-size:0.9rem;" class="text-small text-muted text-center">Listar ARPs</p>
-                    </div>
+                    <i class="fa-solid fa-book" title="Listar Atas de Registros de Preços"></i>
+                    <span class="nav-text text-white text-small">Listar ARPs</span>
                 </a>
+            </div>
+        </li>
+        {% if user.is_authenticated %}
+            <li class="nav-item mb-3">
+                <form action="{% url 'logout' %}" method="post" class="">
+                    {% csrf_token %}
+                    <div class="d-flex flex-column align-items-center">
+                        <button class="nav-link link-danger text-danger" type="submit">
+                            <i class="fa-solid fa-circle-xmark" title="Sair do Sistema"></i>
+                        </button>
+                        <span class="nav-text text-white text-small">Sair do sistema</span>
+                    </div>
+                </form>
             </li>
-            
-            {% if user.is_authenticated %}
-                <li class="nav-item mb-3">
-                    <form action="{% url 'logout' %}" method="post" class="">
-                        {% csrf_token %}
-                        <div class="d-flex flex-column align-items-center">
-                            <button class="nav-link link-danger text-danger" type="submit"><i class="fa-solid fa-circle-xmark" title="Sair do Sistema"></i>
-                            </button>
-                            <p style="font-size:0.9rem;" class="text-small text-muted text-center">Sair do sistema</p>
-                        </div>
-                    </form>
-                </li>
-            {% endif %}
-        </ul>
-    </div>
+        {% endif %}
+    </ul>
+</div>
+
+
+    <script>
+        document.getElementById('sidebarToggle').addEventListener('click', function () {
+            const sidebar = document.getElementById('sidebar');
+            const navItems = document.querySelectorAll('#navItems .sidebar-text');
+        
+            sidebar.classList.toggle('collapsed');
+        
+            navItems.forEach(item => {
+                item.classList.toggle('d-none');
+            });
+        
+            // Mudar a direção do ícone
+            if (sidebar.classList.contains('collapsed')) {
+                this.classList.remove('fa-chevron-left');
+                this.classList.add('fa-chevron-right');
+            } else {
+                this.classList.remove('fa-chevron-right');
+                this.classList.add('fa-chevron-left');
+            }
+        });
+        
+        // Verificar o estado inicial do sidebar para ajustar o ícone corretamente
+        window.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleIcon = document.getElementById('sidebarToggle');
+        
+            if (sidebar.classList.contains('collapsed')) {
+                toggleIcon.classList.remove('fa-chevron-left');
+                toggleIcon.classList.add('fa-chevron-right');
+            } else {
+                toggleIcon.classList.remove('fa-chevron-right');
+                toggleIcon.classList.add('fa-chevron-left');
+            }
+        });
+        
+        
+    </script>
+    
+    

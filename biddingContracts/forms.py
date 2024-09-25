@@ -264,6 +264,7 @@ class formARP(forms.ModelForm):
                 }
             ),
             "dataInicial": forms.DateInput(
+                format=("%Y-%m-%d"),
                 attrs={
                     "type": "date",
                     "class": "form-control",
@@ -276,9 +277,9 @@ class formARP(forms.ModelForm):
                 }
             ),
 
-            "licitao_fk": forms.Select(
+            "licitacao_fk": forms.Select(
                 attrs={
-                    "class":"form-select"
+                    "class":"form-control",
                 }
             ),
 
