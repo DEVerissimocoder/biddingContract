@@ -1,10 +1,15 @@
 from django.db import models
 
-#licitacao
-class Licitacao(models.Model):
-    #id = models.IntegerField(primary_key=True, auto_created=True)
+class Modalidade(models.TextChoices):
+    CONCORRENCIA = 'concorrência', 'Concorrência'
+    PREGAO = 'pregao', 'Pregão'
+    LEILAO = 'leilao', 'Leilão'
+    CONCURSO = 'concurso', 'Concurso'
+    DIALOGO_COMPETITIVO = 'dialogo_competitivo', 'Diálogo Competitivo'
+
+class Licitacao (models.Model):
     numProcess = models.CharField(max_length=7, unique=True, blank=False, null=False)
-    categoria = models.CharField(max_length=200, verbose_name="Categoria", null=False)
+    categoria = models.CharField(max_length=150, choices=Modalidade.choices)
     assunto = models.CharField(max_length=200, verbose_name="Assunto",  null=False, blank=False)
     date = models.DateField()
     
@@ -54,8 +59,10 @@ class NotaFiscal(models.Model):
     valor = models.FloatField()
     tipo = models.CharField(max_length=50)
     dataEmissao = models.DateField()
-    contrato_fk = models.ForeignKey("Contrato", on_delete=models.CASCADE)
-
+    contrato_fk = models.ForeignKey("Contrato", blank=True, null=True, on_delete=models.CASCADE)
+    fornecedor_fk = models.ForeignKey("Fornecedor", on_delete=models.CASCADE)
+    ataregistropreco_fk = models.ForeignKey('AtaRegistroPreco', blank=True, null=True, on_delete=models.CASCADE)
+    
     class Meta:
         verbose_name_plural = "Notas Fiscais"
 
@@ -71,6 +78,9 @@ class AtaRegistroPreco(models.Model):
     valor = models.FloatField(null=False)
     licitacao_fk= models.ForeignKey("Licitacao", on_delete=models.CASCADE)
     fornecedor_fk = models.ForeignKey("Fornecedor", on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f'{self.numero}'
     
     class Meta:
         verbose_name_plural = 'Atas de Registros de Preços'

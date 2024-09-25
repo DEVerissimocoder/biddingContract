@@ -27,11 +27,10 @@ class formLicitacao(forms.ModelForm):
                     "id": "proc",
                 }
             ),
-            "categoria": forms.TextInput(
+            "categoria": forms.Select(
                 attrs={
                     "type": "text",
                     "class": "form-control",
-                    "placeholder": "Modalidade"
                 }
             ),
             "assunto": forms.Textarea(
@@ -228,17 +227,8 @@ class formContrato(forms.ModelForm):
         }
 
 class formARP(forms.ModelForm):
-    licitacao_fk = forms.ModelChoiceField(
-        queryset=Licitacao.objects.all(),
-        label="Licitação",
-        #widget=forms.Select(attrs={'class': 'form-select'})
-    )
-
-    fornecedor_fk = forms.ModelChoiceField(
-        queryset=Fornecedor.objects.all(),
-        label="Fornecedor",
-        #widget=forms.Select(attrs={'class': 'form-select'})
-    )
+    #licitacao_fk = forms.ModelChoiceField( queryset=Licitacao.objects.all(), label="Licitação")
+    #fornecedor_fk = forms.ModelChoiceField(queryset=Fornecedor.objects.all(), label="Fornecedor")
     
     class Meta:
         model = AtaRegistroPreco
@@ -286,21 +276,39 @@ class formARP(forms.ModelForm):
                     "placeholder": "Valor da Ata de Registro de Preços",
                 }
             ),
+
+            "licitao_fk": forms.Select(
+                attrs={
+                    "class":"form-select"
+                }
+            ),
+
+            "fornecedor_fk": forms.TextInput(
+                attrs={
+                    "type":"text",
+                    "class":"form-control"
+
+                }
+            ),
+                           
         }
 
 class NotaFiscalForm(forms.ModelForm):
+
     class Meta:
         model = NotaFiscal
-        fields=["num", "serie", "valor", "tipo", "dataEmissao", "contrato_fk"]
+        fields=["num", "serie", "valor", "tipo", "dataEmissao", "contrato_fk", "fornecedor_fk", "ataregistropreco_fk"]
         labels={
                 "num": "NÚMERO",
                 "serie": "SERIE",
                 "valor": "VALOR",
-                "tipo": "TIPO", #acho que este campo poderia sair, já que que tem o campo serie.
+                "tipo": "TIPO", 
                 "dataEmissao": "DATA DE EMISSÃO",
-                "contrato_fk": "CONTRATO"
+                "contrato_fk": "CONTRATO",
+                "ataregistropreco_fk": "ARP"
                 }
         
+
         widgets={
             "num":forms.NumberInput(
                 attrs={
@@ -333,10 +341,24 @@ class NotaFiscalForm(forms.ModelForm):
                     "class": "form-control",
                 }
             ),
+          
             "contrato_fk": forms.Select(
                 attrs={
+                    "blank": "true",
                     "class": "form-select"
                 }
             ),
+
+            "fornecedor_fk": forms.Select(
+                attrs={                  
+                    "class": "form-select"
+                }
+            ),
+            "ataregistropreco_fk": forms.Select(
+                attrs={
+                    "blank": "true",
+                    "class": "form-select"
+                }
+            )
         }
             

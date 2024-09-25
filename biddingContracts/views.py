@@ -1,3 +1,4 @@
+from django.db.models.query import QuerySet
 from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect, HttpResponse
 from datetime import datetime
@@ -9,6 +10,7 @@ from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.contrib import messages
+
 import tempfile
 from django.utils import timezone
 #import weasyprint
@@ -36,12 +38,11 @@ from django.contrib.auth.decorators import login_required
     return render(request, "modal_fornecedor_teste.html")"""
 
 @login_required
-def cadContrato(request):
+def cadContrato(request, fornecedor_id):
     if request.method == "POST":
         form = formContrato(request.POST)
-        print(f"Dados recebidos no POST: {request.POST}")  # Verifique o que está sendo enviado
+        print(f"Dados recebidos no POST: {request.POST}") 
         if form.is_valid():
-            print("formulario validado")
             form.save()
             return HttpResponseRedirect(reverse("biddingContracts:contratos"))
         else:
@@ -58,7 +59,24 @@ def cadContrato(request):
 #     print("chamando view")
 #     return render(request, "contratos.html", context)
 
-class ListContractsView(LoginRequiredMixin, ListView):
+# class ListContractsView(LoginRequiredMixin, ListView):
+    
+#     # fluxo 2-> segunda requisição, ou seja, quando ele vem da tela de cadastro de fornecedor.
+#     if fornecedor_id!=0:
+#         #consulta o fornecedor vindo do banco através do ID e cria um objeto com os dados retornado da tabela fornecedor
+#         fornecedor = Fornecedor.objects.get(id = fornecedor_id)
+        
+#         form = formContrato()
+#         context={'form':form, 'fornecedor_id':fornecedor.id}
+#         return render(request, 'contrato_new.html', context)
+    
+#     # fluxo 1 -> primeira requisição get
+#     else:
+#         form = formContrato()
+#         context={'form':form,'fornecedor_id':fornecedor_id}
+#         return render(request, "contrato_new.html", context)
+    
+class ListContractsView(ListView):
     """
     Classe destinada a listar os contratos criados
     """
@@ -128,7 +146,7 @@ class ContractsUpdateView(LoginRequiredMixin, UpdateView):
 
 @login_required
 def contratosRelatorio(request, id_contrato):
-    contrato = Contrato.objects.get(id_contrato=id_contrato)
+    contrato = Contrato.objects.get(id=id_contrato)
     notasFiscais = NotaFiscal.objects.filter(contrato_fk = id_contrato)
     saldoAtual = contrato.valor
     #tipo datetime.datetime
@@ -149,6 +167,7 @@ def contratosRelatorio(request, id_contrato):
         "vigencia": mensagem,
         "hoje": hoje,
         "dataFinal": dataFinalContrato,
+        "chave":True
         }
     return render(request, "contratos_relatorio.html", context)
 
@@ -166,13 +185,20 @@ def verifica_prazo_validade_contrato(prazoRestante, dataFinal, hoje):
         mensagem =  "O prazo de validade do contrato já expirou."
     return mensagem
 
-def verifica_prazo_validade_ARP(prazoRestante, dataFinal, hoje):
+def verifica_prazo_validade_arp(prazoRestante, dataFinal, hoje):
     mensagem = " "
-    if dataFinal >= hoje:
-        mensagem = f"O contrato é válido por mais {prazoRestante.years} anos, {prazoRestante.months} meses e {prazoRestante.days} dias."
+    if dataFinal > hoje:
+        mensagem = f"Esta ARP é válida por mais {prazoRestante.years} anos, {prazoRestante.months} meses e {prazoRestante.days} dias."
         return mensagem
-    else:
-        mensagem =  "O prazo de validade do contrato já expirou."
+    elif dataFinal == hoje:
+        mensagem = f"Esta ARP é válido até hoje dia: {dataFinal.strftime('%d/%m/%y')}"
+        return mensagem
+    elif dataFinal < hoje:
+        #Aqui eu vi uma utilidade de ser armazenado no banco de dados o valor atual da ARP para quando 
+        # for cadastrar o contrato já inserir o valor automaticamente para evitar possíveis erros do 
+        # usuário de digitar um valor diferente do valor atual do contrato.
+        mensagem =  "O prazo de validade desta ARP expirou, cadastre-a como contrato usando o saldo atual, clique aqui:" 
+        
     return mensagem
 
 
@@ -188,6 +214,20 @@ class BiddingFornecedor(LoginRequiredMixin, CreateView):
     form_class = formFornecedor
     template_name = 'fornecedor_new.html'
     success_url = reverse_lazy('biddingContracts:cadContrato')
+def fornecedor_new(request):
+    if request.method=='POST':
+        form = formFornecedor(request.POST)
+        if form.is_valid():
+            fornecedor=form.save() 
+            print(f"id do fornecedor = {fornecedor.id}")
+            #redirecionar de volta para a tela de cadastro fornecendo o ID do fornecedor
+            # aqui terá 2 fluxos: 1 redirecionar para a página de contrato e outro para ARP 
+            return redirect('biddingContracts:cadContrato', fornecedor_id = fornecedor.id)
+        else:
+            print('ocorreu um erro no fomulario', form.errors)
+    else:
+        form = formFornecedor()
+        return render(request, 'fornecedor_new.html', {'form': form})
 
 
 @login_required
@@ -290,14 +330,6 @@ class ListBiddingView(LoginRequiredMixin, ListView):
         else:
             queryset = Licitacao.objects.all()
         return queryset
-    
-
- 
-"""class BiddingCreateArp(CreateView):
-    model=AtaRegistroPreco
-    form_class = formARP
-    template_name = 'ataRegistroPreco_new.html'
-    success_url = reverse_lazy('biddingContracts:create-ARP')"""
 
 
 @login_required
@@ -306,7 +338,7 @@ def createArp(request):
     if request.method == "POST":
         form = formARP(request.POST)
         print("enviando método POST")
-        if form.is_valid(): #por que o formulário não está sendo validaddo?
+        if form.is_valid():
             arp = form.save(commit=False)
             dataInicial = arp.dataInicial
             print("formulario valido", dataInicial)
@@ -365,6 +397,51 @@ class ARPsDeleteView(LoginRequiredMixin, DeleteView):
         return reverse_lazy("biddingContracts:atas")
  
  
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['atas'] = AtaRegistroPreco.objects.all()
+        return context
+
+
+class RelatorioARPs(ListView):
+    model = AtaRegistroPreco
+    template_name = 'contratos_relatorio.html'
+    success_url = reverse_lazy('biddingContracts:relatorioarp') #não ta servindo pra nada
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        ata_id = self.kwargs.get('pk')  #captura a ata pelo id na url
+        notasfiscais = NotaFiscal.objects.filter(ataregistropreco_fk_id = ata_id)
+        ata = AtaRegistroPreco.objects.get(id=ata_id) # captura o objeto inteiro
+
+        hoje = datetime.today()
+        hoje = hoje.date()
+        dataInicial = ata.dataInicial
+        dataFinal = ata.dataFinal
+        # calculo de quanto tempo falta para o fim da ARP
+        prazoRestante = relativedelta(dataFinal,hoje)
+        print(hoje)
+        #mensagem que será levada para o template
+        mensagem=verifica_prazo_validade_arp(prazoRestante, dataFinal, hoje)
+        #saldo restante da ARP
+        saldoAtual = calcula_saldo_restante(notasfiscais, ata.valor)
+
+        context["vigencia"] = mensagem
+        context["hoje"]=hoje
+        context["dataFinal"] = dataFinal
+        context["prazoRestante"] = prazoRestante
+        context["notasfiscais"] = notasfiscais
+        context['saldoAtual']=saldoAtual
+        context["chave"] = False
+        return context
+
+def calcula_saldo_restante(notasfiscais, valorARP):
+    soma=0
+    for nota in notasfiscais:
+        soma+=nota.valor  
+    return valorARP - soma
+    
  # View que atualiza as licitações
 class BiddingUpdateView(LoginRequiredMixin, UpdateView):
     model = Licitacao
@@ -430,13 +507,63 @@ class FornecedorUpdate(LoginRequiredMixin, UpdateView):
 #     return response
 
 
-# View que cria as notas fiscais
-class NotasFiscaisView(LoginRequiredMixin, CreateView):
-    model= NotaFiscal
-    form_class = NotaFiscalForm
-    template_name = "notaFiscal_new.html"
-    print("notas fiscais view")
-    success_url = reverse_lazy("biddingContracts:notasfiscais")
+# # View que cria as notas fiscais
+# class NotasFiscaisView(LoginRequiredMixin, CreateView):
+#     model= NotaFiscal
+#     form_class = NotaFiscalForm
+#     template_name = "notaFiscal_new.html"
+#     print("notas fiscais view")
+#     success_url = reverse_lazy("biddingContracts:notasfiscais")
+def notafiscal_new(request):
+    #requisição post
+    if request.method=='POST':
+        hoje = datetime.today()
+        dhoje= hoje.date()
+        form = NotaFiscalForm(request.POST)
+        
+        if form.is_valid():
+            print("formulario valido")
+            if form.cleaned_data['contrato_fk']:
+                print("nota fiscal - contrato")
+                contrato = Contrato.objects.get(numero=form.cleaned_data['contrato_fk'])
+                #pega do banco todas as notas fiscais relacionado ao contrato em questão
+                notasfiscais = NotaFiscal.objects.filter(contrato_fk_id = contrato.id)
+                #soma os valores das notas fiscais do contrato, que já estão armazenadas no banco, mais a nota que está tentando cadastrar
+                soma = sum(nota.valor for nota in notasfiscais) + form.cleaned_data.get('valor')
+            
+                # valida se o resultado da soma ultrapassa o valor total do contrato.
+                if soma > contrato.valor:
+                    messages.add_message(request, messages.INFO, "NÃO FOI POSSÍVEL CADASTRAR A NOTA FISCAL, VALOR DA NOTA MAIOR DO QUE O SALDO RESTANTO DO CONTRATO")
+                    return HttpResponseRedirect(reverse('biddingContracts:nfe'))
+                #verificação da data de vigência
+                if contrato.dataFinal<dhoje:
+                    messages.add_message(request, messages.INFO, "NÃO FOI POSSIVEL CADASTRAR NOTAS, CONSULTE O VALOR RESTANTE DO CONTRATO")
+                    return HttpResponseRedirect(reverse("biddingContracts:nfe"))
+            else: 
+                print("notafiscal - ata de registro de preços")
+                arp = AtaRegistroPreco.objects.get(numero=form.cleaned_data['ataregistropreco_fk'])
+                #pega do banco todas as notas fiscais relacionado a ARP em questão
+                
+                notasfiscais = NotaFiscal.objects.filter(ataregistropreco_fk_id = arp.id)
+                soma = sum(nota.valor for nota in notasfiscais) + form.cleaned_data.get('valor')
+            
+                # valida se o resultado da soma ultrapassa o valor total da ARP
+                if soma > arp.valor:
+                    messages.add_message(request, messages.INFO, "NÃO FOI POSSÍVEL CADASTRAR A NOTA FISCAL, VALOR DA NOTA MAIOR DO QUE O SALDO RESTANTE DA ATA DE REGISTRO DE PREÇOS")
+                    return HttpResponseRedirect(reverse('biddingContracts:nfe'))
+                #verificação da data de vigência
+                if arp.dataFinal<dhoje:
+                    messages.add_message(request, messages.INFO, "NÃO FOI POSSIVEL CADASTRAR NOTAS, CONSULTE O VALOR RESTANTE DA ATA DE REGISTRO DE PREÇO")
+                    return HttpResponseRedirect(reverse("biddingContracts:nfe"))
+            form.save()
+            messages.add_message(request, messages.SUCCESS, "SALVO COM SUCESSO")
+            return HttpResponseRedirect(reverse('biddingContracts:notasfiscais'))
+        else:
+            print(form.errors)
+    #requisição get.
+    print("formulario vazio")
+    form = NotaFiscalForm()
+    return render(request, 'notaFiscal_new.html', {"form":form})
 
 
 # View que lista as Notas Fiscais

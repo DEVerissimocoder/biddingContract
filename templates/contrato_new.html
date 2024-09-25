@@ -107,24 +107,6 @@
 
 <script>
   
-
-    document.getElementById('bot-licitacao').addEventListener('click', function() {
-        fetch("{% url 'biddingContracts:modal-licitacao' %}")
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('modal-body-content').innerHTML = data;
-            });
-    });
-    document.getElementById('bot-fornecedor').addEventListener('click', function(){
-        fetch("{% url 'biddingContracts:modal-fornecedor' %}")
-        .then(response => response.text())
-        .then(data=>{
-            document.getElementById('modal-body-content-forn').innerHTML = data;
-            console.log("dados carregado", data)
-        });
-  
-
-    
     document.getElementById('bot-fornecedor').addEventListener('click', function(){
         fetch("{% url 'biddingContracts:modal-fornecedor' %}")
         .then(response => response.text())
@@ -139,15 +121,6 @@
         document.getElementById('{{ form.fornecedor_fk.id_for_label }}').value = selectedFornecedor.value;
         var modal = bootstrap.Modal.getInstance(document.getElementById('fornecedor-modal')); 
         modal.hide();
-});
-    document.getElementById('btn-confirmar-forn').addEventListener('click', function(){
-        var selectedFornecedor = document.querySelector("input[name='flexRadioProvider']:checked");
-        document.getElementById('{{ form.fornecedor_fk.id_for_label }}').value = selectedFornecedor.value;
-        var modal = bootstrap.Modal.getInstance(document.getElementById('fornecedor-modal')); 
-        modal.hide();
-
-    }); 
-
-    }); 
+    });
 </script> 
 {% endblock %}
