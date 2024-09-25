@@ -44,13 +44,14 @@ def cadContrato(request, fornecedor_id):
         print(f"Dados recebidos no POST: {request.POST}") 
         if form.is_valid():
             form.save()
+            messages.success(request, "Cadastro criado com sucesso!")
             return HttpResponseRedirect(reverse("biddingContracts:contratos"))
         else:
             print(f"Deu errado!{form.errors}")
     else:
         form = formContrato()
 
-    return render(request, "contrato_new.html", {"form": form})
+    return render(request, "contrato_new.html", {"form": form, "fornecedor_id": fornecedor_id})
     
 
 # def listContratos(request):
