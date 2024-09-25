@@ -151,15 +151,15 @@ def contratosRelatorio(request, id_contrato):
     notasFiscais = NotaFiscal.objects.filter(contrato_fk = id_contrato)
     saldoAtual = contrato.valor
     #tipo datetime.datetime
-    hoje = datetime.today()
+    hoje = datetime.today().date()
     # convertendo para o tipo datetime.date
     hoje = hoje.date()
     # tipo datetime.date
     dataFinalContrato = contrato.dataFinal  
-    
+    print(f'data final= {dataFinalContrato}')
     prazoRestante = relativedelta(dataFinalContrato, hoje)
     
-    #mensagem = verifica_prazo_validade(prazoRestante, dataFinalContrato, hoje)
+    mensagem = verifica_prazo_validade(prazoRestante, dataFinalContrato, hoje)
 
     for notas in notasFiscais:
         if notas.contrato_fk.numero == contrato.numero:
@@ -167,7 +167,7 @@ def contratosRelatorio(request, id_contrato):
     context = {
         "notasfiscais": notasFiscais,
         "saldoAtual": saldoAtual,
-        #"vigencia": mensagem,
+        "vigencia": mensagem,
         "hoje": hoje,
         "dataFinal": dataFinalContrato,
         "chave":True
@@ -176,16 +176,16 @@ def contratosRelatorio(request, id_contrato):
 
 
 @login_required
-def verifica_prazo_validade(dataFinal, hoje, tipo="contrato", prazoRestante=None):
+def verifica_prazo_validade(prazoRestante, dataFinal,  hoje):
     mensagem = ""
     if dataFinal > hoje:
-        mensagem = f"O {tipo} é válido por mais {prazoRestante.years} anos, {prazoRestante.months} meses e {prazoRestante.days} dias."
+        mensagem = f"O contrato é válido por mais {prazoRestante.years} anos, {prazoRestante.months} meses e {prazoRestante.days} dias."
         return mensagem
     elif dataFinal == hoje:
-        mensagem = f"O {tipo} é válido até hoje dia: {dataFinal.strftime('%d/%m/%y')}"
+        mensagem = f"O contrato é válido até hoje dia: {dataFinal.strftime('%d/%m/%y')}"
         return mensagem
     elif dataFinal < hoje:
-        mensagem =  f"O prazo de validade do {tipo} já expirou."
+        mensagem =  f"O prazo de validade do contrato já expirou."
     return mensagem
 
 def verifica_prazo_validade_arp(prazoRestante, dataFinal, hoje):
@@ -411,7 +411,7 @@ class ARPsDeleteView(LoginRequiredMixin, DeleteView):
 class RelatorioARPs(ListView):
     model = AtaRegistroPreco
     template_name = 'contratos_relatorio.html'
-    success_url = reverse_lazy('biddingContracts:relatorioarp') #não ta servindo pra nada
+    success_url = reverse_lazy('biddingContracts:relatorioarp')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
