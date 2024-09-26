@@ -4,6 +4,7 @@
 <div class="d-flex">
     {% include 'sidebar.html'%}
     <div id="contrato" class="container mt-5">
+        {% include "messages.html" %}
         <div class="card shadow-sm">
         <div class="card-header text-white" style="background-color: #1D1D1D;">
             <h5 class="card-title mb-0">Cadastro de Contrato</h5>
@@ -18,8 +19,9 @@
                         <div class="text-danger">{{ form.fornecedor_fk.errors }}</div>
                     {% endif %}
                     <!-- TRIGGER -->
-                    <div class="d-flex">
+                    <div class="d-flex align-items-center">
                         <i class="fa-solid fa-magnifying-glass mt-2 cursor-pointer" id="bot-fornecedor" data-bs-toggle="modal" data-bs-target="#fornecedor-modal" title="procurar fornecedor"></i>
+                        <span class="ms-2 mt-2">Pesquisar Fornecedores!</span>
                     </div>
 
                     <!-- Modal -->
@@ -28,7 +30,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                         
-                                    <a href="{% url 'biddingContracts:fornecedor_new' %}" id="modal-forn-label">novo</a>
+                                    <a class="btn btn-light" href="{% url 'biddingContracts:fornecedor_new' %}" id="modal-forn-label" style="color:#1d1d1d;">+Novo Fornecedor</a>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body" id="modal-body-content-forn">
