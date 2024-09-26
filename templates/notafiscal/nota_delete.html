@@ -13,9 +13,9 @@
                         <h1 class="h4 mb-0">Confirmar Exclusão</h1>
                     </div>
                     <div class="card-body p-4">
-                        <p class="text-danger text-center fs-5">
+                        <p class="text-dark text-center fs-5">
                             Você tem certeza de que deseja excluir a Nota fiscal:
-                            "<span class="fw-bold text-dark">{{ note.num }}</span>"?
+                            <span class="fw-bold text-danger">"{{ note.num }}"</span> do tipo: <span class="fw-bold text-danger">  "<span>{{ note.tipo }}</span>"?
                         </p>
                         <form method="post" action="{% url 'biddingContracts:deletenfe' note.pk %}">
                             {% csrf_token %}
