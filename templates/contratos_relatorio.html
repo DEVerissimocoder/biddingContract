@@ -49,7 +49,7 @@
                     <tbody>
                         {% for nota in notasfiscais %}
                         <tr>
-                            <td>{{ nota.num }}</td>
+                            <td><a href="{% url "biddingContracts:notasfiscais" %}">{{ nota.num }}</a></td>
                             <td>{{ nota.serie }}</td>
                             <td>{{ nota.valor }}</td>
                             <td>{{ nota.tipo }}</td>
