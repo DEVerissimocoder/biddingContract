@@ -150,13 +150,12 @@ def contratosRelatorio(request, id_contrato):
     contrato = Contrato.objects.get(id=id_contrato)
     notasFiscais = NotaFiscal.objects.filter(contrato_fk = id_contrato)
     saldoAtual = contrato.valor
-    #tipo datetime.datetime
+    #tipo datetime.date
     hoje = datetime.today().date()
-    # convertendo para o tipo datetime.date
-    hoje = hoje.date()
+    
     # tipo datetime.date
     dataFinalContrato = contrato.dataFinal  
-    print(f'data final= {dataFinalContrato}')
+    print(f'data final= {type(hoje)}')
     prazoRestante = relativedelta(dataFinalContrato, hoje)
     
     mensagem = verifica_prazo_validade(prazoRestante, dataFinalContrato, hoje)
@@ -175,7 +174,7 @@ def contratosRelatorio(request, id_contrato):
     return render(request, "contratos_relatorio.html", context)
 
 
-@login_required
+
 def verifica_prazo_validade(prazoRestante, dataFinal,  hoje):
     mensagem = ""
     if dataFinal > hoje:
