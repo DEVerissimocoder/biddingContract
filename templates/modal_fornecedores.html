@@ -8,7 +8,7 @@
     
     {% for fornecedor in fornecedores %}
 <div class="form-check">
-    <input class="form-check-input inputs" type="radio" name="flexRadioProvider" id="fornecedor-{{ fornecedor.pk }}" value="{{ fornecedor.pk }}">
+    <input class="form-check-input inputs" type="radio" style="background-color: #cccccc;" name="flexRadioProvider" id="fornecedor-{{ fornecedor.pk }}" value="{{ fornecedor.nome }}">
     <label class="form-check-label" for="fornecedor-{{ fornecedor.pk }}" value="{{ fornecedor.pk }}">
         <div class="accordion-item accordion-flush mt-4">
             <h2 class="accordion-header" id="headingOne-{{ fornecedor.pk }}">
@@ -32,7 +32,7 @@
 </div>
 {% empty %}
     <p>Vazio!!</p>
-{% endfor %}
+{% endfor %}    
     </ul>
     </label>
   </div>

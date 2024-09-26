@@ -226,6 +226,7 @@ def fornecedor_new(request):
             print(f"id do fornecedor = {fornecedor.id}")
             #redirecionar de volta para a tela de cadastro fornecendo o ID do fornecedor
             # aqui terá 2 fluxos: 1 redirecionar para a página de contrato e outro para ARP 
+            messages.success(request, "Fornecedor cadastrado com sucesso!")
             return redirect('biddingContracts:cadContrato', fornecedor_id = fornecedor.id)
         else:
             print('ocorreu um erro no fomulario', form.errors)
