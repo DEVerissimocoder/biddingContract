@@ -16,27 +16,38 @@ class UserCreateView(CreateView):
     template_name = "registration/cadastro.html"
     form_class = AccountSignupForm
     success_url = reverse_lazy("usuarios:login")
-    success_mensage = "Cadastro feito com sucesso!"
+    success_mensage = "Cadastro feito com sucesso, entre em contato com o administrador do sistema e solicite a liberação!"
 
     def form_valid(self, form):
         form.instance.password = make_password(form.instance.password)
+        form.instance.is_active = False
         form.save()
-        messages.success(self.request, self.success_mensage)
+        messages.warning(self.request, self.success_mensage)
         return super(UserCreateView, self).form_valid(form)
 
 
 class CustomLoginView(LoginView):
-    template_name = 'login.html'
+    template_name = 'registration/login.html'
     fields = ["username", "password"]
     redirect_authenticated_user = True
+    success_message = "Usuário logado com sucesso!"
+    error_message = "Erro de login: usuário não está ativo!"
 
-    def form_invalid(self, form):
-        messages.error(self.request, 'Erro de login: usuário ou senha inválidos!')
-        return super(CustomLoginView, self).form_invalid(form)
+    def form_valid(self, form):
+        user = form.get_user()
+        if user.is_active:
+            messages.success(self.request, self.success_message)
+            print(f"Veio aqui 111")
+            print(messages.get_messages(self.request))
+            return super(CustomLoginView, self).form_valid(form)
+        else:
+            messages.error(self.request, self.error_message)
+            print(f"Entrou aqui")
+            print(messages.get_messages(self.request))
+            return self.form_invalid(form)
 
     def get_success_url(self):
-        messages.success(self.request, 'Usuário logado com sucesso!')
-        self.request.session['messages'] = messages.get_messages(self.request)
+        print("Aquiiiiiiiii")
         return reverse_lazy('biddingContracts:index')  # redireciona para a página inicial após o login
     
 
@@ -77,3 +88,11 @@ class PasswordResetConfirmView(auth_views.PasswordResetConfirmView):
 
 class PasswordResetCompleteView(auth_views.PasswordResetCompleteView):
     template_name = 'registration/password_reset_complete.html'
+    
+    
+# View para adicionar permissão ao usuário que fez o cadastro
+def add_permission(request, pk):
+    user = User.objects.get(pk=pk)
+    user.is_active  = True
+    user.save()
+    return redirect("admin_users") 
