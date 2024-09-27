@@ -209,6 +209,10 @@ def verifica_prazo_validade_arp(prazoRestante, dataFinal, hoje):
 # INDEX
 @login_required
 def index(request):
+    if request.user.is_authenticated:
+        nome_usuario = request.user.username.title()
+        aviso = f"Olá, {nome_usuario }. Seja bem-vindo!"
+        messages.success(request, aviso)
     return render(request, 'index.html')
 
 
