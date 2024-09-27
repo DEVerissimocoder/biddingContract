@@ -12,10 +12,10 @@
                 {% csrf_token %}
 
                 <div class="col-md-12 mb-3">
-                    <label for="{{ form.username.id_for_label }}" class="form-label">{{ form.username.label }}</label>
-                    {{ form.username }}
-                    {% if form.username.errors %}
-                        <div class="text-danger">{{ form.username.errors }}</div>
+                    <label for="{{ form.nome_cadastro.id_for_label }}" class="form-label">{{ form.nome_cadastro.label }}</label>
+                    {{ form.nome_cadastro }} <p class="text-muted text-uppercase"><strong>Esse será o seu login de acesso!</strong></p>
+                    {% if form.nome_cadastro.errors %}
+                        <div class="text-danger">{{ form.nome_cadastro.errors }}</div>
                     {% endif %}
                 </div>
 
@@ -27,11 +27,18 @@
                     {% endif %}
                 </div>
 
-                <div class="col-md-12 mb-3">
-                    <label for="{{ form.password.id_for_label }}" class="form-label">{{ form.password.label }}</label>
-                    {{ form.password }}
-                    {% if form.password.errors %}
-                        <div class="text-danger">{{ form.password.errors }}</div>
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.senha.id_for_label }}" class="form-label">{{ form.senha.label }}</label>
+                    {{ form.senha }}
+                    {% if form.senha.errors %}
+                        <div class="text-danger">{{ form.senha.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.senha_confirme.id_for_label }}" class="form-label">{{ form.senha_confirme.label }}</label>
+                    {{ form.senha_confirme }}
+                    {% if form.senha_confirme.errors %}
+                        <div class="text-danger">{{ form.senha_confirme.errors }}</div>
                     {% endif %}
                 </div>
                 
