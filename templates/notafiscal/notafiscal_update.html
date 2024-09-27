@@ -7,7 +7,7 @@
     <div class="row">
       <div class="col-md-10 mx-auto">
         <div class="card">
-          <h4 class="font-weight-normal text-center m-3">Atualizar informações da Nota Fiscal de n°: {{notas.num}}</h4>
+          <h4 class="font-weight-normal text-center m-3">Atualizar informações da Nota Fiscal de n°: {{notas.num}} e pk {{ notas.pk }}</h4>
           <form action="{% url 'biddingContracts:updatenfe' notas.pk %}" method="post" class="needs-validation" novalidate>
             {% csrf_token %}
             {{ form.media }}
@@ -69,6 +69,14 @@
                           {{ form.contrato_fk.errors }}
                         </div>
                     {% endif %}
+                    <div class="form-group col-12">
+                      <label for="{{ form.ataregistropreco_fk.id_for_label }}">ARP:</label>
+                      {{ form.ataregistropreco_fk}}
+                      {% if form.ataregistropreco_fk.errors %}
+                      <div class="alert-danger pt-1 col-auto" role="alert">
+                        {{ form.ataregistropreco_fk.errors }}
+                      </div>
+                  {% endif %}
                 </div>
                 </div>
               </div>
@@ -85,5 +93,24 @@
       </div>
     </div>
 </div>
+
+<script>
+  
+  document.getElementById('bot-fornecedor').addEventListener('click', function(){
+      fetch("{% url 'biddingContracts:modal-fornecedor' %}")
+      .then(response => response.text())
+      .then(data=>{
+          document.getElementById('modal-body-content-forn').innerHTML = data;
+          console.log("dados carregado", data)
+      });
+  });
+
+  document.getElementById('btn-confirmar-forn').addEventListener('click', function(){
+      var selectedFornecedor = document.querySelector("input[name='flexRadioProvider']:checked");
+      document.getElementById('{{ form.fornecedor_fk.id_for_label }}').value = selectedFornecedor.value;
+      var modal = bootstrap.Modal.getInstance(document.getElementById('fornecedor-modal')); 
+      modal.hide();
+  });
+</script>
 
   {% endblock content %}

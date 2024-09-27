@@ -305,6 +305,7 @@ class NotaFiscalForm(forms.ModelForm):
                 "tipo": "TIPO", 
                 "dataEmissao": "DATA DE EMISSÃO",
                 "contrato_fk": "CONTRATO",
+                "fornecedor_fk": "FORNECEDOR",
                 "ataregistropreco_fk": "ARP"
                 }
         
@@ -351,6 +352,70 @@ class NotaFiscalForm(forms.ModelForm):
 
             "fornecedor_fk": forms.Select(
                 attrs={                  
+                    "class": "form-select"
+                }
+            ),
+            "ataregistropreco_fk": forms.Select(
+                attrs={
+                    "blank": "true",
+                    "class": "form-select"
+                }
+            )
+        }
+
+
+class NotaFiscalEditForm(forms.ModelForm):
+
+    class Meta:
+        model = NotaFiscal
+        fields=["num", "serie", "valor", "tipo", "dataEmissao", "contrato_fk", "ataregistropreco_fk"]
+        labels={
+                "num": "NÚMERO",
+                "serie": "SERIE",
+                "valor": "VALOR",
+                "tipo": "TIPO", 
+                "dataEmissao": "DATA DE EMISSÃO",
+                "contrato_fk": "CONTRATO",
+                "ataregistropreco_fk": "ARP"
+                }
+        
+
+        widgets={
+            "num":forms.NumberInput(
+                attrs={
+                    "type":"number",
+                    "class":"form-control",
+                }
+            ),
+            "serie": forms.TextInput(
+                attrs={
+                    "type": "text",
+                    "class": "form-control"
+                }
+            ),
+            "valor": forms.NumberInput(
+                attrs={
+                    "type":"number",
+                    "class": "form-control",
+                }
+            ),
+            "tipo": forms.TextInput(
+                attrs={
+                    "type":"text",
+                    "class": "form-control",
+                }
+            ),
+            "dataEmissao": forms.DateInput(
+                format=("%Y-%m-%d"),
+                attrs={
+                    "type": "date",
+                    "class": "form-control",
+                }
+            ),
+          
+            "contrato_fk": forms.Select(
+                attrs={
+                    "blank": "true",
                     "class": "form-select"
                 }
             ),
