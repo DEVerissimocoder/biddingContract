@@ -52,30 +52,29 @@
     {% include "sidebar.html" %}
 
     <!-- Main Content -->
-    <main class="col-md-9 d-flex flex-column align-items-center justify-content-center h-100">
-        <div class="container mt-5 text-center">
-            <div class="d-flex flex-column align-items-center">
-                {% include "messages.html" %}
-                <h3 class="text-center text-uppercase mb-4">Sistema para Controle de Contratos Licitatórios da Prefeitura de <br> <span class="text-uppercase">Paranatama</span></h3>
+    
+<div class="container mt-5 text-center">
+    <div class="d-flex flex-column align-items-center">
+            {% include "messages.html" %}
+            <h3 class="text-center text-uppercase mb-4">Sistema para Controle de Contratos Licitatórios da Prefeitura de <br> <span class="text-uppercase">Paranatama</span></h3>
 
-                <!-- Slider -->
-                <div class="swiper">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <img src="{% static 'imagens/para1.png' %}" alt="Imagem 1">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{% static 'imagens/para.jpeg' %}" alt="Imagem 2">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="{% static 'imagens/para3.png' %}" alt="Imagem 3">
-                        </div>
+            <!-- Slider -->
+            <div class="swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="{% static 'imagens/para1.png' %}" alt="Imagem 1">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="{% static 'imagens/para.jpeg' %}" alt="Imagem 2">
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="{% static 'imagens/para3.png' %}" alt="Imagem 3">
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
+    </div>
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>

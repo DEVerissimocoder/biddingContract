@@ -47,16 +47,20 @@
     <hr class="w-100" style="background-color:#fff5f5" heigth="1px"> 
     <ul class="nav d-flex flex-column  justify-content-start" id="navItems">
         <li class="nav-item mb-3">
-            <a class="nav-link text-white" href="{% url 'biddingContracts:index' %}">
-                <i class="fa-solid fa-house" title="Inicio"></i>
-                <span class="nav-text text-white small">Início</span>
-            </a>
+            <div class="d-flex flex-column align-items-center">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:index' %}">
+                    <i class="fa-solid fa-house" title="Inicio"></i>
+                    <span class="nav-text text-white small">Início</span>
+                </a>
+            </div>
         </li>
         <li class="nav-item mb-3">
+            <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:cadContrato' fornecedor_id=0 %}">
                     <i class="fa-solid fa-file-contract" title="Criar Contratos"></i>
                     <span class="nav-text text-white small">Criar Contratos</span>
                 </a>
+            </div>
         </li>
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
@@ -107,26 +111,32 @@
             </div>
         </li>
         <li class="nav-item mb-3">
-            <a class="nav-link text-white" href="{% url 'biddingContracts:create-ARP' %}">
-                <i class="fa-solid fa-registered" title="Criar Atas de Registro de Preços"></i>
-                <span class="nav-text text-white small">Criar ARPs</span>
-            </a>
+            <div class="d-flex flex-column align-items-center">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:create-ARP' %}">
+                    <i class="fa-solid fa-registered" title="Criar Atas de Registro de Preços"></i>
+                    <span class="nav-text text-white small">Criar ARPs</span>
+                </a>
+            </div>
         </li>
         <li class="nav-item mb-3">
-            <a class="nav-link text-white" href="{% url 'biddingContracts:atas' %}">
-                <i class="fa-solid fa-book" title="Listar Atas de Registros de Preços"></i>
-                <span class="nav-text text-white small">Listar ARPs</span>
-            </a>
+            <div class="d-flex flex-column align-items-center">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:atas' %}">
+                    <i class="fa-solid fa-book" title="Listar Atas de Registros de Preços"></i>
+                    <span class="nav-text text-white small">Listar ARPs</span>
+                </a>
+            </div>
         </li>
         {% if user.is_authenticated %}
             <li class="nav-item mb-3">
-                <form action="{% url 'logout' %}" method="post" class="">
-                    {% csrf_token %}
-                    <button class="nav-link link-danger text-danger" type="submit">
-                        <i class="fa-solid fa-circle-xmark" title="Sair do Sistema"></i>
-                        <span class="nav-text text-white text-small">Sair do sistema</span>
-                    </button>
-                </form>
+                <div class="d-flex flex-column align-items-center">
+                    <form action="{% url 'logout' %}" method="post" class="">
+                        {% csrf_token %}
+                        <button class="nav-link link-danger text-danger" type="submit">
+                            <i class="fa-solid fa-circle-xmark" title="Sair do Sistema"></i>
+                            <span class="nav-text text-white text-small">Sair do sistema</span>
+                        </button>
+                    </form>
+                </div>
             </li>
         {% endif %}
     </ul>

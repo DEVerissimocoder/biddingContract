@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django. urls import reverse_lazy
 from usuarios.forms2 import  CadastroForms, CustomLoginForm
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login as auth_login
 from django.contrib import messages, auth
 
 
@@ -15,22 +16,23 @@ def login(request):
             username = form.cleaned_data["username"]
             password = form.cleaned_data["password"]
 
-            usuario = auth.authenticate(
+            usuario = authenticate(
                 request,
                 username=username,
                 password=password
             )
             if usuario is not None and usuario.is_active:
-                aviso = 'Login efetuado com sucesso!'
-                messages.success(request, aviso)
-                auth.login(request, usuario)
-                return redirect('index.html')
+                messages.success(request, 'Login efetuado com sucesso!')
+                auth_login(request, usuario)
+                return reverse_lazy('index')  # Redireciona para a página inicial após login bem-sucedido
             else:
-                aviso = 'Login Inválido! Dados incorretos ou conta não ativada.'
-                messages.error(request,aviso)
-                return redirect('login.html')
-
+                messages.error(request, 'Login inválido! Dados incorretos ou conta não ativada.')
+                return reverse_lazy('usuarios:login')  # Redireciona para a view de login em caso de erro
+    else:
+        messages.info(request, 'Por favor, faça login para acessar.')
+    
     return render(request, "registration/login.html", {"form": form})
+
 
 def cadastro(request):
     form = CadastroForms()
@@ -55,7 +57,9 @@ def cadastro(request):
             usuario.is_active = False
             usuario.save()
             aviso = 'Cadastro efetuado com sucesso!'
+            aviso2 = 'Entre em contato com o administrador solicitando a liberação do sistema!'
             messages.success(request, aviso)
+            messages.warning(request, aviso2)
             return redirect('login')
 
     return render(request, "registration/cadastro.html", {"form": form})
@@ -64,6 +68,6 @@ def cadastro(request):
 def logout(request):
     auth.logout(request)
     messages.success(request, "Deslogado com sucesso!")
-    return redirect('login')
+    return reverse_lazy('login')
 
 
