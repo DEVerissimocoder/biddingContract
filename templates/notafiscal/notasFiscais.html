@@ -13,31 +13,43 @@
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">#</th>
-          <th scope="col">NÚMERO</th>
-          <th scope="col">SÉRIE</th>
-          <th scope="col">VALOR</th>
-          <th scope="col">TIPO</th>
-          <th scope="col">DATA EMISSAO</th>
-          <th scope="col">CONTRATO</th>
-          <th scope="col">ARP</th>
-          <th class="text-center" scope="col">AÇÕES</th>
+          <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">#</th>
+          <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">NÚMERO</th>
+          <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">VALOR</th>
+          <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">DATA EMISSAO</th>
+          <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">CONTRATO</th>
+          <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">ARP</th>
+          <th class="text-center text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">AÇÕES</th>
         </tr>
       </thead>
       <tbody>
         
           {% for notafiscal in notafiscal_list %}
           <tr>
-              <th scope="row">{{ notafiscal.pk }}</th>
-              <td>{{ notafiscal.num}}</td>
-              <td>{{ notafiscal.serie }}</td>
-              <td>{{ notafiscal.valor }}</td>
-              <td>{{ notafiscal.tipo }}</td>
-              <td>{{ notafiscal.dataEmissao }}</td>
-              <td>{{ notafiscal.contrato_fk }}</td>
-              <td>{{ notafiscal.ataregistropreco_fk }}</td>
+              <th class="align align-middle" scope="row">{{ notafiscal.pk }}</th>
+              <td class="align-align-middle" style="font-size:14px;">
+                {{ notafiscal.num}}
+                <p class="text-muted small">
+                  SÉRIE: {{ notafiscal.serie }}
+                </p>
+              </td>
+              <td class="align-align-middle" style="font-size:14px;">
+                R${{ notafiscal.valor }}
+                <p class="text-muted small">
+                  TIPO: {{ notafiscal.tipo }}
+                </p>
+              </td>
+              <td class="align-align-middle" style="font-size:14px;">
+                {{ notafiscal.dataEmissao }}
+              </td>
+              <td class="align-align-middle" style="font-size:14px;">
+                {{ notafiscal.contrato_fk }}
+              </td>
+              <td class="align-align-middle" style="font-size:14px;">
+                {{ notafiscal.ataregistropreco_fk }}
+              </td>
               <td class="">
-                <div class="d-flex gap-3 justify-content-center">
+                <div class="d-flex gap-3 justify-content-center align-align-middle" style="font-size:14px;">
                   <a href="{% url "biddingContracts:updatenfe" notafiscal.pk %}">Editar</a>
                   <a class="text-danger" href="{% url "biddingContracts:deletenfe" notafiscal.pk %}">Excluir</a>
                 </div>
