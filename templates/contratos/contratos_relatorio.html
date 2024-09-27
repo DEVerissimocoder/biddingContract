@@ -32,7 +32,8 @@
                         </div>
                     {% endif %}
                 </div>
-            </div>    
+            </div> 
+            {% if notasfiscais %}  
             <h3 class="text-center mb-4">Notas Fiscais</h3>       
             
             <div class="table-responsive">
@@ -58,7 +59,13 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                <a href="{% url "biddingContracts:contratos" %}" class="btn btn-dark">Voltar</a>
+                {% else %}
+                <div class="d-flex flex-column justify-content-center align-items-center gap-3">
+                    <h2 class="text-center text-muted">Não existem notas fiscais para esse contrato</h2>
+                    <img style="width:150px;" src="{% static "imagens/not.png" %}" alt="Imagem que mostra uma exclamação">
+                </div>
+                {% endif %} 
+                <a href="{% url "biddingContracts:contratos" %}" class="btn btn-dark mt-3">Voltar</a>
             </div>
                
         {% else %} <!-- se não existe contrato, ou seja, quando for atas de registros de preço -->

@@ -16,16 +16,12 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th scope="col">AÇÃO</th>
-                                    <th scope="col">#</th>
-                                    <th scope="col">NOME</th>
-                                    <th scope="col">CNPJ</th>
-                                    <th scope="col">RUA</th>
-                                    <th scope="col">NUMERO</th>
-                                    <th scope="col">BAIRRO</th>
-                                    <th scope="col">CEP</th>
-                                    <th scope="col">CIDADE</th>
-                                    <th scope="col">TELEFONE</th> 
+                                    <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">AÇÃO</th>
+                                    <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">#</th>
+                                    <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">NOME</th>
+                                    <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">RUA</th>
+                                    <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">CEP</th>
+                                    <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">CIDADE</th>
                                 </tr>                               
                             </thead>
                             <tbody>
@@ -56,15 +52,29 @@
                                                 </div>
                                             </div>
                                         </td>        
-                                        <td scope="row">{{fornecedor.pk}}</td>
-                                        <td>{{ fornecedor.nome }}</td>
-                                        <td>{{ fornecedor.cnpj }}</td>
-                                        <td>{{ fornecedor.endereco }}</td>
-                                        <td>{{ fornecedor.num }}</td>
-                                        <td>{{ fornecedor.bairro }}</td>
-                                        <td>{{ fornecedor.cep }}</td>
-                                        <td>{{ fornecedor.cidade }}</td>
-                                        <td>{{ fornecedor.telefone }}</p></td>
+                                        <th class="align-align-middle" scope="row">{{forloop.counter}}
+
+                                        </th>
+                                        <td class="align-align-middle" style="font-size:14px;">
+                                            {{ fornecedor.nome }}
+                                            <p class="text-muted small">
+                                            CNPJ: {{ fornecedor.cnpj }} <br>
+                                            TELEFONE: {{ fornecedor.telefone }}
+                                            </p>
+                                        </td>
+                                        <td class="align-align-middle" style="font-size:14px;">
+                                            {{ fornecedor.endereco }}
+                                            <p class="text-muted small">
+                                                NúMERO: {{ fornecedor.num }} <br>
+                                                BAIRRO: {{ fornecedor.bairro }}
+                                            </p>
+                                        </td>
+                                        <td class="align-align-middle" style="font-size:14px;">
+                                            {{ fornecedor.cep }}
+                                        </td>
+                                        <td class="align-align-middle" style="font-size:14px;">
+                                            {{ fornecedor.cidade }}
+                                        </td>
                                         <!-- falta uf -->
                                     </tr>
                                 {% endfor %}
