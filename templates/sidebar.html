@@ -45,29 +45,24 @@
     <i id="sidebarToggle" class="fa-solid fa-chevron-left mb-3" style="cursor: pointer;" title="Toggle Sidebar"></i>
     <h4 class="text-center text-uppercase mb-4 menu">Menu</h4>
     <hr class="w-100" style="background-color:#fff5f5" heigth="1px"> 
-    <ul class="nav d-flex flex-column align-items-center justify-content-start" id="navItems">
-    
+    <ul class="nav d-flex flex-column  justify-content-start" id="navItems">
         <li class="nav-item mb-3">
-            <div class="d-flex flex-column align-items-center">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:index' %}">
-                    <i class="fa-solid fa-house" title="Inicio"></i>
-                    <span class="nav-text text-white text-small">Início</span>
-                </a>
-            </div>
+            <a class="nav-link text-white" href="{% url 'biddingContracts:index' %}">
+                <i class="fa-solid fa-house" title="Inicio"></i>
+                <span class="nav-text text-white small">Início</span>
+            </a>
         </li>
         <li class="nav-item mb-3">
-            <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:cadContrato' fornecedor_id=0 %}">
                     <i class="fa-solid fa-file-contract" title="Criar Contratos"></i>
-                    <span class="nav-text text-white text-small">Criar Contratos</span>
+                    <span class="nav-text text-white small">Criar Contratos</span>
                 </a>
-            <div>
         </li>
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:contratos' %}">
                     <i class="fa-solid fa-list" title="Listar Contratos"></i>
-                    <span class="nav-text text-white text-small">Listar Contratos</span>
+                    <span class="nav-text text-white small">Listar Contratos</span>
                 </a>
             </div>
         </li>
@@ -75,7 +70,7 @@
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:new_notas' %}">
                     <i class="fa-solid fa-square-plus" title="Criar nota fiscal"></i>
-                    <span class="nav-text text-white text-small">Criar Nota Fiscal</span>
+                    <span class="nav-text text-white small">Criar Nota Fiscal</span>
                 </a>
             </div>
         </li>
@@ -83,7 +78,7 @@
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:notasfiscais' %}">
                     <i class="fa-solid fa-file-invoice-dollar" title="Notas Fiscais"></i>
-                    <span class="nav-text text-white text-small">Listar Notas Fiscais</span>
+                    <span class="nav-text text-white small">Listar Notas Fiscais</span>
                 </a>
             </div>
         </li>
@@ -91,7 +86,7 @@
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:create-bidding' %}">
                     <i class="fa-solid fa-file" title="Cadastrar Licitação"></i> 
-                    <span class="nav-text text-white text-small">Cadastrar Licitação</span> 
+                    <span class="nav-text text-white small">Cadastrar Licitação</span> 
                 </a>
             </div>
         </li>
@@ -99,7 +94,7 @@
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:list_bidding' %}">
                     <i class="fa-solid fa-list-check" title="Listar Licitações"></i>
-                    <span class="nav-text text-white text-small">Listar Licitações</span>
+                    <span class="nav-text text-white small">Listar Licitações</span>
                 </a>
             </div>
         </li>
@@ -107,36 +102,30 @@
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:fornecedores' %}">
                     <i class="fa-solid fa-truck-fast" title="Listar Fornecedores"></i>
-                    <span class="nav-text text-white text-small">Listar Fornecedores</span>
+                    <span class="nav-text text-white small">Listar Fornecedores</span>
                 </a>
             </div>
         </li>
         <li class="nav-item mb-3">
-            <div class="d-flex flex-column align-items-center">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:create-ARP' %}">
-                    <i class="fa-solid fa-registered" title="Criar Atas de Registro de Preços"></i>
-                    <span class="nav-text text-white text-small">Criar ARPs</span>
-                </a>
-            </div>
+            <a class="nav-link text-white" href="{% url 'biddingContracts:create-ARP' %}">
+                <i class="fa-solid fa-registered" title="Criar Atas de Registro de Preços"></i>
+                <span class="nav-text text-white small">Criar ARPs</span>
+            </a>
         </li>
         <li class="nav-item mb-3">
-            <div class="d-flex flex-column align-items-center">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:atas' %}">
-                    <i class="fa-solid fa-book" title="Listar Atas de Registros de Preços"></i>
-                    <span class="nav-text text-white text-small">Listar ARPs</span>
-                </a>
-            </div>
+            <a class="nav-link text-white" href="{% url 'biddingContracts:atas' %}">
+                <i class="fa-solid fa-book" title="Listar Atas de Registros de Preços"></i>
+                <span class="nav-text text-white small">Listar ARPs</span>
+            </a>
         </li>
         {% if user.is_authenticated %}
             <li class="nav-item mb-3">
                 <form action="{% url 'logout' %}" method="post" class="">
                     {% csrf_token %}
-                    <div class="d-flex flex-column align-items-center">
-                        <button class="nav-link link-danger text-danger" type="submit">
-                            <i class="fa-solid fa-circle-xmark" title="Sair do Sistema"></i>
-                        </button>
+                    <button class="nav-link link-danger text-danger" type="submit">
+                        <i class="fa-solid fa-circle-xmark" title="Sair do Sistema"></i>
                         <span class="nav-text text-white text-small">Sair do sistema</span>
-                    </div>
+                    </button>
                 </form>
             </li>
         {% endif %}
