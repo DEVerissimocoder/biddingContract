@@ -172,7 +172,7 @@ def contratosRelatorio(request, id_contrato):
         "dataFinal": dataFinalContrato,
         "chave":True
         }
-    return render(request, "contratos_relatorio.html", context)
+    return render(request, "contratos/contratos_relatorio.html", context)
 
 
 
