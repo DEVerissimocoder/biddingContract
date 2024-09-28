@@ -47,12 +47,10 @@
     <hr class="w-100" style="background-color:#fff5f5" heigth="1px"> 
     <ul class="nav d-flex flex-column  justify-content-start" id="navItems">
         <li class="nav-item mb-3">
-            <div class="d-flex flex-column align-items-center">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:index' %}">
-                    <i class="fa-solid fa-house" title="Inicio"></i>
-                    <span class="nav-text text-white small">Início</span>
-                </a>
-            </div>
+            <a class="nav-link text-white" href="{% url 'biddingContracts:index' %}">
+                <i class="fa-solid fa-house" title="Inicio"></i>
+                <span class="nav-text text-white small">Início</span>
+            </a>
         </li>
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
@@ -111,20 +109,16 @@
             </div>
         </li>
         <li class="nav-item mb-3">
-            <div class="d-flex flex-column align-items-center">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:create-ARP' %}">
-                    <i class="fa-solid fa-registered" title="Criar Atas de Registro de Preços"></i>
-                    <span class="nav-text text-white small">Criar ARPs</span>
-                </a>
-            </div>
+            <a class="nav-link text-white" href="{% url 'biddingContracts:create-ARP' %}">
+                <i class="fa-solid fa-registered" title="Criar Atas de Registro de Preços"></i>
+                <span class="nav-text text-white small">Criar ARPs</span>
+            </a>
         </li>
         <li class="nav-item mb-3">
-            <div class="d-flex flex-column align-items-center">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:atas' %}">
-                    <i class="fa-solid fa-book" title="Listar Atas de Registros de Preços"></i>
-                    <span class="nav-text text-white small">Listar ARPs</span>
-                </a>
-            </div>
+            <a class="nav-link text-white" href="{% url 'biddingContracts:atas' %}">
+                <i class="fa-solid fa-book" title="Listar Atas de Registros de Preços"></i>
+                <span class="nav-text text-white small">Listar ARPs</span>
+            </a>
         </li>
         {% if user.is_authenticated %}
             <li class="nav-item mb-3">
