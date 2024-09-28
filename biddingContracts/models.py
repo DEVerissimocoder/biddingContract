@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+
 
 class Modalidade(models.TextChoices):
     CONCORRENCIA = 'concorrência', 'Concorrência'
@@ -40,7 +42,6 @@ class Fornecedor(models.Model):
 
 #Contrato
 class Contrato(models.Model):
-    #id_contrato = models.BigAutoField(primary_key=True, auto_created=True, serialize=True)
     numero = models.CharField(max_length=7, null=False, unique=True, blank=False)
     assuntoDetalhado = models.TextField(max_length=200, verbose_name="Detalhe do contrato", null=False, blank=False)
     dataInicial = models.DateField()
@@ -51,9 +52,13 @@ class Contrato(models.Model):
 
     def __str__(self):
         return f"{self.numero}"
+    
+
+    def is_vencido(self):
+        # Verifica se a data final do contrato já passou
+        return self.dataFinal < timezone.now().date()
 
 class NotaFiscal(models.Model):
-    id_notafiscal = models.BigAutoField(primary_key=True, auto_created=True, serialize=True)
     num = models.IntegerField(unique=True)
     serie = models.CharField(max_length=3)
     valor = models.FloatField()
