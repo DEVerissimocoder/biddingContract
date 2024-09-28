@@ -4,6 +4,7 @@
 {% block content %}
 <div class="d-flex justify-content-center align-items-center min-vh-100">
     <div class="card w-50">
+        {% include "messages.html" %}
         <div class="card-header bg-dark text-white">
             <h5 class="card-title text-center mb-0">Registro de Usuário </h5>
         </div>
@@ -44,6 +45,7 @@
                 
                 <div class="col-12 text-center">
                     <button type="submit" class="btn btn-primary w-100">Enviar</button>
+                    <a href="{% url "usuarios:login" %}" class="btn btn-secondary w-100 mt-2">Voltar</a>
                 </div>
             </form>
         </div>

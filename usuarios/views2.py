@@ -13,8 +13,8 @@ def login(request):
         form = CustomLoginForm(request.POST)
 
         if form.is_valid():
-            username = form.cleaned_data["username"]
-            password = form.cleaned_data["password"]
+            username = form["username"].value()
+            password = form["password"].value()
 
             usuario = authenticate(
                 request,
@@ -22,12 +22,14 @@ def login(request):
                 password=password
             )
             if usuario is not None and usuario.is_active:
-                messages.success(request, 'Login efetuado com sucesso!')
-                auth_login(request, usuario)
-                return reverse_lazy('index')  # Redireciona para a página inicial após login bem-sucedido
+                aviso = 'Login efetuado com sucesso!'
+                messages.success(request, aviso)
+                auth.login(request, usuario)
+                return redirect('index')  # Redireciona para a página inicial após login bem-sucedido
             else:
-                messages.error(request, 'Login inválido! Dados incorretos ou conta não ativada.')
-                return reverse_lazy('usuarios:login')  # Redireciona para a view de login em caso de erro
+                aviso = 'Login inválido! Dados incorretos ou conta não ativada.'
+                messages.error(request, aviso)
+                return redirect('login')  # Redireciona para a view de login em caso de erro
     else:
         messages.info(request, 'Por favor, faça login para acessar.')
     
@@ -48,6 +50,11 @@ def cadastro(request):
             
             if User.objects.filter(username=nome).exists():
                 return redirect('login')
+
+            if User.objects.filter(email=email).exists():
+                messages.error(request, "Email já cadastrado, use outro!")
+                return render(request, "registration/cadastro.html", {"form": form})
+
 
             usuario = User.objects.create_user(
                 username=nome,

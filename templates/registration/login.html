@@ -46,7 +46,7 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Bem Vindo!</h1>
                                     </div>
-                                    <form method="post" action="{% url 'login' %}">
+                                    <form method="post" action="{% url 'login' %}" autcomplete="off">
                                         {% csrf_token %}
                                         <div class="form-group">
                                             <label for="{{ form.username.id_for_label }}">UserName:</label>
