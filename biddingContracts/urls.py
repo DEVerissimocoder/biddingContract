@@ -11,7 +11,7 @@ urlpatterns = [
     path("contratos/", views.ListContractsView.as_view(), name="contratos"), #Lista Contratos
     path('contratos/relatorio/<int:id_contrato>', views.contratosRelatorio, name='relatorio'), #Relatório dos contratos
     path('contratos/<int:pk>/editar/', views.ContractsUpdateView.as_view(), name='update_contracts'), #Atualiza Contratos
-    path('delete/contract/<int:pk>/', views.ContractDeleteView.as_view(), name='delete_contracts'),
+    path('delete/contract/<int:pk>/', views.ContractDeleteView.as_view(), name='delete_contracts'), #Deleta contratos
 
     # Fornecedores
     path('fornecedores/', views.listFornecedores, name="fornecedores"), #Lista Fornecedores
