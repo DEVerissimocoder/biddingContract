@@ -34,7 +34,7 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 SECRET_KEY = "teste"
 
-DEBUG = False
+DEBUG = True
 
 
 
