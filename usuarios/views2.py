@@ -23,15 +23,19 @@ def login(request):
             )
             if usuario is not None and usuario.is_active:
                 aviso = 'Login efetuado com sucesso!'
-                messages.success(request, aviso)
                 auth.login(request, usuario)
+                messages.add_message(request, messages.INFO, 'Mensagem de teste')
+                messages.success(request, aviso)
                 return redirect('index')  # Redireciona para a página inicial após login bem-sucedido
             else:
                 aviso = 'Login inválido! Dados incorretos ou conta não ativada.'
                 messages.error(request, aviso)
                 return redirect('login')  # Redireciona para a view de login em caso de erro
     else:
-        messages.info(request, 'Por favor, faça login para acessar.')
+
+        if not request.user.is_authenticated:
+            messages.info(request, 'Por favor, faça login para acessar.')
+        #messages.info(request, 'Por favor, faça login para acessar.')
     
     return render(request, "registration/login.html", {"form": form})
 
@@ -75,6 +79,6 @@ def cadastro(request):
 def logout(request):
     auth.logout(request)
     messages.success(request, "Deslogado com sucesso!")
-    return reverse_lazy('login')
+    return redirect('login')
 
 

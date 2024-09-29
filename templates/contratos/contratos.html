@@ -157,6 +157,7 @@
                         <!-- Não exibir botão, pois o contrato está vencido -->
                         {% else %}
                         <a href="{% url 'biddingContracts:update_contracts' contrato.pk %}" class="btn btn-sm btn-outline-info ml-3 ms-2">Editar</a>
+                        <a href="{% url "biddingContracts:delete_contracts" contrato.pk %}" class="btn btn-sm btn-outline-danger ml-3 ms-2">Deletar</a>
                         {% endif %}
                     </div>
                 </div>

@@ -206,14 +206,24 @@ def verifica_prazo_validade_arp(prazoRestante, dataFinal, hoje):
     return mensagem
 
 
+# View que deleta os contratos
+class ContractDeleteView(LoginRequiredMixin, DeleteView):
+    model = Contrato
+    template_name = "contratos/contratos_delete.html"
+    context_object_name = "contrato"
+
+    def get_success_url(self):
+        messages.success(self.request, 'Contrato excluído com sucesso!')
+        return reverse_lazy("biddingContracts:contratos")
+
 # INDEX
 @login_required
 def index(request):
     if request.user.is_authenticated:
-        nome_usuario = request.user.username.title()
-        aviso = f"Olá, {nome_usuario }. Seja bem-vindo!"
-        messages.success(request, aviso)
-    return render(request, 'index.html')
+        # nome_usuario = request.user.username.title()
+        # aviso = f"Olá, {nome_usuario }. Seja bem-vindo!"
+        # messages.success(request, aviso)
+        return render(request, 'index.html')
 
 
 # View que Cria os fornecedores
@@ -256,13 +266,13 @@ def modal_fornecedor(request):
     return render(request, "fornecedor/modal_fornecedores.html", context)
 
 
-@login_required
-# View que lista as Licitações
-def listLicitacoes(request):
-    """mostra todas as licitacoes"""
-    licitacoes = Licitacao.objects.all()
-    context = {"licitacoes": licitacoes}
-    return render(request, "licitacoes/list_licitacoes.html", context)
+# @login_required
+# # View que lista as Licitações
+# def listLicitacoes(request):
+#     """mostra todas as licitacoes"""
+#     licitacoes = Licitacao.objects.all()
+#     context = {"licitacoes": licitacoes}
+#     return render(request, "licitacoes/list_licitacoes.html", context)
 
 
 @login_required

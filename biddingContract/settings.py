@@ -204,6 +204,8 @@ EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 
 #Messages Flash
 
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
 MESSAGE_TAGS = {
     messages.ERROR: "danger",
     messages.SUCCESS: "success",
