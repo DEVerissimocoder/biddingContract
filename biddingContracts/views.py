@@ -293,11 +293,10 @@ class BiddingCreateView(LoginRequiredMixin, CreateView):
     form_class = formLicitacao
     template_name = 'licitacoes/licitacoes.html'
     message_success = 'Licitação criada com sucesso!'
-    #success_url = reverse_lazy
 
     def get_success_url(self) -> str:
         messages.success(self.request, self.message_success)
-        return reverse_lazy('biddingContracts:list_bidding')
+        return reverse_lazy('biddingContracts:cadContrato', kwargs={'fornecedor_id':0})
 
 
 # View que faz a listagem das licitações com a pesquisa 
@@ -477,7 +476,7 @@ class BiddingUpdateView(LoginRequiredMixin, UpdateView):
         return render(self.request, self.template_name, {"form": form})
 
     def get_success_url(self):
-        return reverse_lazy("biddingContracts:licitacoes")
+        return reverse_lazy("biddingContracts:list_bidding")
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
