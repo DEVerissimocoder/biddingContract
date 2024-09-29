@@ -32,9 +32,9 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-SECRET_KEY = str(os.getenv('SECRET_KEY'))
+SECRET_KEY = "teste"
 
-DEBUG = os.getenv("DEBUG")
+DEBUG = False
 
 
 
