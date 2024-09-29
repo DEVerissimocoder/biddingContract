@@ -38,11 +38,7 @@ DEBUG = False
 
 
 
-ALLOWED_HOSTS = [
-    "127.0.0.1",
-    "pythonanywhere.com",
-    "localhost",
-]
+ALLOWED_HOSTS = ["*"]
 
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'x-Register',
