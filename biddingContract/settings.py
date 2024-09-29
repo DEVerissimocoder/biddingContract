@@ -32,9 +32,10 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-SECRET_KEY = "teste"
 
-DEBUG = True
+SECRET_KEY = os.getenv('SECRET_KEY')
+
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
 
 
@@ -104,16 +105,29 @@ WSGI_APPLICATION = 'biddingContract.wsgi.application'
 #     }
 # }
 
+import os
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'licitacao_db_vtkq',
-        'USER': 'admin',
-        'PASSWORD': 'dck8JXf4noc4N8aadKV6fMClP2ZFB3CY',
-        'HOST': 'dpg-crsnmu5ds78s73e7ctv0-a.oregon-postgres.render.com',
-        'PORT': 5432,
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': 'licitacao_db_vtkq',
+#         'USER': 'admin',
+#         'PASSWORD': 'dck8JXf4noc4N8aadKV6fMClP2ZFB3CY',
+#         'HOST': 'dpg-crsnmu5ds78s73e7ctv0-a/licitacao_db_vtkq',
+#         'PORT': 5432,
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
