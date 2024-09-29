@@ -111,11 +111,11 @@ WSGI_APPLICATION = 'biddingContract.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.getenv('NAME_DB'),
-        'USER': os.getenv('USER_DB'),
-        'PASSWORD': os.getenv('PASSWORD_DB'),
-        'HOST': os.getenv('HOST_DB'),
-        'PORT': os.getenv('PORT_DB'),
+        'NAME': 'licitacao_db_vtkq',
+        'USER': 'admin',
+        'PASSWORD': 'dck8JXf4noc4N8aadKV6fMClP2ZFB3CY',
+        'HOST': 'dpg-crsnmu5ds78s73e7ctv0-a.oregon-postgres.render.com',
+        'PORT': 5432,
     }
 }
 
