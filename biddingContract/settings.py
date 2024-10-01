@@ -32,17 +32,14 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
-DEBUG = os.getenv("DEBUG")
+SECRET_KEY = os.getenv('SECRET_KEY')
+
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
 
 
-ALLOWED_HOSTS = [
-    "127.0.0.1",
-    "pythonanywhere.com",
-    "localhost",
-]
+ALLOWED_HOSTS = ["*"]
 
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'x-Register',
@@ -65,6 +62,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -97,27 +95,40 @@ WSGI_APPLICATION = 'biddingContract.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-                #'USER':os.getenv('USER_DB')
-                #'PASSWORD':os.getenv('PASSWORD_DB')
-                #'HOST':os.getenv('HOST_DB')
-                #'PORT':os.getenv('PORT_DB')
-    }
-}
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.getenv('NAME_DB'),
-#         'USER': os.getenv('USER_DB'),
-#         'PASSWORD': os.getenv('PASSWORD_DB'),
-#         'HOST': os.getenv('HOST_DB'),
-#         'PORT': os.getenv('PORT_DB'),
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#                 #'USER':os.getenv('USER_DB')
+#                 #'PASSWORD':os.getenv('PASSWORD_DB')
+#                 #'HOST':os.getenv('HOST_DB')
+#                 #'PORT':os.getenv('PORT_DB')
 #     }
 # }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'HOST': os.getenv('DB_HOST'),
+#         'NAME': os.getenv('DB_NAME'),
+#         'USER': os.getenv('DB_USER'),
+#         'PASSWORD': os.getenv('DB_PASSWORD'),
+#         'PORT': os.getenv('DB_PORT'),
+#     }
+# }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST').split('/')[0],
+        'PORT': os.getenv('DB_PORT'),
+    }
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -171,17 +182,18 @@ STATICFILES_FINDERS = [
 
 ]
 
-STATIC_URL = 'static/'
+#STATIC_URL = 'static/'
 
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'biddingContract/static')
 ]
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_URL = '/static/'
 
-#STATIC_URL = '/static/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 #Questões de mídia  
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
