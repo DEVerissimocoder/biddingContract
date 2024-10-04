@@ -116,16 +116,26 @@
                         </li>
                       </form> <!-- Fim colapse licitação -->
 
-                      <div class="d-flex">
+                    <div class="d-flex justify-content-center align-items-baseline">
                         <a class="text-muted mt-2" style="text-decoration:none;" href="."><i title="Resetar página" class="fa-solid fa-arrows-rotate"></i></a> <!-- ícone de resetar página -->
+
+                        <form method="get" id="filterForm" class="">
+                            <div class="d-flex align-content-center">
+                                <label class="switch ms-2">
+                                    <input type="checkbox" id="filterToggle" name="search" value="on" {% if request.GET.search == 'on' %}checked{% endif %} onclick="document.getElementById('filterForm').submit()">
+                                    <span class="slider round w-100"></span>
+                                </label>
+                                <p class="text-muted align-content-center ms-2">Contratos vencidos</p>
+                            </div>
+                        </form> 
                     </div>
                 </ul> 
               </div>
             </div>
             
-            {% if object_list %}
+            {% if contratos %}
                 <div class="d-flex ">
-                    <p class="text-muted small">{{ object_list.count }} Contrato(s) Existente(s)</p>
+                    <p class="text-muted small">{{ contratos.count }} Contrato(s) Existente(s)</p>
                 </div>
             {% else %}
                 <div class="d-flex">

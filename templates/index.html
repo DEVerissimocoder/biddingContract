@@ -110,7 +110,7 @@ Inicial {% endblock %} {% block content %}
                 <i class="fa-solid fa-file-signature"></i>
               </div>
               <div class="inner">
-                <h3>150</h3>
+                <h3>{{contratos.count}}</h3>
                 <p>Contratos</p>
               </div>
               <a href="{% url "biddingContracts:contratos" %}" class="small-box-footer"
@@ -123,7 +123,7 @@ Inicial {% endblock %} {% block content %}
                 <i class="fa-solid fa-sheet-plastic"></i>
               </div>
               <div class="inner">
-                <h3>53</h3>
+                <h3>{{licitacoes.count}}</h3>
                 <p>Licitações</p>
               </div>
               <a href="{% url "biddingContracts:list_bidding" %}" class="small-box-footer"
@@ -136,7 +136,11 @@ Inicial {% endblock %} {% block content %}
                 <i class="fa-solid fa-file-pen"></i>
               </div>
               <div class="inner">
-                <h3>44</h3>
+                {% if notasfiscais %}
+                <h3>{{notasfiscais.count}}</h3>
+                {% else %}
+                <h3>0</h3>
+                {% endif %}
                 <p>Notas Fiscais</p>
               </div>
               <a href="{% url "biddingContracts:notasfiscais" %}" class="small-box-footer"
@@ -149,7 +153,7 @@ Inicial {% endblock %} {% block content %}
                 <i class="fa-solid fa-file-excel"></i>
               </div>
               <div class="inner">
-                <h3>65</h3>
+                <h3>{{vencidos.count}}</h3>
                 <p>Contratos Vencidos</p>
               </div>
               <a href="#" class="small-box-footer"
