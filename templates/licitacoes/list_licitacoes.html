@@ -164,11 +164,13 @@
             </div>
         {% endfor %}
         </ul>
+        {% if licitacao %}
         <div class="d-flex mt-4 justify-content-center mb-3">
             <a class="btn btn-secondary " href="{% url 'biddingContracts:index' %}">Voltar</a>
             <a class="btn btn-success ms-2" href="{% url 'biddingContracts:create-bidding' %}">Criar Licitação</a>
             {% comment %} <a class="btn btn-danger flex-row-reverse" href="{% url 'biddingContracts:export-pdf' %}">ExportPDF</a> {% endcomment %}
         </div>
+        {% endif %}
     </div>
 </div>
 
