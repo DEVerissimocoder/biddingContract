@@ -156,8 +156,8 @@ Inicial {% endblock %} {% block content %}
                 <h3>{{vencidos.count}}</h3>
                 <p>Contratos Vencidos</p>
               </div>
-              <a href="#" class="small-box-footer"
-                >More info <i class="fas fa-arrow-circle-right"></i
+              <a href="{% url "biddingContracts:contratos"%}?search=on" class="small-box-footer"
+                >Mais informações <i class="fas fa-arrow-circle-right"></i
               ></a>
             </div>
           </div>
