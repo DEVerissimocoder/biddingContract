@@ -1,96 +1,183 @@
-{% extends "base_template.html" %}
-{% load static %}
-{% block title %} Página Inicial {% endblock %}
-{% block content %}
+{% extends "base_template.html" %} {% load static %} {% block title %} Página
+Inicial {% endblock %} {% block content %}
 <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
 />
 <style>
-    .swiper {
-        max-width: 100%;
-        height: auto;
-    }
+  .swiper {
+    max-width: 100%;
+    height: auto;
+  }
 
-    main {
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+  main {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-    .container {
-        max-width: 900px; /* Define uma largura máxima */
-        width: 100%; /* Largura total até o limite de 900px */
-    }
+  .container {
+    max-width: 1200px; /* Aumentei o limite para 1200px */
+    width: 100%; /* Largura total até o limite de 1200px */
+    padding: 0 15px; /* Garantir espaçamento lateral */
+  }
 
-    span {
-        font-size: 1.5rem;
-        color: #188249;
-    }
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-around;
+  }
 
-    img {
-        box-shadow: 0 1px 2px #0003;
-        max-width: 100%;
-        height: auto;
-        object-fit: cover;
-    }
+  .small-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+  }
 
-    .swiper-slide {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+  .small-box:hover {
+    transform: translateY(-5px); /* Elevar levemente o card ao passar o mouse */
+  }
 
-    h2, h3 {
-        color: #6c757d;
+  .small-box h3 {
+    font-size: 2.5rem;
+    margin: 0;
+  }
+
+  .small-box .inner h3,
+  .small-box .inner p,
+  .small-box-footer {
+    color: #fff; /* Cor branca */
+  }
+
+  .small-box p {
+    font-size: 1.2rem;
+    margin: 10px 0;
+  }
+
+  .small-box-footer {
+    display: block;
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .small-box .icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+  }
+
+  /* Estilos responsivos */
+  @media (max-width: 768px) {
+    .card-container {
+      flex-direction: column;
+      align-items: center;
     }
+  }
+
+  h2,
+  h3 {
+    color: #6c757d;
+  }
 </style>
 
-<div class="d-flex"> 
-    <!-- Sidebar -->
-    {% include "sidebar.html" %}
+<div class="d-flex">
+  <!-- Sidebar -->
+  {% include "sidebar.html" %}
 
-    <!-- Main Content -->
-    
-<div class="container mt-5 text-center">
+  <!-- Main Content -->
+
+  <div class="container mt-5 text-center">
     <div class="d-flex flex-column align-items-center">
-            {% include "messages.html" %}
-            <h3 class="text-center text-uppercase mb-4">Sistema para Controle de Contratos Licitatórios da Prefeitura de <br> <span class="text-uppercase">Paranatama</span></h3>
+      {% include "messages.html" %}
+      <h3 class="text-center text-uppercase mb-4">
+        Sistema para Controle de Contratos Licitatórios da Prefeitura de <br />
+        <span class="text-uppercase">Paranatama</span>
+      </h3>
 
-            <!-- Slider -->
-            <div class="swiper">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <img src="{% static 'imagens/para1.png' %}" alt="Imagem 1">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="{% static 'imagens/para.jpeg' %}" alt="Imagem 2">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="{% static 'imagens/para3.png' %}" alt="Imagem 3">
-                    </div>
-                </div>
+      <section class="content">
+        <div class="container-fluid">
+          <div class="card-container">
+            <div class="small-box bg-info">
+              <div class="icon">
+                <i class="fa-solid fa-file-signature"></i>
+              </div>
+              <div class="inner">
+                <h3>150</h3>
+                <p>Contratos</p>
+              </div>
+              <a href="{% url "biddingContracts:contratos" %}" class="small-box-footer"
+                >Mais informações <i class="fas fa-arrow-circle-right"></i
+              ></a>
             </div>
-    </div>
-</div>
 
+            <div class="small-box bg-success">
+              <div class="icon">
+                <i class="fa-solid fa-sheet-plastic"></i>
+              </div>
+              <div class="inner">
+                <h3>53</h3>
+                <p>Licitações</p>
+              </div>
+              <a href="{% url "biddingContracts:list_bidding" %}" class="small-box-footer"
+                >Mais informações <i class="fas fa-arrow-circle-right"></i
+              ></a>
+            </div>
+
+            <div class="small-box bg-warning">
+              <div class="icon">
+                <i class="fa-solid fa-file-pen"></i>
+              </div>
+              <div class="inner">
+                <h3>44</h3>
+                <p>Notas Fiscais</p>
+              </div>
+              <a href="{% url "biddingContracts:notasfiscais" %}" class="small-box-footer"
+                >Mais informações <i class="fas fa-arrow-circle-right"></i
+              ></a>
+            </div>
+
+            <div class="small-box bg-danger">
+              <div class="icon">
+                <i class="fa-solid fa-file-excel"></i>
+              </div>
+              <div class="inner">
+                <h3>65</h3>
+                <p>Contratos Vencidos</p>
+              </div>
+              <a href="#" class="small-box-footer"
+                >More info <i class="fas fa-arrow-circle-right"></i
+              ></a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
-    const swiper = new Swiper('.swiper', {
-        direction: 'horizontal',
-        loop: true,
-        autoplay: {
-            delay: 3000,
-            disableOnInteraction: false,
-        },
-        pagination: {
-            el: '.swiper-pagination',
-        },
-        scrollbar: {
-            el: '.swiper-scrollbar',
-        },
-    });
+  const swiper = new Swiper(".swiper", {
+    direction: "horizontal",
+    loop: true,
+    autoplay: {
+      delay: 3000,
+      disableOnInteraction: false,
+    },
+    pagination: {
+      el: ".swiper-pagination",
+    },
+    scrollbar: {
+      el: ".swiper-scrollbar",
+    },
+  });
 </script>
 {% endblock content %}
