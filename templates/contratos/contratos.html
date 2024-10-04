@@ -116,19 +116,19 @@
                         </li>
                       </form> <!-- Fim colapse licitação -->
 
-                    <div class="d-flex justify-content-center align-items-baseline">
-                        <a class="text-muted mt-2" style="text-decoration:none;" href="."><i title="Resetar página" class="fa-solid fa-arrows-rotate"></i></a> <!-- ícone de resetar página -->
-
-                        <form method="get" id="filterForm" class="">
-                            <div class="d-flex align-content-center">
-                                <label class="switch ms-2">
-                                    <input type="checkbox" id="filterToggle" name="search" value="on" {% if request.GET.search == 'on' %}checked{% endif %} onclick="document.getElementById('filterForm').submit()">
-                                    <span class="slider round w-100"></span>
-                                </label>
-                                <p class="text-muted align-content-center ms-2">Contratos vencidos</p>
-                            </div>
-                        </form> 
+                    <div class="d-flex align-items-center me-2">
+                        <a class="text-muted" style="text-decoration:none;" href="."><i title="Resetar página" class="fa-solid fa-arrows-rotate"></i></a> <!-- ícone de resetar página -->
+                        
                     </div>
+                    <form method="get" id="filterForm" class="ms-3">
+                        <div class="form-check form-switch d-flex align-items-start">
+                            <label class="form-check-label ms-2">
+                                <input class="form-check-input" type="checkbox" role="switch" id="filterToggle" name="search" value="on" {% if request.GET.search == 'on' %}checked{% endif %} onclick="document.getElementById('filterForm').submit()">
+                                <span class="slider-round"></span>
+                            </label>
+                            <p class="text-muted ms-2">Contratos vencidos</p>
+                        </div>
+                    </form>
                 </ul> 
               </div>
             </div>
@@ -142,7 +142,7 @@
                     <p class="text-muted small">Nenhum Contrato Existente</p>
                 </div>
             {% endif %}
-          </nav>   <!-- Fim do navbar -->
+        </nav>   <!-- Fim do navbar -->
 
           <div class="list-group">
             {% for contrato in contratos %}
