@@ -70,11 +70,11 @@
                       <form action="?" method="GET">
                         <li class="nav-item dropdown">
                               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                              Assunto:
+                              Objeto:
                               </a>
                               <div class="dropdown-menu p-3 collapse" id="filtro-fornecedor">
                                   <div class="d-flex">
-                                      <label for=""><strong>Pesquisar Assunto:</strong></label>
+                                      <label for=""><strong>Pesquisar Objeto:</strong></label>
                                   </div>
                                   <div class="input-group d-flex flex-column">
                                       <div class="d-flex"><input type="text" class="form-control w-100" name="assunto" id="" value="{{ request.GET.assunto }}"></div>
@@ -157,13 +157,20 @@
             </div>
         {% empty %}
             <h2 class="text-center text-uppercase">Sem licitações cadastradas</h2>
+            <div class="d-flex mt-4 justify-content-center mb-3">
+                <a class="btn btn-secondary " href="{% url 'biddingContracts:list_bidding' %}">Voltar</a>
+                <a class="btn btn-success ms-2" href="{% url 'biddingContracts:create-bidding' %}">Criar Licitação</a>
+                {% comment %} <a class="btn btn-danger flex-row-reverse" href="{% url 'biddingContracts:export-pdf' %}">ExportPDF</a> {% endcomment %}
+            </div>
         {% endfor %}
         </ul>
+        {% if licitacao %}
         <div class="d-flex mt-4 justify-content-center mb-3">
             <a class="btn btn-secondary " href="{% url 'biddingContracts:index' %}">Voltar</a>
             <a class="btn btn-success ms-2" href="{% url 'biddingContracts:create-bidding' %}">Criar Licitação</a>
             {% comment %} <a class="btn btn-danger flex-row-reverse" href="{% url 'biddingContracts:export-pdf' %}">ExportPDF</a> {% endcomment %}
         </div>
+        {% endif %}
     </div>
 </div>
 

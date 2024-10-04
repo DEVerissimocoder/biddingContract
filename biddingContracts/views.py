@@ -1,7 +1,7 @@
 from django.db.models.query import QuerySet
 from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect, HttpResponse
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.db.models import Q
 from  biddingContracts.forms import formLicitacao, formFornecedor,NotaFiscalEditForm, formContrato, formARP, NotaFiscalForm
 from django.urls import reverse, reverse_lazy
@@ -87,10 +87,18 @@ class ListContractsView(ListView):
 
     # Adicionando filtros ao object_list através do get_queryset
     def get_queryset(self):
+        today = datetime.now().date() # Data de hoje
         txt_contratos = self.request.GET.get("contratos")
         txt_assunto = self.request.GET.get("assunto")
         txt_fornecedor = self.request.GET.get("fornecedor")
         txt_licitacao = self.request.GET.get("licitacao")
+        filter_expired = self.request.GET.get('search') == 'on'
+        
+        # Filtro de contratos vencidos
+        if filter_expired:
+            return Contrato.objects.filter(dataFinal__lt=timezone.now().date())
+        elif not filter_expired:
+            return Contrato.objects.all()
 
         if txt_fornecedor:
             queryset = Contrato.objects.filter(fornecedor_fk__nome__icontains=txt_fornecedor)
@@ -108,10 +116,12 @@ class ListContractsView(ListView):
             queryset = Contrato.objects.all()
         return queryset
     
+    
+    
      # Adicionando o cálculo de vencimento ao contexto
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        contratos = context['contratos']
+        contratos = context['contratos'] = self.get_queryset()
         today = timezone.now().date()  # Obtém a data atual
 
         # Adiciona um atributo 'vencido' a cada contrato
@@ -220,10 +230,20 @@ class ContractDeleteView(LoginRequiredMixin, DeleteView):
 @login_required
 def index(request):
     if request.user.is_authenticated:
+        contratos = Contrato.objects.all()
+        licitacoes = Licitacao.objects.all()
+        notas_fiacias = NotaFiscal.objects.all()
+        vencidos = Contrato.objects.filter(dataFinal__lt=timezone.now().date())
+        context = {
+            'contratos': contratos,
+            'licitacoes': licitacoes,
+            'notas_fiacias': notas_fiacias,
+            'vencidos': vencidos
+        }
         # nome_usuario = request.user.username.title()
         # aviso = f"Olá, {nome_usuario }. Seja bem-vindo!"
         # messages.success(request, aviso)
-        return render(request, 'index.html')
+        return render(request, 'index.html', context)
 
 
 # View que Cria os fornecedores

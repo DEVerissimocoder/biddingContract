@@ -61,7 +61,8 @@ class formFornecedor(forms.ModelForm):
         "bairro",  
         "cep",
         "cidade", 
-        "telefone"
+        "telefone",
+        "uf"
         ]
 
         labels={
@@ -135,7 +136,16 @@ class formFornecedor(forms.ModelForm):
                     "required": True,
                     "id": "phone",
                 }
-            )
+            ),
+            "uf": forms.TextInput(
+                attrs={
+                    "type": "text",
+                    "class": "form-control",
+                    "placeholder": "Unidade Federativa",
+                    "required": True,
+                    "id": "uf"
+                }
+            ),
         }   
 
 class formContrato(forms.ModelForm):
