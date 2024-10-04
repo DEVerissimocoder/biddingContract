@@ -61,6 +61,10 @@
                             {{ form.cidade }}
                         </div>
                         <div class="mb-3">
+                            <label for="id_uf" class="form-label">UF</label>
+                            {{ form.uf }}
+                        </div>
+                        <div class="mb-3">
                             <label for="id_telefone" class="form-label">Telefone</label>
                             {{ form.telefone }}
                         </div>
@@ -85,5 +89,9 @@
     $('#cnpj').mask('00.000.000/0000-00', {reverse: true});
     $('#phone').mask('(00) 00000-0000');
     $('#cep').mask('00000-000');
+    {% comment %} $("#uf").on("input", function() {
+        var valor = $(this).val().toUpperCase();
+        $(this).val(valor);
+      }); {% endcomment %}
 </script>
 {% endblock %}

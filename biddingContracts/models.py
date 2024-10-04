@@ -32,6 +32,7 @@ class Fornecedor(models.Model):
     cep = models.CharField(max_length=200)
     cidade = models.CharField(max_length=200)
     telefone = models.CharField(max_length=200)
+    uf = models.CharField(max_length=2, null=True)
 
     def __str__(self):
         return f"{self.nome}"
