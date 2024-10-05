@@ -1,5 +1,5 @@
 from django import forms
-from .models import Licitacao, Fornecedor, Contrato, AtaRegistroPreco, NotaFiscal
+from .models import Licitacao, Fornecedor, Contrato, AtaRegistroPreco, NotaFiscal, Secretaria
 
 class formLicitacao(forms.ModelForm):
     class Meta:
@@ -435,5 +435,29 @@ class NotaFiscalEditForm(forms.ModelForm):
                     "class": "form-select"
                 }
             )
+        }
+
+
+class formSecretaria(forms.ModelForm):
+    class Meta:
+        model = Secretaria
+        fields = [
+            "nome",
+        ]
+        exclude = ["usuario"]
+
+        labels = {
+            "nome": "Setor",
+        }
+
+        widgets = {
+            "nome": forms.TextInput(
+                attrs={
+                    "type": "text",
+                    "class": "form-control",
+                    "placeholder": "Setor de atuação",
+                    "id": "nome",
+                }
+            ),
         }
             

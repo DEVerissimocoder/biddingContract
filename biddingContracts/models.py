@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth import get_user_model
 
+User  = get_user_model()
 
 class Modalidade(models.TextChoices):
     CONCORRENCIA = 'concorrência', 'Concorrência'
@@ -58,6 +60,19 @@ class Contrato(models.Model):
     def is_vencido(self):
         # Verifica se a data final do contrato já passou
         return self.dataFinal < timezone.now().date()
+    
+#Secretaria
+class Secretaria(models.Model):
+    nome = models.CharField(max_length=200, verbose_name="Nome da secretaria", null=True, blank=True)
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.nome}"
+    
+    class Meta:
+        verbose_name = "Secretaria"
+        verbose_name_plural = "Secretarias"
+
 
 class NotaFiscal(models.Model):
     num = models.IntegerField(unique=True)
@@ -68,6 +83,7 @@ class NotaFiscal(models.Model):
     contrato_fk = models.ForeignKey("Contrato", blank=True, null=True, on_delete=models.CASCADE)
     fornecedor_fk = models.ForeignKey("Fornecedor", on_delete=models.CASCADE)
     ataregistropreco_fk = models.ForeignKey('AtaRegistroPreco', blank=True, null=True, on_delete=models.CASCADE)
+    secretaria = models.ForeignKey(Secretaria, on_delete=models.CASCADE, null=True, blank=True)
     
     class Meta:
         verbose_name_plural = "Notas Fiscais"

@@ -39,4 +39,9 @@ urlpatterns = [
     path('editarnfe/<int:pk>/<int:is_contract>/', views.NotasFiscaisUpdate.as_view(), name='updatenfe'), #Editar Notas Fiscais
     path('deletenfe/<int:pk>/', views.NotesDeleteView.as_view(), name='deletenfe'), #Deletar Notas Fiscais
 
+    # Secretarias
+    path('create/new-secretary/', views.SecretaryNew.as_view(), name='new_secretaria'),
+    path('list-secretarys/', views.ListSecretary.as_view(), name='list_secretarias'),
+    path('delete-secretary/<int:pk>/', views.SecretaryDeleteView.as_view(), name='del_secretaria')
+
 ]

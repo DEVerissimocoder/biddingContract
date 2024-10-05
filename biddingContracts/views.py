@@ -3,9 +3,9 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect, HttpResponse
 from datetime import datetime, timedelta
 from django.db.models import Q
-from  biddingContracts.forms import formLicitacao, formFornecedor,NotaFiscalEditForm, formContrato, formARP, NotaFiscalForm
+from  biddingContracts.forms import formLicitacao, formFornecedor,NotaFiscalEditForm, formContrato, formARP, NotaFiscalForm, formSecretaria
 from django.urls import reverse, reverse_lazy
-from .models import Contrato, NotaFiscal, Fornecedor, Licitacao, AtaRegistroPreco
+from .models import Contrato, NotaFiscal, Fornecedor, Licitacao, AtaRegistroPreco, Secretaria
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
@@ -232,13 +232,15 @@ def index(request):
     if request.user.is_authenticated:
         contratos = Contrato.objects.all()
         licitacoes = Licitacao.objects.all()
-        notas_fiacias = NotaFiscal.objects.all()
+        notas_fiscais = NotaFiscal.objects.all()
+        arp = AtaRegistroPreco.objects.all()
         vencidos = Contrato.objects.filter(dataFinal__lt=timezone.now().date())
         context = {
             'contratos': contratos,
             'licitacoes': licitacoes,
-            'notas_fiacias': notas_fiacias,
-            'vencidos': vencidos
+            'notas_fiscais': notas_fiscais,
+            'vencidos': vencidos,
+            'arps': arp
         }
         # nome_usuario = request.user.username.title()
         # aviso = f"Olá, {nome_usuario }. Seja bem-vindo!"
@@ -574,11 +576,11 @@ class NotaFiscal_new(LoginRequiredMixin, CreateView):
         
             # valida se o resultado da soma ultrapassa o valor total do contrato.
             if soma > contrato.valor:
-                messages.add_message(self.request, messages.INFO, "NÃO FOI POSSÍVEL CADASTRAR A NOTA FISCAL, VALOR DA NOTA MAIOR DO QUE O SALDO RESTANTO DO CONTRATO")
+                messages.add_message(self.request, messages.ERROR, "NÃO FOI POSSÍVEL CADASTRAR A NOTA FISCAL, VALOR DA NOTA MAIOR DO QUE O SALDO RESTANTO DO CONTRATO")
                 return HttpResponseRedirect(reverse('biddingContracts:new_notas', kwargs={'is_contract': is_contract}))
             #verificação da data de vigência
             elif contrato.dataFinal<hoje:
-                messages.add_message(self.request, messages.INFO, "NÃO FOI POSSIVEL CADASTRAR NOTAS, CONSULTE O PRAZO RESTANTE DO CONTRATO")
+                messages.add_message(self.request, messages.ERROR, "NÃO FOI POSSIVEL CADASTRAR NOTAS, CONSULTE O PRAZO RESTANTE DO CONTRATO")
                 return HttpResponseRedirect(reverse("biddingContracts:new_notas", kwargs={'is_contract': is_contract}))
             else:
                 form.save()
@@ -667,3 +669,36 @@ class NotesDeleteView(LoginRequiredMixin, DeleteView):
         messages.success(self.request, 'Nota Fiscal excluída com sucesso!')
         return reverse_lazy("biddingContracts:notasfiscais")
     
+# View que cria as secretarias
+class SecretaryNew(LoginRequiredMixin, CreateView):
+    """
+    Faz o cadastro das Secretarias
+    """
+    model = Secretaria
+    form_class = formSecretaria
+    template_name = 'secretaria/secretaria_new.html'
+    message_success = 'Secretaria cadastrada com sucesso!'
+
+    def get_success_url(self) -> str:
+        messages.success(self.request, self.message_success)
+        return reverse_lazy('biddingContracts:list_secretarias')
+    
+
+
+# View que lista as Secretarias
+class ListSecretary(LoginRequiredMixin, ListView):
+    model = Secretaria
+    template_name = "secretaria/list_secretaria.html"
+    success_url = reverse_lazy("biddingContracts:list_secretarias")
+    context_object_name = "secretarias"
+
+
+# View que deleta as Secretarias
+class SecretaryDeleteView(LoginRequiredMixin, DeleteView):
+    model = Secretaria
+    template_name = "secretaria/delete_secretaria.html"
+    context_object_name = "sec"
+
+    def get_success_url(self):
+        messages.success(self.request, 'Secretaria excluída com sucesso!')
+        return reverse_lazy("biddingContracts:list_secretarias")

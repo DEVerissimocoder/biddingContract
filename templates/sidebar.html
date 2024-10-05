@@ -52,6 +52,25 @@
                 <span class="nav-text text-white small">Início</span>
             </a>
         </li>
+
+        <li class="nav-item mb-3">
+            <div class="d-flex flex-column align-items-center">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:new_secretaria' %}">
+                    <i class="fa-solid fa-s" title="Cadastrar Secretaria"></i> 
+                    <span class="nav-text text-white small">Cadastrar Secretaria</span> 
+                </a>
+            </div>
+        </li>
+
+        <li class="nav-item mb-3">
+            <div class="d-flex flex-column align-items-center">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:list_secretarias' %}">
+                    <i class="fa-solid fa-table-list" title="Listar Secretarias"></i> 
+                    <span class="nav-text text-white small">Listar Secretarias</span> 
+                </a>
+            </div>
+        </li>
+
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:cadContrato' fornecedor_id=0 %}">
@@ -68,18 +87,19 @@
                 </a>
             </div>
         </li>
-        <!--cadastro de notas fiscal -->
+        <!--cadastro de notas fiscais -->
         <!--colapse-->
         <li class="nav-item mb-3">
-            <div  id="collapse-nf" >
-                <div class="d-flex flex-column align-items-center">
-                    <i class="fa-solid fa-square-plus nav-text text-white small" data-bs-toggle="collapse" data-bs-target="#nota-fiscal" aria-expanded="false" aria-controls="nota-fiscal"> nota fiscal</i>
+            <div  id="collapse-nf d-flex flex-column align-items-center" >
+                <div class="nav-link text-white ms-1">
+                    <i class="fa-solid fa-square-plus" data-bs-toggle="collapse" data-bs-target="#nota-fiscal" aria-expanded="false" aria-controls="nota-fiscal" style="cursor: pointer;"></i>
+                    <span class="nav-text text-white small" data-bs-toggle="collapse" data-bs-target="#nota-fiscal" aria-expanded="false" aria-controls="nota-fiscal" style="cursor: pointer;">Notas Fiscais</span>
                 </div>
             </div>
             <div class="collapse" id="nota-fiscal" data-bs-parent="collapse-nf">
                 <div>
                     <a class="nav-link text-white" href="{% url 'biddingContracts:new_notas' 0 %}">
-                        <i class="fa-solid fa-square-plus" title="Criar nota fiscal"></i>
+                        <i class="fa-solid fa-file-contract" title="Nova Nota Fiscal ARP"></i>
                         <span class="nav-text text-white small"> nota fiscal (ARP)</span>
                     </a>
                     <a class="nav-link text-white" href="{% url 'biddingContracts:new_notas' 1 %}">
