@@ -34,9 +34,9 @@ urlpatterns = [
     path('atas-delete/<int:pk>/', views.ARPsDeleteView.as_view(), name="deleteARP"), #Deletar ARPS
 
     # Notas Fiscais
-    path('create/nota/fiscal/<int:is_contract>', views.NotaFiscal_new.as_view(), name='new_notas'), #Criar Notas Fiscais
-    path('notasfiscais/', views.ListNfe.as_view(), name='notasfiscais'), #Listar Notas Fiscais
-    path('editarnfe/<int:pk>/', views.NotasFiscaisUpdate.as_view(), name='updatenfe'), #Editar Notas Fiscais
+    path('create/nota/fiscal/<int:is_contract>/', views.NotaFiscal_new.as_view(), name='new_notas'), #Criar Notas Fiscais
+    path('notasfiscais/<int:is_contract>/', views.ListNfe.as_view(), name='notasfiscais'), #Listar Notas Fiscais
+    path('editarnfe/<int:pk>/<int:is_contract>/', views.NotasFiscaisUpdate.as_view(), name='updatenfe'), #Editar Notas Fiscais
     path('deletenfe/<int:pk>/', views.NotesDeleteView.as_view(), name='deletenfe'), #Deletar Notas Fiscais
 
 ]

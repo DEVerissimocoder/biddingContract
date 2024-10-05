@@ -583,7 +583,7 @@ class NotaFiscal_new(LoginRequiredMixin, CreateView):
             else:
                 form.save()
                 messages.add_message(self.request, messages.SUCCESS, "SALVO COM SUCESSO")
-                return HttpResponseRedirect(reverse('biddingContracts:notasfiscais'))
+                return HttpResponseRedirect(reverse('biddingContracts:notasfiscais', kwargs={'is_contract': is_contract}))
         else:
             print("notafiscal - ata de registro de preços")
             arp = AtaRegistroPreco.objects.get(numero=form.cleaned_data['ataregistropreco_fk'])
@@ -600,10 +600,10 @@ class NotaFiscal_new(LoginRequiredMixin, CreateView):
             if arp.dataFinal<hoje:
                 messages.add_message(messages.INFO, "NÃO FOI POSSIVEL CADASTRAR NOTAS, CONSULTE O VALOR RESTANTE DA ATA DE REGISTRO DE PREÇO")
                 return HttpResponseRedirect(reverse("biddingContracts:new_notas", kwargs={'is_contract': is_contract}))
-            # se não for tiver tudo certo salve os dados.
+            # se tiver tudo certo salve os dados.
             form.save()
             messages.add_message(self.request, messages.SUCCESS, "SALVO COM SUCESSO")
-            return HttpResponseRedirect(reverse('biddingContracts:notasfiscais'))
+            return HttpResponseRedirect(reverse('biddingContracts:notasfiscais', kwargs={'is_contract': is_contract}))
         
 
 # View que lista as Notas Fiscais
@@ -611,6 +611,13 @@ class ListNfe(LoginRequiredMixin, ListView):
     model = NotaFiscal
     template_name = "notafiscal/notasFiscais.html"
     success_url = reverse_lazy("biddingContracts:notasfiscais")
+    def get_context_data(self, **kwargs):
+        # Captura o valor de is_contract da URL
+        context = super().get_context_data(**kwargs)
+        is_contract = self.kwargs['is_contract']
+        print(type(is_contract))
+        context['is_contract'] = is_contract
+        return context
 
 
 # View que edita as Notas fiscais
@@ -623,6 +630,7 @@ class NotasFiscaisUpdate(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         messages.success(self.request, 'Nota Fiscal editada com sucesso!')
+
         return super().form_valid(form)
 
     def form_invalid(self, form):
@@ -634,6 +642,19 @@ class NotasFiscaisUpdate(LoginRequiredMixin, UpdateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['is_contract'] = self.kwargs['is_contract']
+        is_contract = context['is_contract']
+        print(is_contract)
+        if (is_contract == 2):
+            id_notafiscal = self.kwargs['pk']
+           
+            notafiscal = NotaFiscal.objects.get(id=id_notafiscal)
+            print(" numero da nota fiscal é:", notafiscal.num)
+            if notafiscal.ataregistropreco_fk is None:
+                context["is_contract"] = 1
+            elif notafiscal.contrato_fk is None:
+                context["is_contract"] = 0
+            
         return context
     
 # View que deleta as Notas fiscais

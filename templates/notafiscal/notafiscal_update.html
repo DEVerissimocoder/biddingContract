@@ -1,6 +1,5 @@
 {% extends 'base_template.html' %}
 {% block content %}
-
 <div class="d-flex">
   {% include "sidebar.html" %}
   <div class="container mt-4">
@@ -8,7 +7,7 @@
       <div class="col-md-10 mx-auto">
         <div class="card">
           <h4 class="font-weight-normal text-center m-3">Atualizar informações da Nota Fiscal de n°: {{notas.num}} e pk {{ notas.pk }}</h4>
-          <form action="{% url 'biddingContracts:updatenfe' notas.pk %}" method="post" class="needs-validation" novalidate>
+          <form action="{% url 'biddingContracts:updatenfe' notas.pk  is_contract %}" method="post" class="needs-validation" novalidate>
             {% csrf_token %}
             {{ form.media }}
             {% load static %}
@@ -61,33 +60,37 @@
                       {{ form.dataEmissao.errors }}
                     </div>
                     {% endif %}
-                    <div class="form-group col-12">
-                        <label for="{{ form.contrato_fk.id_for_label }}">Contrato:</label>
-                        {{ form.contrato_fk}}
-                        {% if form.contrato_fk.errors %}
-                        <div class="alert-danger pt-1 col-auto" role="alert">
-                          {{ form.contrato_fk.errors }}
-                        </div>
-                    {% endif %}
-                    <div class="form-group col-12">
-                      <label for="{{ form.ataregistropreco_fk.id_for_label }}">ARP:</label>
-                      {{ form.ataregistropreco_fk}}
-                      {% if form.ataregistropreco_fk.errors %}
-                      <div class="alert-danger pt-1 col-auto" role="alert">
-                        {{ form.ataregistropreco_fk.errors }}
+
+                    {% if is_contract %}
+                      <div class="form-group col-12">
+                          <label for="{{ form.contrato_fk.id_for_label }}">Contrato:</label>
+                          {{ form.contrato_fk}}
+                          {% if form.contrato_fk.errors %}
+                            <div class="alert-danger pt-1 col-auto" role="alert">
+                              {{ form.contrato_fk.errors }}
+                            </div>
+                          {% endif %}
                       </div>
-                  {% endif %}
-                </div>
+                    {% else %}
+                      <div class="form-group col-12">
+                        <label for="{{ form.ataregistropreco_fk.id_for_label }}">ARP:</label>
+                        {{ form.ataregistropreco_fk}}
+                        {% if form.ataregistropreco_fk.errors %}
+                          <div class="alert-danger pt-1 col-auto" role="alert">
+                            {{ form.ataregistropreco_fk.errors }}
+                          </div>
+                        {% endif %}
+                      </div>
+                    {% endif %}
                 </div>
               </div>
               <div class="d-flex justify-content-start mt-3 mb-4 col-12">
-                <a href="{% url 'biddingContracts:notasfiscais' %}" name="cancel"
+                <a href="{% url 'biddingContracts:notasfiscais' 2 %}" name="cancel"
                   class="btn btn-secondary mr-2">Cancelar</a>
                 <button type="submit" class="btn btn-success ms-2">Salvar</button>
               </div>
             </div>
             <br>
-  
           </form>
         </div>
       </div>

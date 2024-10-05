@@ -3,7 +3,6 @@
 {% block title %} notas fiscais {% endblock %}
 
 {% block content %}
-
 <div class="d-flex">
   {% include "sidebar.html" %}
   <div class="container my-5">
@@ -50,7 +49,7 @@
               </td>
               <td class="">
                 <div class="d-flex gap-3 justify-content-center align-align-middle" style="font-size:14px;">
-                  <a href="{% url "biddingContracts:updatenfe" notafiscal.pk %}">Editar</a>
+                  <a href="{% url "biddingContracts:updatenfe" notafiscal.pk is_contract %}">Editar</a>
                   <a class="text-danger" href="{% url "biddingContracts:deletenfe" notafiscal.pk %}">Excluir</a>
                 </div>
               </td>
