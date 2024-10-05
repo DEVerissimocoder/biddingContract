@@ -52,6 +52,25 @@
                 <span class="nav-text text-white small">Início</span>
             </a>
         </li>
+
+        <li class="nav-item mb-3">
+            <div class="d-flex flex-column align-items-center">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:new_secretaria' %}">
+                    <i class="fa-solid fa-s" title="Cadastrar Secretaria"></i> 
+                    <span class="nav-text text-white small">Cadastrar Secretaria</span> 
+                </a>
+            </div>
+        </li>
+
+        <li class="nav-item mb-3">
+            <div class="d-flex flex-column align-items-center">
+                <a class="nav-link text-white" href="{% url 'biddingContracts:list_secretarias' %}">
+                    <i class="fa-solid fa-table-list" title="Listar Secretarias"></i> 
+                    <span class="nav-text text-white small">Listar Secretarias</span> 
+                </a>
+            </div>
+        </li>
+
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:cadContrato' fornecedor_id=0 %}">
@@ -80,7 +99,7 @@
             <div class="collapse" id="nota-fiscal" data-bs-parent="collapse-nf">
                 <div>
                     <a class="nav-link text-white" href="{% url 'biddingContracts:new_notas' 0 %}">
-                        <i class="fa-solid fa-square-plus" title="Criar nota fiscal"></i>
+                        <i class="fa-solid fa-file-contract" title="Nova Nota Fiscal ARP"></i>
                         <span class="nav-text text-white small"> nota fiscal (ARP)</span>
                     </a>
                     <a class="nav-link text-white" href="{% url 'biddingContracts:new_notas' 1 %}">
