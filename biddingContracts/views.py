@@ -252,6 +252,8 @@ class BiddingFornecedor(LoginRequiredMixin, CreateView):
     form_class = formFornecedor
     template_name = 'fornecedor/fornecedor_new.html'
     success_url = reverse_lazy('biddingContracts:cadContrato')
+
+
 def fornecedor_new(request):
     if request.method=='POST':
         form = formFornecedor(request.POST)
@@ -546,12 +548,19 @@ class FornecedorUpdate(LoginRequiredMixin, UpdateView):
 
 
 # # View que cria as notas fiscais
-# class NotasFiscaisView(LoginRequiredMixin, CreateView):
-#     model= NotaFiscal
-#     form_class = NotaFiscalForm
-#     template_name = "notaFiscal_new.html"
-#     print("notas fiscais view")
-#     success_url = reverse_lazy("biddingContracts:notasfiscais")
+class NotaFiscal_new(LoginRequiredMixin, CreateView):
+    model= NotaFiscal
+    form_class = NotaFiscalForm
+    template_name = "notafiscal/notaFiscal_new.html"
+    success_url = reverse_lazy("biddingContracts:notasfiscais")
+    def get_context_data(self, **kwargs):
+        # Captura o valor de is_contract da URL
+        context = super().get_context_data(**kwargs)
+        is_contract = self.kwargs['is_contract']
+        print(type(is_contract))
+        context['is_contract'] = is_contract
+        return context
+"""
 def notafiscal_new(request):
     #requisição post
     if request.method=='POST':
@@ -603,7 +612,7 @@ def notafiscal_new(request):
     form = NotaFiscalForm()
     return render(request, 'notafiscal/notaFiscal_new.html', {"form":form})
 
-
+"""
 # View que lista as Notas Fiscais
 class ListNfe(LoginRequiredMixin, ListView):
     model = NotaFiscal

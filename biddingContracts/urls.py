@@ -35,7 +35,7 @@ urlpatterns = [
 
     # Notas Fiscais
     #path('criar-notafiscal/', views.NotasFiscaisView.as_view(), name='nfe'),
-    path('create/nota/fiscal/', views.notafiscal_new, name='new_notas'), #Criar Notas Fiscais
+    path('create/nota/fiscal/<int:is_contract>', views.NotaFiscal_new.as_view(), name='new_notas'), #Criar Notas Fiscais
     path('notasfiscais/', views.ListNfe.as_view(), name='notasfiscais'), #Listar Notas Fiscais
     path('editarnfe/<int:pk>/', views.NotasFiscaisUpdate.as_view(), name='updatenfe'), #Editar Notas Fiscais
     path('deletenfe/<int:pk>/', views.NotesDeleteView.as_view(), name='deletenfe'), #Deletar Notas Fiscais
