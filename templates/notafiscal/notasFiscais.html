@@ -19,6 +19,7 @@
           <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">DATA EMISSAO</th>
           <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">CONTRATO</th>
           <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">ARP</th>
+          <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">SECRETARIA</th>
           <th class="text-center text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">AÇÕES</th>
         </tr>
       </thead>
@@ -42,11 +43,26 @@
               <td class="align-align-middle" style="font-size:14px;">
                 {{ notafiscal.dataEmissao }}
               </td>
+              {% if notafiscal.contrato_fk %}
               <td class="align-align-middle" style="font-size:14px;">
                 {{ notafiscal.contrato_fk }}
               </td>
+              {% else %}
+              <td class="align-align-middle" style="font-size:14px;">
+                -----
+              </td>
+              {% endif %}
+              {% if notafiscal.ataregistropreco_fk %}
               <td class="align-align-middle" style="font-size:14px;">
                 {{ notafiscal.ataregistropreco_fk }}
+              </td>
+              {% else %}
+              <td class="align-align-middle" style="font-size:14px;">
+                -----
+              </td>
+              {% endif %}
+              <td class="align-align-middle" style="font-size:14px;">
+                {{ notafiscal.secretaria }}
               </td>
               <td class="">
                 <div class="d-flex gap-3 justify-content-center align-align-middle" style="font-size:14px;">
