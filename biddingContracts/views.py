@@ -529,12 +529,14 @@ def calcula_saldo_restante(notasfiscais, valorARP):
         soma+=nota.valor  
     return valorARP - soma
     
+    
  # View que atualiza as licitações
-class BiddingUpdateView(LoginRequiredMixin, UpdateView):
+class BiddingUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Licitacao
     template_name = "licitacoes/edit_licitacoes.html"
     form_class = formLicitacao
     context_object_name = "licitacao"
+    permission_required = ["biddingContracts.change_licitacao"]
 
     def form_valid(self, form):
         messages.success(self.request, 'Licitação editada com sucesso!')
@@ -719,6 +721,29 @@ class ListSecretary(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     success_url = reverse_lazy("biddingContracts:list_secretarias")
     context_object_name = "secretarias"
     permission_required = ["biddingContracts.view_secretaria"]
+
+
+ # View que edita as secretarias ***********
+class BiddingUpdateView(LoginRequiredMixin, UpdateView):
+    model = Secretaria
+    template_name = "licitacoes/edit_licitacoes.html"
+    form_class = formLicitacao
+    context_object_name = "licitacao"
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Licitação editada com sucesso!')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Erro ao editar licitação. Verifique os campos do formulário.')
+        return render(self.request, self.template_name, {"form": form})
+
+    def get_success_url(self):
+        return reverse_lazy("biddingContracts:list_bidding")
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
 
 
 # View que deleta as Secretarias
