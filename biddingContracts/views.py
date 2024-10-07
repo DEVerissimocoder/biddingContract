@@ -99,6 +99,14 @@ class ListContractsView(PermissionRequiredMixin, ListView):
         txt_fornecedor = self.request.GET.get("fornecedor")
         txt_licitacao = self.request.GET.get("licitacao")
         filter_expired = self.request.GET.get('search') == 'on'
+        valor = self.request.GET.get("valor")
+
+        if valor == "0":
+            return Contrato.objects.filter(valor=0)
+        if self.kwargs.get("zerados"):
+
+            return Contrato.objects.filter(valor=0)
+
         
         # Filtro de contratos vencidos
         if filter_expired:
@@ -136,6 +144,12 @@ class ListContractsView(PermissionRequiredMixin, ListView):
 
         return context
 
+def contrato_zerado(request):
+    zerado = Contrato.objects.filter(valor__lte=0)
+    context = {
+        "zerados": zerado
+    }
+    return render(request, "contratos/contratos_zerados.html", context)
 
 # View que atualiza os contratos
 class ContractsUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):

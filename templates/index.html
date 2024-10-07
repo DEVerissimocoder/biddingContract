@@ -171,7 +171,7 @@ Inicial {% endblock %} {% block content %}
                 <h3>{{zerados.count}}</h3>
                 <p>Contratos sem Saldo</p>
               </div>
-              <a href="{% url "biddingContracts:contratos" %}" class="small-box-footer"
+              <a href="{% url "biddingContracts:contratos" %}?valor=0" class="small-box-footer"
                 >Mais informações <i class="fas fa-arrow-circle-right"></i
               ></a>
             </div>
