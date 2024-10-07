@@ -42,6 +42,8 @@ urlpatterns = [
     # Secretarias
     path('create/new-secretary/', views.SecretaryNew.as_view(), name='new_secretaria'),
     path('list-secretarys/', views.ListSecretary.as_view(), name='list_secretarias'),
-    path('delete-secretary/<int:pk>/', views.SecretaryDeleteView.as_view(), name='del_secretaria')
+    path('modal-secretaria/', views.modal_secretaria, name="modal_secretaria"), #Modal Secretaria
+    path('editar-secretaria/<int:pk>/', views.SecretaryUpdateView.as_view(), name='update_secretaria'),
+    path('delete-secretary/<int:pk>/', views.SecretaryDeleteView.as_view(), name='del_secretaria'),
 
 ]

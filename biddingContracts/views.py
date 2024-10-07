@@ -723,27 +723,36 @@ class ListSecretary(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     permission_required = ["biddingContracts.view_secretaria"]
 
 
- # View que edita as secretarias ***********
-class BiddingUpdateView(LoginRequiredMixin, UpdateView):
+ # View que edita as secretarias 
+class SecretaryUpdateView(LoginRequiredMixin, UpdateView):
     model = Secretaria
-    template_name = "licitacoes/edit_licitacoes.html"
-    form_class = formLicitacao
-    context_object_name = "licitacao"
+    template_name = "secretaria/edit_secretarias.html"
+    form_class = formSecretaria
+    context_object_name = "secretaria"
 
     def form_valid(self, form):
-        messages.success(self.request, 'Licitação editada com sucesso!')
+        messages.success(self.request, 'Secretaria editada com sucesso!')
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        messages.error(self.request, 'Erro ao editar licitação. Verifique os campos do formulário.')
+        messages.error(self.request, 'Erro ao editar secretaria. Verifique os campos do formulário.')
         return render(self.request, self.template_name, {"form": form})
 
     def get_success_url(self):
-        return reverse_lazy("biddingContracts:list_bidding")
+        return reverse_lazy("biddingContracts:list_secretarias")
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+    
+    
+@login_required
+# View que mostra fornecedor em um modal
+def modal_secretaria(request):
+    "mostra fornecedor em um modal"
+    secretarias = Secretaria.objects.all()
+    context = {"secretarias": secretarias}
+    return render(request, "secretaria/modal_secretaria.html", context)
 
 
 # View que deleta as Secretarias
