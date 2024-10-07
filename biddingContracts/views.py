@@ -246,11 +246,13 @@ def index(request):
         notas_fiscais = NotaFiscal.objects.all()
         arp = AtaRegistroPreco.objects.all()
         vencidos = Contrato.objects.filter(dataFinal__lt=timezone.now().date())
+        zerados = Contrato.objects.filter(valor__lte=0)
         context = {
             'contratos': contratos,
             'licitacoes': licitacoes,
             'notas_fiscais': notas_fiscais,
             'vencidos': vencidos,
+            'zerados': zerados,
             'arps': arp
         }
         # nome_usuario = request.user.username.title()

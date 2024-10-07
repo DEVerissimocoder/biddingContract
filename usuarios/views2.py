@@ -21,10 +21,9 @@ def login(request):
                 username=username,
                 password=password
             )
-            if usuario is not None and usuario.is_active:
+            if  usuario.is_active:
                 aviso = 'Login efetuado com sucesso!'
                 auth.login(request, usuario)
-                messages.add_message(request, messages.INFO, 'Mensagem de teste')
                 messages.success(request, aviso)
                 return redirect('index')  # Redireciona para a página inicial após login bem-sucedido
             else:
