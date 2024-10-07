@@ -58,7 +58,7 @@
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:new_secretaria' %}">
                     <i class="fa-solid fa-s" title="Cadastrar Secretarias"></i> 
-                    <span class="nav-text text-white small">Cadastrar Secretaria</span> 
+                    <span class="nav-text text-white small">Cadastrar Secretarias</span> 
                 </a>
             </div>
         </li>
@@ -79,12 +79,14 @@
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:cadContrato' fornecedor_id=0 %}">
-                    <i class="fa-solid fa-file-contract" title="Criar Contratos"></i>
+                    <i class="fa-solid fa-c" title="Criar Contratos"></i>
                     <span class="nav-text text-white small">Cadastrar Contratos</span>
                 </a>
             </div>
         </li>
         {% endif %}
+
+        {% if perms.biddingContracts.view_contrato %}
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:contratos' %}">
@@ -93,6 +95,8 @@
                 </a>
             </div>
         </li>
+        {% endif %}
+        
         {% if perms.biddingContracts.add_notafiscal %}
         <!--cadastro de notas fiscais -->
         <!--colapse-->
