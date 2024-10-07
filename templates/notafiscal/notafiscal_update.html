@@ -60,28 +60,31 @@
                       {{ form.dataEmissao.errors }}
                     </div>
                     {% endif %}
-
-                    {% if is_contract %}
-                      <div class="form-group col-12">
-                          <label for="{{ form.contrato_fk.id_for_label }}">Contrato:</label>
-                          {{ form.contrato_fk}}
-                          {% if form.contrato_fk.errors %}
-                            <div class="alert-danger pt-1 col-auto" role="alert">
-                              {{ form.contrato_fk.errors }}
-                            </div>
-                          {% endif %}
-                      </div>
-                    {% else %}
-                      <div class="form-group col-12">
-                        <label for="{{ form.ataregistropreco_fk.id_for_label }}">ARP:</label>
-                        {{ form.ataregistropreco_fk}}
-                        {% if form.ataregistropreco_fk.errors %}
-                          <div class="alert-danger pt-1 col-auto" role="alert">
-                            {{ form.ataregistropreco_fk.errors }}
-                          </div>
-                        {% endif %}
-                      </div>
+                    <div class="form-group col-12">
+                        <label for="{{ form.contrato_fk.id_for_label }}">Contrato:</label>
+                        {{ form.contrato_fk}}
+                        {% if form.contrato_fk.errors %}
+                        <div class="alert-danger pt-1 col-auto" role="alert">
+                          {{ form.contrato_fk.errors }}
+                        </div>
                     {% endif %}
+                    <div class="form-group col-12">
+                      <label for="{{ form.secretaria.id_for_label }}">Secretaria:</label>
+                      {{ form.secretaria}}
+                      {% if form.secretaria.errors %}
+                      <div class="alert-danger pt-1 col-auto" role="alert">
+                        {{ form.secretaria.errors }}
+                      </div>
+                      {% endif %}
+                    <div class="form-group col-12">
+                      <label for="{{ form.ataregistropreco_fk.id_for_label }}">ARP:</label>
+                      {{ form.ataregistropreco_fk}}
+                      {% if form.ataregistropreco_fk.errors %}
+                      <div class="alert-danger pt-1 col-auto" role="alert">
+                        {{ form.ataregistropreco_fk.errors }}
+                      </div>
+                  {% endif %}
+                </div>
                 </div>
               </div>
               <div class="d-flex justify-content-start mt-3 mb-4 col-12">
