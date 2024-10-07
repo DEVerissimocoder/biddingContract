@@ -626,7 +626,7 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
                 return HttpResponseRedirect(reverse('biddingContracts:new_notas', kwargs={'is_contract': is_contract}))
             #verificação da data de vigência
             if arp.dataFinal<hoje:
-                messages.add_message(messages.INFO, "NÃO FOI POSSIVEL CADASTRAR NOTAS, CONSULTE O VALOR RESTANTE DA ATA DE REGISTRO DE PREÇO")
+                messages.add_message(self.request, messages.INFO, "NÃO FOI POSSIVEL CADASTRAR NOTAS, ATA DE REGISTRO DE PREÇOS COM VALIDADE VENCIDA")
                 return HttpResponseRedirect(reverse("biddingContracts:new_notas", kwargs={'is_contract': is_contract}))
             # se tiver tudo certo salve os dados.
             form.save()
