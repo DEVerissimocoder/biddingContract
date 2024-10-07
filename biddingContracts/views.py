@@ -695,7 +695,7 @@ class NotesDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
 
     def get_success_url(self):
         messages.success(self.request, 'Nota Fiscal excluída com sucesso!')
-        return reverse_lazy("biddingContracts:notasfiscais")
+        return reverse_lazy("biddingContracts:notasfiscais", kwargs={"is_contract": 2})
     
 # View que cria as secretarias
 class SecretaryNew(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
