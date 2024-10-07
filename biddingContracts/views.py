@@ -1,4 +1,6 @@
 from django.db.models.query import QuerySet
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.decorators import permission_required
 from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect, HttpResponse
 from datetime import datetime, timedelta
@@ -37,7 +39,9 @@ from django.contrib.auth.decorators import login_required
 """def teste(request):
     return render(request, "modal_fornecedor_teste.html")"""
 
+
 @login_required
+@permission_required("biddingContracts.add_contrato") # Permissão de criar contratos
 def cadContrato(request, fornecedor_id):
     if request.method == "POST":
         form = formContrato(request.POST)
@@ -77,13 +81,15 @@ def cadContrato(request, fornecedor_id):
 #         context={'form':form,'fornecedor_id':fornecedor_id}
 #         return render(request, "contrato_new.html", context)
     
-class ListContractsView(ListView):
+
+class ListContractsView(PermissionRequiredMixin, ListView):
     """
     Classe destinada a listar os contratos criados
     """
     model = Contrato
     template_name = "contratos/contratos.html"
     context_object_name = "contratos"
+    permission_required = ["biddingContracts.view_contrato"]
 
     # Adicionando filtros ao object_list através do get_queryset
     def get_queryset(self):
@@ -130,8 +136,9 @@ class ListContractsView(ListView):
 
         return context
 
+
 # View que atualiza os contratos
-class ContractsUpdateView(LoginRequiredMixin, UpdateView):
+class ContractsUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     """
     Classe destinada a atualizar os contratos já criados
     """
@@ -139,6 +146,7 @@ class ContractsUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "contratos/edit_contratos.html"
     form_class = formContrato
     context_object_name = "contrato"
+    permission_required = ["biddingContracts.change_contrato"]
 
     def form_valid(self, form):
         messages.success(self.request, 'Contrato editado com sucesso!')
@@ -155,6 +163,7 @@ class ContractsUpdateView(LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context['fornecedores'] = Fornecedor.objects.all()
         return context
+
 
 @login_required
 def contratosRelatorio(request, id_contrato):
@@ -185,7 +194,6 @@ def contratosRelatorio(request, id_contrato):
     return render(request, "contratos/contratos_relatorio.html", context)
 
 
-
 def verifica_prazo_validade(prazoRestante, dataFinal,  hoje):
     mensagem = ""
     if dataFinal > hoje:
@@ -197,6 +205,7 @@ def verifica_prazo_validade(prazoRestante, dataFinal,  hoje):
     elif dataFinal < hoje:
         mensagem =  f"O prazo de validade do contrato já expirou."
     return mensagem
+
 
 def verifica_prazo_validade_arp(prazoRestante, dataFinal, hoje):
     # return verifica_prazo_validade(prazoRestante, dataFinal, hoje, tipo="ARP")
@@ -217,14 +226,16 @@ def verifica_prazo_validade_arp(prazoRestante, dataFinal, hoje):
 
 
 # View que deleta os contratos
-class ContractDeleteView(LoginRequiredMixin, DeleteView):
+class ContractDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Contrato
     template_name = "contratos/contratos_delete.html"
     context_object_name = "contrato"
+    permission_required = ["biddingContracts.delete_contrato"]
 
     def get_success_url(self):
         messages.success(self.request, 'Contrato excluído com sucesso!')
         return reverse_lazy("biddingContracts:contratos")
+
 
 # INDEX
 @login_required
@@ -249,11 +260,12 @@ def index(request):
 
 
 # View que Cria os fornecedores
-class BiddingFornecedor(LoginRequiredMixin, CreateView):
+class BiddingFornecedor(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Fornecedor
     form_class = formFornecedor
     template_name = 'fornecedor/fornecedor_new.html'
     success_url = reverse_lazy('biddingContracts:cadContrato')
+    permission_required = ["biddingContracts.add_fornecedor"]
 
 
 def fornecedor_new(request):
@@ -273,12 +285,38 @@ def fornecedor_new(request):
         return render(request, 'fornecedor/fornecedor_new.html', {'form': form})
 
 
-@login_required
 # View que lista os fornecedores
+@login_required
+@permission_required("biddingContracts.view_fornecedor")
 def listFornecedores(request):
     fornecedores = Fornecedor.objects.all()
     context = {"fornecedores": fornecedores}
     return render(request, "fornecedor/fornecedores.html", context)
+
+
+# View que edita os fornecedores
+class FornecedorUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    model=Fornecedor
+    template_name = "fornecedor/fornecedor_update.html"
+    form_class = formFornecedor
+    context_object_name = "fornecedor"
+    permission_required = ["biddingContracts.change_fornecedor"]
+
+
+    def form_valid(self, form):
+        messages.success(self.request, 'fornecedor editado com sucesso!')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Erro ao editar fornecedor. Verifique os campos do formulário.')
+        return render(self.request, self.template_name, {"form": form})
+
+    def get_success_url(self):
+        return reverse_lazy("biddingContracts:fornecedores")
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
 
 
 @login_required
@@ -309,7 +347,7 @@ def modal_licitacao(request):
 
 
 # View que faz o cadastro das licitações
-class BiddingCreateView(LoginRequiredMixin, CreateView):
+class BiddingCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     """
     Faz o cadastro das licitações
     """
@@ -317,6 +355,8 @@ class BiddingCreateView(LoginRequiredMixin, CreateView):
     form_class = formLicitacao
     template_name = 'licitacoes/licitacoes.html'
     message_success = 'Licitação criada com sucesso!'
+    permission_required = ["biddingContracts.add_licitacao"]
+    
 
     def get_success_url(self) -> str:
         messages.success(self.request, self.message_success)
@@ -324,13 +364,14 @@ class BiddingCreateView(LoginRequiredMixin, CreateView):
 
 
 # View que faz a listagem das licitações com a pesquisa 
-class ListBiddingView(LoginRequiredMixin, ListView):
+class ListBiddingView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     """
     Faz a listagem das licitações
     """
     model = Licitacao
     template_name = "licitacoes/list_licitacoes.html"
     context_object_name = "licitacoes"
+    permission_required = ["biddingContracts.view_licitacao"]
 
     # Adicionando filtros ao object_list através do get_queryset
     def get_queryset(self):
@@ -375,6 +416,7 @@ class ListBiddingView(LoginRequiredMixin, ListView):
 
 
 @login_required
+@permission_required("biddingContracts.add_ataregistropreco")
 # Função que cria as ARPs
 def createArp(request):
     if request.method == "POST":
@@ -397,19 +439,21 @@ def createArp(request):
 
 
 # View que lista as ARPs
-class listARPs(LoginRequiredMixin, ListView):
+class listARPs(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model=AtaRegistroPreco
     template_name='ARPs/atas.html'
     success_url= reverse_lazy('biddingContracts:atas')
     context_object_name = "atas"
+    permission_required = ["biddingContracts.view_ataregistropreco"]
 
 
 # View que edita ARPs
-class ARPsUpdate(LoginRequiredMixin, UpdateView):
+class ARPsUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model=AtaRegistroPreco
     template_name = "ARPs/ata_update.html"
     form_class = formARP
     context_object_name = "ata"
+    permission_required = ["biddingContracts.change_ataregistropreco"]
 
 
     def form_valid(self, form):
@@ -429,10 +473,11 @@ class ARPsUpdate(LoginRequiredMixin, UpdateView):
 
 
 # View que deleta as ARPs
-class ARPsDeleteView(LoginRequiredMixin, DeleteView):
+class ARPsDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = AtaRegistroPreco
     template_name = "ARPs/ata_delete.html"
     context_object_name = "ata"
+    permission_required =["biddingContracts.delete_ataregistropreco"]
 
     def get_success_url(self):
         messages.success(self.request, 'ARP excluída com sucesso!')
@@ -505,31 +550,6 @@ class BiddingUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
-
-
-
-# View que edita os fornecedores
-class FornecedorUpdate(LoginRequiredMixin, UpdateView):
-    model=Fornecedor
-    template_name = "fornecedor/fornecedor_update.html"
-    form_class = formFornecedor
-    context_object_name = "fornecedor"
-
-
-    def form_valid(self, form):
-        messages.success(self.request, 'fornecedor editado com sucesso!')
-        return super().form_valid(form)
-
-    def form_invalid(self, form):
-        messages.error(self.request, 'Erro ao editar fornecedor. Verifique os campos do formulário.')
-        return render(self.request, self.template_name, {"form": form})
-
-    def get_success_url(self):
-        return reverse_lazy("biddingContracts:fornecedores")
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
     
 
 # #view para salvar as licitações como pdf
@@ -550,11 +570,13 @@ class FornecedorUpdate(LoginRequiredMixin, UpdateView):
 
 
 # # View que cria as notas fiscais
-class NotaFiscal_new(LoginRequiredMixin, CreateView):
+class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model= NotaFiscal
     form_class = NotaFiscalForm
     template_name = "notafiscal/notaFiscal_new.html"
     success_url = reverse_lazy("biddingContracts:notasfiscais")
+    permission_required = ["biddingContracts.add_notafiscal"]
+
     def get_context_data(self, **kwargs):
         # Captura o valor de is_contract da URL
         context = super().get_context_data(**kwargs)
@@ -609,10 +631,12 @@ class NotaFiscal_new(LoginRequiredMixin, CreateView):
         
 
 # View que lista as Notas Fiscais
-class ListNfe(LoginRequiredMixin, ListView):
+class ListNfe(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = NotaFiscal
     template_name = "notafiscal/notasFiscais.html"
     success_url = reverse_lazy("biddingContracts:notasfiscais")
+    permission_required = ["biddingContracts.view_notafiscal"]
+
     def get_context_data(self, **kwargs):
         # Captura o valor de is_contract da URL
         context = super().get_context_data(**kwargs)
@@ -623,11 +647,12 @@ class ListNfe(LoginRequiredMixin, ListView):
 
 
 # View que edita as Notas fiscais
-class NotasFiscaisUpdate(LoginRequiredMixin, UpdateView):
+class NotasFiscaisUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model=NotaFiscal
     template_name = "notafiscal/notafiscal_update.html"
     form_class = NotaFiscalEditForm
     context_object_name = "notas"
+    permission_required = ["biddingContracts.change_notafiscal"]
 
 
     def form_valid(self, form):
@@ -660,17 +685,18 @@ class NotasFiscaisUpdate(LoginRequiredMixin, UpdateView):
         return context
     
 # View que deleta as Notas fiscais
-class NotesDeleteView(LoginRequiredMixin, DeleteView):
+class NotesDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = NotaFiscal
     template_name = "notafiscal/nota_delete.html"
     context_object_name = "note"
+    permission_required = ["biddingContracs.delete_notafiscal"]
 
     def get_success_url(self):
         messages.success(self.request, 'Nota Fiscal excluída com sucesso!')
         return reverse_lazy("biddingContracts:notasfiscais")
     
 # View que cria as secretarias
-class SecretaryNew(LoginRequiredMixin, CreateView):
+class SecretaryNew(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     """
     Faz o cadastro das Secretarias
     """
@@ -678,6 +704,7 @@ class SecretaryNew(LoginRequiredMixin, CreateView):
     form_class = formSecretaria
     template_name = 'secretaria/secretaria_new.html'
     message_success = 'Secretaria cadastrada com sucesso!'
+    permission_required = ["biddingContracts.add_secretaria"]
 
     def get_success_url(self) -> str:
         messages.success(self.request, self.message_success)
@@ -686,19 +713,22 @@ class SecretaryNew(LoginRequiredMixin, CreateView):
 
 
 # View que lista as Secretarias
-class ListSecretary(LoginRequiredMixin, ListView):
+class ListSecretary(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = Secretaria
     template_name = "secretaria/list_secretaria.html"
     success_url = reverse_lazy("biddingContracts:list_secretarias")
     context_object_name = "secretarias"
+    permission_required = ["biddingContracts.view_secretaria"]
 
 
 # View que deleta as Secretarias
-class SecretaryDeleteView(LoginRequiredMixin, DeleteView):
+class SecretaryDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Secretaria
     template_name = "secretaria/delete_secretaria.html"
     context_object_name = "sec"
+    permission_required = ["biddingContracts.delete_secretaria"]
 
     def get_success_url(self):
         messages.success(self.request, 'Secretaria excluída com sucesso!')
         return reverse_lazy("biddingContracts:list_secretarias")
+    

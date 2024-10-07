@@ -53,6 +53,7 @@
             </a>
         </li>
 
+        {% if perms.biddingContracts.add_secretaria %} <!-- Visualiza somente com a permissão de criar secretaria -->
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:new_secretaria' %}">
@@ -61,7 +62,9 @@
                 </a>
             </div>
         </li>
+        {% endif %}
 
+        {% if perms.biddingContracts.view_secretaria %}
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:list_secretarias' %}">
@@ -70,15 +73,18 @@
                 </a>
             </div>
         </li>
-
+        {% endif %}
+        
+        {% if perms.biddingContracts.add_contrato %} <!-- Visualiza somente com a permissão de criar contrato -->
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:cadContrato' fornecedor_id=0 %}">
                     <i class="fa-solid fa-file-contract" title="Criar Contratos"></i>
-                    <span class="nav-text text-white small">Criar Contratos</span>
+                    <span class="nav-text text-white small">Cadastrar Contratos</span>
                 </a>
             </div>
         </li>
+        {% endif %}
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:contratos' %}">
@@ -87,12 +93,13 @@
                 </a>
             </div>
         </li>
+        {% if perms.biddingContracts.add_notafiscal %}
         <!--cadastro de notas fiscais -->
         <!--colapse-->
         <li class="nav-item mb-3">
             <div  id="collapse-nf d-flex flex-column align-items-center" >
                 <div class="nav-link text-white ms-1">
-                    <i class="fa-solid fa-square-plus" data-bs-toggle="collapse" data-bs-target="#nota-fiscal" aria-expanded="false" aria-controls="nota-fiscal" style="cursor: pointer;"></i>
+                    <i class="fa-solid fa-n" data-bs-toggle="collapse" data-bs-target="#nota-fiscal" aria-expanded="false" aria-controls="nota-fiscal" style="cursor: pointer;"></i>
                     <span class="nav-text text-white small" data-bs-toggle="collapse" data-bs-target="#nota-fiscal" aria-expanded="false" aria-controls="nota-fiscal" style="cursor: pointer;">Notas Fiscais</span>
                 </div>
             </div>
@@ -103,31 +110,38 @@
                         <span class="nav-text text-white small"> nota fiscal (ARP)</span>
                     </a>
                     <a class="nav-link text-white" href="{% url 'biddingContracts:new_notas' 1 %}">
-                        <i class="fa-solid fa-square-plus" title="nova nota fiscal"></i>
+                        <i class="fa-regular fa-note-sticky" title="Nova Nota Fiscal Contrato"></i>
                         <span class="nav-text text-white small"> nota fiscal (contrato)</span>
                     </a>
                 </div>
             </div>
         </li>
         <!--fim do colapse -->
+        {% endif %}
+
+        {% if perms.biddingContracts.view_notafiscal %}
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:notasfiscais' 2 %}">
-                    <i class="fa-solid fa-file-invoice-dollar" title="Notas Fiscais"></i>
+                    <i class="fa-solid fa-list-ol" title="Listar Notas Fiscais"></i>
                     <span class="nav-text text-white small">Listar Notas Fiscais</span>
                 </a>
             </div>
         </li>
+        {% endif %}
     
+        {% if perms.biddingContracts.add_licitacao %}
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:create-bidding' %}">
-                    <i class="fa-solid fa-file" title="Cadastrar Licitação"></i> 
-                    <span class="nav-text text-white small">Cadastrar Licitação</span> 
+                    <i class="fa-solid fa-l" title="Cadastrar Licitações"></i> 
+                    <span class="nav-text text-white small">Cadastrar Licitações</span> 
                 </a>
             </div>
         </li>
+        {% endif %}
         
+        {% if perms.biddingContracts.view_licitacao %}
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:list_bidding' %}">
@@ -136,6 +150,9 @@
                 </a>
             </div>
         </li>
+        {% endif %}
+
+        {% if perms.biddingContracts.view_fornecedor %}
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white" href="{% url 'biddingContracts:fornecedores' %}">
@@ -144,18 +161,26 @@
                 </a>
             </div>
         </li>
+        {% endif %}
+
+        {% if perms.biddingContracts.add_ataregistropreco %}
         <li class="nav-item mb-3">
             <a class="nav-link text-white" href="{% url 'biddingContracts:create-ARP' %}">
-                <i class="fa-solid fa-registered" title="Criar Atas de Registro de Preços"></i>
+                <i class="fa-solid fa-a" title="Criar Atas de Registro de Preços"></i>
                 <span class="nav-text text-white small">Criar ARPs</span>
             </a>
         </li>
+        {% endif %}
+
+        {% if perms.biddingContracts.view_ataregistropreco %}
         <li class="nav-item mb-3">
             <a class="nav-link text-white" href="{% url 'biddingContracts:atas' %}">
                 <i class="fa-solid fa-book" title="Listar Atas de Registros de Preços"></i>
                 <span class="nav-text text-white small">Listar ARPs</span>
             </a>
         </li>
+        {% endif %}
+
         {% if user.is_authenticated %}
             <li class="nav-item mb-3">
                 <div class="d-flex flex-column align-items-center">

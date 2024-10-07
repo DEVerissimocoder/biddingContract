@@ -16,7 +16,11 @@
                         <table class="table">
                             <thead>
                                 <tr>
+                                    {% if perms.biddingContracts.change_fornecedor %}
                                     <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">AÇÃO</th>
+                                    {% else %}
+                                    <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">AÇÃO</th>
+                                    {% endif %}
                                     <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">#</th>
                                     <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">NOME</th>
                                     <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">RUA</th>
@@ -29,11 +33,13 @@
                             
                                     <tr>
                                         <td>
+                                            {% if perms.biddingContracts.change_fornecedor %}
                                             <ul class="nav">
                                                 <li class="nav-item">
                                                     <a href="{% url 'biddingContracts:updateforn' fornecedor.id %}" data-id="{{ fornecedor.id }}" class="nav-link active bot-fornecedor" aria-current="page" data-bs-toggle="modal" data-bs-target="#modal-upd-forn">editar</a>
                                                 </li>
                                             </ul>
+                                            {% endif %}
                                             <div class="modal fade" id="modal-upd-forn" aria-labelledby="head-mod-upd" aria-hidden="True">
                                                 <div class="modal-dialog modal-dialog-centered">
                                                     <div class="modal-content">
@@ -85,12 +91,15 @@
                         </table>
                     </div>
                 </div>
-            </div>
-        </div>
-        {% else %}
-            <p class="text-center">Nenhum fornecedor encontrado!</p>
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center align-items-center mt-0">
+                {% if perms.biddingContracts.add_fornecedor %}
                 <a class="btn btn-success me-4" href="{% url "biddingContracts:fornecedor_new" %}">Cadastrar Fornecedor</a>
+                {% endif %}
+                <a class="btn btn-secondary" href="{% url "biddingContracts:index" %}">Voltar</a>
+            </div>
+        {% else %}
+            <div class="d-flex justify-content-center align-items-center">
+                <p class="text-center text-uppercase text-dark">Nenhum fornecedor encontrado!</p>
                 <a class="btn btn-secondary" href="{% url "biddingContracts:index" %}">Voltar</a>
             </div>
         {% endif %}

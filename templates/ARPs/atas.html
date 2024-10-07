@@ -23,8 +23,12 @@
                       <a class="text-primary" style="text-decoration: none;" href="{% url 'biddingContracts:relatorioARP' ata.pk %}"> Mais informações </a>
                     </div>
                     <div class="d-flex gap-3">
+                        {% if perms.biddingContracts.change_ataregistropreco %}
                       <a class="btn btn-outline-info" href="{% url "biddingContracts:updateARP" ata.pk %}">Editar</a>
+                        {% endif %}
+                        {% if perms.biddingContracts.delete_ataregistropreco %}
                       <a class="btn btn-outline-danger" href="{% url "biddingContracts:deleteARP" ata.pk %}">Deletar</a>
+                      {% endif %}
                     </div>
                 </div>   
             </div>  

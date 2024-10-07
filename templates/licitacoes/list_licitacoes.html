@@ -11,6 +11,7 @@
         <h1 class="text-center mt-2 text-muted">Lista de licitações</h1>
         {% include "messages.html" %}
 
+        {% if licitacoes %}
         <nav class="navbar navbar-expand-lg mt-3 mb-3"> <!-- Início do navbar -->
             <div class="container-fluid">
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -155,21 +156,25 @@
                     </div>
                 </div>
             </div>
-        {% empty %}
+        {% endfor %}
+        </ul>
+        <div class="d-flex mt-4 justify-content-center mb-3">
+            <a class="btn btn-secondary " href="{% url 'biddingContracts:index' %}">Voltar</a>
+            {% if perms.biddingContracts.add_licitacao %}
+            <a class="btn btn-success ms-2" href="{% url 'biddingContracts:create-bidding' %}">Criar Licitação</a>
+            {% endif %}
+            {% comment %} <a class="btn btn-danger flex-row-reverse" href="{% url 'biddingContracts:export-pdf' %}">ExportPDF</a> {% endcomment %}
+        </div>
+        {% else %}
             <h2 class="text-center text-uppercase">Sem licitações cadastradas</h2>
             <div class="d-flex mt-4 justify-content-center mb-3">
                 <a class="btn btn-secondary " href="{% url 'biddingContracts:list_bidding' %}">Voltar</a>
+                {% if perms.biddingContracts.add_licitacao %}
                 <a class="btn btn-success ms-2" href="{% url 'biddingContracts:create-bidding' %}">Criar Licitação</a>
+                {% endif %}
                 {% comment %} <a class="btn btn-danger flex-row-reverse" href="{% url 'biddingContracts:export-pdf' %}">ExportPDF</a> {% endcomment %}
             </div>
-        {% endfor %}
-        </ul>
-        {% if licitacao %}
-        <div class="d-flex mt-4 justify-content-center mb-3">
-            <a class="btn btn-secondary " href="{% url 'biddingContracts:index' %}">Voltar</a>
-            <a class="btn btn-success ms-2" href="{% url 'biddingContracts:create-bidding' %}">Criar Licitação</a>
-            {% comment %} <a class="btn btn-danger flex-row-reverse" href="{% url 'biddingContracts:export-pdf' %}">ExportPDF</a> {% endcomment %}
-        </div>
+        
         {% endif %}
     </div>
 </div>

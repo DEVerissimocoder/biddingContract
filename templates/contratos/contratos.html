@@ -166,8 +166,12 @@
                         {% if contrato.is_vencido %}
                         <!-- Não exibir botão, pois o contrato está vencido -->
                         {% else %}
+                        {% if perms.biddingContracts.change_contrato %}
                         <a href="{% url 'biddingContracts:update_contracts' contrato.pk %}" class="btn btn-sm btn-outline-info ml-3 ms-2">Editar</a>
+                        {% endif %}
+                        {% if perms.biddingContracts.delete_contrato %}
                         <a href="{% url "biddingContracts:delete_contracts" contrato.pk %}" class="btn btn-sm btn-outline-danger ml-3 ms-2">Deletar</a>
+                        {% endif %}
                         {% endif %}
                     </div>
                 </div>
@@ -179,7 +183,9 @@
         {% endif %}
         <div class="d-flex justify-content-center">
             <a class="btn btn-secondary mt-2" href="{% url "biddingContracts:index" %}">Voltar</a>
+            {% if perms.biddingContracts.add_contrato %}
             <a class="btn btn-success mt-2 ms-4" href="{% url "biddingContracts:cadContrato" 0 %}">Criar contratos</a>
+            {% endif %}
         </div>
     </div>
 </div>
