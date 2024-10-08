@@ -99,6 +99,14 @@ class ListContractsView(PermissionRequiredMixin, ListView):
         txt_fornecedor = self.request.GET.get("fornecedor")
         txt_licitacao = self.request.GET.get("licitacao")
         filter_expired = self.request.GET.get('search') == 'on'
+        valor = self.request.GET.get("valor")
+
+        if valor == "0":
+            return Contrato.objects.filter(valor=0)
+        if self.kwargs.get("zerados"):
+
+            return Contrato.objects.filter(valor=0)
+
         
         # Filtro de contratos vencidos
         if filter_expired:
@@ -136,6 +144,12 @@ class ListContractsView(PermissionRequiredMixin, ListView):
 
         return context
 
+def contrato_zerado(request):
+    zerado = Contrato.objects.filter(valor__lte=0)
+    context = {
+        "zerados": zerado
+    }
+    return render(request, "contratos/contratos_zerados.html", context)
 
 # View que atualiza os contratos
 class ContractsUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
@@ -246,11 +260,13 @@ def index(request):
         notas_fiscais = NotaFiscal.objects.all()
         arp = AtaRegistroPreco.objects.all()
         vencidos = Contrato.objects.filter(dataFinal__lt=timezone.now().date())
+        zerados = Contrato.objects.filter(valor__lte=0)
         context = {
             'contratos': contratos,
             'licitacoes': licitacoes,
             'notas_fiscais': notas_fiscais,
             'vencidos': vencidos,
+            'zerados': zerados,
             'arps': arp
         }
         # nome_usuario = request.user.username.title()
@@ -723,27 +739,36 @@ class ListSecretary(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     permission_required = ["biddingContracts.view_secretaria"]
 
 
- # View que edita as secretarias ***********
-class BiddingUpdateView(LoginRequiredMixin, UpdateView):
+ # View que edita as secretarias 
+class SecretaryUpdateView(LoginRequiredMixin, UpdateView):
     model = Secretaria
-    template_name = "licitacoes/edit_licitacoes.html"
-    form_class = formLicitacao
-    context_object_name = "licitacao"
+    template_name = "secretaria/edit_secretarias.html"
+    form_class = formSecretaria
+    context_object_name = "secretaria"
 
     def form_valid(self, form):
-        messages.success(self.request, 'Licitação editada com sucesso!')
+        messages.success(self.request, 'Secretaria editada com sucesso!')
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        messages.error(self.request, 'Erro ao editar licitação. Verifique os campos do formulário.')
+        messages.error(self.request, 'Erro ao editar secretaria. Verifique os campos do formulário.')
         return render(self.request, self.template_name, {"form": form})
 
     def get_success_url(self):
-        return reverse_lazy("biddingContracts:list_bidding")
+        return reverse_lazy("biddingContracts:list_secretarias")
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+    
+    
+@login_required
+# View que mostra fornecedor em um modal
+def modal_secretaria(request):
+    "mostra fornecedor em um modal"
+    secretarias = Secretaria.objects.all()
+    context = {"secretarias": secretarias}
+    return render(request, "secretaria/modal_secretaria.html", context)
 
 
 # View que deleta as Secretarias

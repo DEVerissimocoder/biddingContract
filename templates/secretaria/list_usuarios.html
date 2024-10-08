@@ -1,6 +1,6 @@
 {% extends "base_template.html" %}
 {% load static %}
-{% block title %} Fornecedores  {% endblock %}
+{% block title %} Usuários da secretarias  {% endblock %}
 
 
 
@@ -9,8 +9,8 @@
     {% include "sidebar.html" %}
     <div class="container my-5">
         {% include "messages.html" %}
-        <h2 class="text-center mb-4">Lista de Secretarias</h2>
-        {% if secretarias %}
+        <h2 class="text-center mb-4">Lista de Usuários das Secretarias</h2>
+        {% if usuarios %}
                 <div class="row">
                     <div class="col-md-12">
                         <table class="table">
@@ -18,20 +18,21 @@
                                 <tr>
                                     <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">AÇÃO</th>
                                     <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">#</th>
-                                    <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">NOME</th>
+                                    <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">USERNAME</th>
+                                    <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">EMAIL</th>
                                 </tr>                               
                             </thead>
                             <tbody>
-                                {% for sec in secretarias %} 
+                                {% for user in usuarios %} 
                             
                                     <tr>
                                         <td>
                                             <ul class="nav">
                                                 <li class="nav-item">
                                                     <div class="d-flex align-items-center">
-                                                        <a href="{% url 'biddingContracts:update_secretaria' sec.id %}" data-id="{{ sec.id }}" class="nav-link active bot-secretaria" aria-current="page" data-bs-toggle="modal" data-bs-target="#modal-upd-sec">Editar</a>
+                                                        <a href="{% url 'biddingContracts:update_secretaria' user.id %}" data-id="{{ user.id }}" class="nav-link active bot-secretaria" aria-current="page" data-bs-toggle="modal" data-bs-target="#modal-upd-sec">Editar</a>
                                                         {% if perms.biddingContracts.delete_secretaria %}
-                                                        <a class="text-danger" style="text-decoration:none;" href="{% url "biddingContracts:del_secretaria" sec.id %}">Deletar</a>
+                                                        <a class="text-danger" style="text-decoration:none;" href="{ url "biddingContracts:del_secretaria" sec.id %}">Deletar</a>
                                                         {% endif %}
                                                     </div>  
                                                 </li>
@@ -47,10 +48,6 @@
                                                         <div class="modal-body" id="modal-body-sec-upd">
                                                             formulario de update aparece aqui 
                                                         </div>
-                                                        <!--<div class="modal-footer">
-                                                            <button class="btn btn-secondary"  id="cancel-upd" data-bs-dismiss="modal"> cancelar</button>
-                                                            <button class="btn btn-primary" id="confirm-upd"> salvar</button>
-                                                        </div>-->
                                                     </div>
                                                 </div>
                                             </div>
@@ -58,7 +55,10 @@
                                         <th class="align-align-middle" scope="row">{{forloop.counter}}
                                         </th>
                                         <td class="align-align-middle" style="font-size:14px;">
-                                            {{ sec.nome }}
+                                            {{ user.username }}
+                                        </td>
+                                        <td class="align-align-middle" style="font-size:14px;">
+                                            {{ user.email }}
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -69,12 +69,12 @@
         
             <div class="d-flex justify-content-center">
                 {% if perms.biddingContracts.add_secretaria %}
-                <a class="btn btn-success me-4" href="{% url "biddingContracts:new_secretaria" %}">Cadastrar Secretaria</a>
+                <a class="btn btn-success me-4" href="{% url "usuarios:cad_user" %}">Cadastrar Novo usuário secretaria</a>
                 {% endif %}
                 <a class="btn btn-secondary" href="{% url "biddingContracts:index" %}">Voltar</a>
             </div>
             {% else %}
-            <p class="text-center">Nenhuma secretaria encontrada!</p>
+            <p class="text-center">Nenhum usuário das secretarias encontrado!</p>
             <a class="btn btn-secondary" href="{% url "biddingContracts:index" %}">Voltar</a>
         {% endif %}
     </div>

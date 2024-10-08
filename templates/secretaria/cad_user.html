@@ -1,0 +1,78 @@
+{% extends "base_template.html" %}
+{% block title %} Cadastro de Usuário Secretaria {% endblock title %}
+
+{% block content %}
+<div class="d-flex">
+    {% include "sidebar.html" %}
+    <div class="d-flex justify-content-center align-items-center w-100">
+        <div class="card w-100" style="max-width: 900px;"> <!-- Ajuste a largura máxima aqui -->
+            {% include "messages.html" %}
+            <div class="card-header bg-dark text-white">
+                <h5 class="card-title text-center mb-0">Cadastro de Usuário da Secretaria</h5>
+            </div>
+            <div class="card-body">
+                <form action="" method="POST" class="d-flex flex-column">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="{{ form.nome_cadastro.id_for_label }}" class="form-label">{{ form.nome_cadastro.label }}</label>
+                        {{ form.nome_cadastro }} 
+                        <p class="text-muted text-uppercase"><strong>Esse será o login de acesso do usuário!</strong></p>
+                        {% if form.nome_cadastro.errors %}
+                            <div class="text-danger">{{ form.nome_cadastro.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }}</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="text-danger">{{ form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.senha.id_for_label }}" class="form-label">{{ form.senha.label }}</label>
+                            {{ form.senha }}
+                            {% if form.senha.errors %}
+                                <div class="text-danger">{{ form.senha.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.senha_confirme.id_for_label }}" class="form-label">{{ form.senha_confirme.label }}</label>
+                            {{ form.senha_confirme }}
+                            {% if form.senha_confirme.errors %}
+                                <div class="text-danger">{{ form.senha_confirme.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% if form.secretaria %}
+                        <div class="mb-3">
+                            <label for="{{ form.secretaria.id_for_label }}" class="form-label">{{ form.secretaria.label }}</label>
+                            {{ form.secretaria }}
+                            {% if form.secretaria.errors %}
+                                <div class="text-danger">{{ form.secretaria.errors }}</div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary w-100">Enviar</button>
+                        <a href="{% url "usuarios:login" %}" class="btn btn-secondary w-100 mt-2">Voltar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-mask-plugin@1.14.16/dist/jquery.mask.min.js"></script>
+
+<script>
+    // Caso precise adicionar alguma funcionalidade com jQuery
+</script>
+
+{% endblock content %}

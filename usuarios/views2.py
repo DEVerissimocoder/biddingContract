@@ -4,13 +4,20 @@ from usuarios.forms2 import  CadastroForms, CustomLoginForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib import messages, auth
+from django.views.generic import ListView
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.decorators import permission_required
+from django.shortcuts import get_object_or_404
+from biddingContracts.models import Secretaria
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 def login(request):
     form = CustomLoginForm()
 
     if request.method == 'POST':
-        form = CustomLoginForm(request.POST)
+        form = CadastroForms(request.POST, mostrar_secretaria=False)
 
         if form.is_valid():
             username = form["username"].value()
@@ -21,10 +28,9 @@ def login(request):
                 username=username,
                 password=password
             )
-            if usuario is not None and usuario.is_active:
+            if  usuario.is_active:
                 aviso = 'Login efetuado com sucesso!'
                 auth.login(request, usuario)
-                messages.add_message(request, messages.INFO, 'Mensagem de teste')
                 messages.success(request, aviso)
                 return redirect('index')  # Redireciona para a página inicial após login bem-sucedido
             else:
@@ -41,10 +47,10 @@ def login(request):
 
 
 def cadastro(request):
-    form = CadastroForms()
+    form = CadastroForms(mostrar_secretaria=False)
 
     if request.method == 'POST':
-        form = CadastroForms(request.POST)
+        form = CadastroForms(mostrar_secretaria=True)
 
         if form.is_valid():
             
@@ -76,9 +82,54 @@ def cadastro(request):
     return render(request, "registration/cadastro.html", {"form": form})
 
 
+@permission_required("usuarios:add_user")
+def cadastro_secretaria(request):
+    form = CadastroForms(mostrar_secretaria=True)
+    
+    if request.method == "POST":
+        form = CadastroForms(request.POST, mostrar_secretaria=True)
+        
+        if form.is_valid():
+            nome = form.cleaned_data["nome_cadastro"]
+            email = form.cleaned_data["email"]
+            senha = form.cleaned_data["senha"]
+            secretaria = form.cleaned_data.get("secretaria")
+
+            
+            if User.objects.filter(username=nome).exists():
+                messages.error(request, "Usuário já existe, insira outro nome de usuário")
+                return render(request, "secretaria/cad_user.html", {"form": form})
+            
+            if User.objects.filter(email=email).exists():
+                messages.error(request, "Email já cadastrado, use outro!")
+                return render(request, "secretaria/cad_user.html", {"form": form})
+            
+            usuario = User.objects.create_user(
+                username=nome,
+                email=email,
+                password=senha
+            )
+            secretaria.usuario = usuario
+            usuario.is_in_secretaria = True  # Add this line
+            usuario.save()
+            aviso = 'Cadastro efetuado com sucesso!'
+            messages.success(request, aviso)
+            return redirect('usuarios:list_member')
+    
+    return render(request, "secretaria/cad_user.html", {"form": form})
+
+
+
+
 def logout(request):
     auth.logout(request)
     messages.success(request, "Deslogado com sucesso!")
     return redirect('login')
 
+class ListMemberView(ListView):
+    model = User
+    template_name = "secretaria/list_usuarios.html"
+    context_object_name = "usuarios"
+
+    
 

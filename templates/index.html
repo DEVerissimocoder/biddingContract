@@ -152,13 +152,26 @@ Inicial {% endblock %} {% block content %}
 
             <div class="small-box bg-danger">
               <div class="icon">
-                <i class="fa-solid fa-file-excel"></i>
+                <i class="fa-solid fa-business-time"></i>
               </div>
               <div class="inner">
                 <h3>{{vencidos.count}}</h3>
                 <p>Contratos Vencidos</p>
               </div>
               <a href="{% url "biddingContracts:contratos"%}?search=on" class="small-box-footer"
+                >Mais informações <i class="fas fa-arrow-circle-right"></i
+              ></a>
+            </div>
+            
+            <div class="small-box bg-maroon">
+              <div class="icon">
+                <i class="fa-solid fa-file-excel"></i>
+              </div>
+              <div class="inner">
+                <h3>{{zerados.count}}</h3>
+                <p>Contratos sem Saldo</p>
+              </div>
+              <a href="{% url "biddingContracts:contratos" %}?valor=0" class="small-box-footer"
                 >Mais informações <i class="fas fa-arrow-circle-right"></i
               ></a>
             </div>

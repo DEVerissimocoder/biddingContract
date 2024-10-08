@@ -263,7 +263,8 @@ class formARP(forms.ModelForm):
                 attrs={
                     "type": "text",
                     "class": "form-control",
-                    "placeholder": "Número Ata de Registro de Preços"
+                    "placeholder": "Número Ata de Registro de Preços",
+                    "id": "num"
                 }
             ),
             "assuntoDetalhado": forms.Textarea(
@@ -284,6 +285,7 @@ class formARP(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "placeholder": "Valor da Ata de Registro de Preços",
+                    "id": "valor"
                 }
             ),
 
