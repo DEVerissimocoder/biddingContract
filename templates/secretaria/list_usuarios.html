@@ -1,0 +1,101 @@
+{% extends "base_template.html" %}
+{% load static %}
+{% block title %} Usuários da secretarias  {% endblock %}
+
+
+
+{% block content %}
+<div class="d-flex">
+    {% include "sidebar.html" %}
+    <div class="container my-5">
+        {% include "messages.html" %}
+        <h2 class="text-center mb-4">Lista de Usuários das Secretarias</h2>
+        {% if usuarios %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">AÇÃO</th>
+                                    <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">#</th>
+                                    <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">USERNAME</th>
+                                    <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">EMAIL</th>
+                                </tr>                               
+                            </thead>
+                            <tbody>
+                                {% for user in usuarios %} 
+                            
+                                    <tr>
+                                        <td>
+                                            <ul class="nav">
+                                                <li class="nav-item">
+                                                    <div class="d-flex align-items-center">
+                                                        <a href="{% url 'biddingContracts:update_secretaria' user.id %}" data-id="{{ user.id }}" class="nav-link active bot-secretaria" aria-current="page" data-bs-toggle="modal" data-bs-target="#modal-upd-sec">Editar</a>
+                                                        {% if perms.biddingContracts.delete_secretaria %}
+                                                        <a class="text-danger" style="text-decoration:none;" href="{ url "biddingContracts:del_secretaria" sec.id %}">Deletar</a>
+                                                        {% endif %}
+                                                    </div>  
+                                                </li>
+                                            </ul>
+                                            <div class="modal fade" id="modal-upd-sec" aria-labelledby="head-mod-upd" aria-hidden="True">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 id="head-mod-upd">Alteração dos dados da secretaria</h5>
+                                                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="close" ></button>
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </div>
+                                                        <div class="modal-body" id="modal-body-sec-upd">
+                                                            formulario de update aparece aqui 
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>        
+                                        <th class="align-align-middle" scope="row">{{forloop.counter}}
+                                        </th>
+                                        <td class="align-align-middle" style="font-size:14px;">
+                                            {{ user.username }}
+                                        </td>
+                                        <td class="align-align-middle" style="font-size:14px;">
+                                            {{ user.email }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        
+            <div class="d-flex justify-content-center">
+                {% if perms.biddingContracts.add_secretaria %}
+                <a class="btn btn-success me-4" href="{% url "usuarios:cad_user" %}">Cadastrar Novo usuário secretaria</a>
+                {% endif %}
+                <a class="btn btn-secondary" href="{% url "biddingContracts:index" %}">Voltar</a>
+            </div>
+            {% else %}
+            <p class="text-center">Nenhum usuário das secretarias encontrado!</p>
+            <a class="btn btn-secondary" href="{% url "biddingContracts:index" %}">Voltar</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        document.querySelectorAll('.bot-secretaria').forEach(function(element){
+            element.addEventListener('click', function(){
+                var secretaria_id = this.getAttribute("data-id")
+                console.log(secretaria_id);
+                fetch("{% url 'biddingContracts:update_secretaria' 0 %}".replace(0, secretaria_id))
+                .then(response => response.text())
+                .then(data=>{
+                document.getElementById("modal-body-sec-upd").innerHTML = data;
+                });
+            });
+        });  
+    </script>
+{% endblock %}
+
+
+
