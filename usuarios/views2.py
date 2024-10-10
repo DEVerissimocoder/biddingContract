@@ -95,28 +95,33 @@ def cadastro_secretaria(request):
             senha = form.cleaned_data["senha"]
             secretaria = form.cleaned_data.get("secretaria")
 
-            
+            # Verifica se já existe o usuário
             if User.objects.filter(username=nome).exists():
                 messages.error(request, "Usuário já existe, insira outro nome de usuário")
                 return render(request, "secretaria/cad_user.html", {"form": form})
             
+            # Verifica se já existe o email
             if User.objects.filter(email=email).exists():
                 messages.error(request, "Email já cadastrado, use outro!")
                 return render(request, "secretaria/cad_user.html", {"form": form})
             
+            # Cria o novo usuário
             usuario = User.objects.create_user(
                 username=nome,
                 email=email,
                 password=senha
             )
-            secretaria.usuario = usuario
-            usuario.is_in_secretaria = True  # Add this line
-            usuario.save()
-            aviso = 'Cadastro efetuado com sucesso!'
-            messages.success(request, aviso)
+
+            # Associa a secretaria ao usuário, se houver
+            if secretaria:
+                secretaria.usuario = usuario
+                secretaria.save()
+
+            messages.success(request, 'Cadastro efetuado com sucesso!')
             return redirect('usuarios:list_member')
     
     return render(request, "secretaria/cad_user.html", {"form": form})
+
 
 
 

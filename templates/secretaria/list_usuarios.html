@@ -20,6 +20,7 @@
                                     <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">#</th>
                                     <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">USERNAME</th>
                                     <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">EMAIL</th>
+                                    <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">SECRETARIA</th>
                                 </tr>                               
                             </thead>
                             <tbody>
@@ -59,6 +60,13 @@
                                         </td>
                                         <td class="align-align-middle" style="font-size:14px;">
                                             {{ user.email }}
+                                        </td>
+                                        <td class="align-align-middle" style="font-size:14px;">
+                                            {% if user.secretaria %}
+                                            {{ user.secretaria }}
+                                            {% else %}
+                                            -------
+                                            {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}
