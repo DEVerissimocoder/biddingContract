@@ -604,51 +604,67 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         context['is_contract'] = is_contract
         return context
     
-    def valid_NF_valor(form, is_contract):
-        if is_contract==1:
-            print("nota fiscal - contrato")
-            contrato = Contrato.objects.get(numero=form.cleaned_data['contrato_fk'])
-            #pega do banco todas as notas fiscais relacionado ao contrato em questão
-            notasfiscais = NotaFiscal.objects.filter(contrato_fk_id = contrato.id)
-            #soma os valores das notas fiscais do contrato, que já estão armazenadas no banco, mais a nota que está tentando cadastrar
-            soma = sum(nota.valor for nota in notasfiscais) + form.cleaned_data.get('valor')
-            # valida se o resultado da soma ultrapassa o valor total do contrato.
-            if soma > contrato.valor:
-                return "NÃO FOI POSSÍVEL CADASTRAR A NOTA FISCAL, VALOR DA NOTA MAIOR DO QUE O SALDO RESTANTE DO CONTRATO"
-            
-            return None
+    def valid_NF_valor(self, numContrato, valorNFform):
+        print("nota fiscal - contrato")
+        contrato = self.searchContractByNum(numContrato)
+        #pega do banco todas as notas fiscais relacionado ao contrato em questão
+        notasfiscais = NotaFiscal.objects.filter(contrato_fk_id = contrato.id)
+        #soma os valores das notas fiscais do contrato, que já estão armazenadas no banco, mais a nota que está tentando cadastrar
+        soma = sum(nota.valor for nota in notasfiscais) + valorNFform
+        # valida se o resultado da soma ultrapassa o valor total do contrato.
+        if soma > contrato.valor:
+            msg_valor="NÃO FOI POSSÍVEL CADASTRAR A NOTA FISCAL, VALOR DA NOTA MAIOR DO QUE O SALDO RESTANTE DO CONTRATO"
+            messages.add_message(self.request, messages.ERROR, msg_valor)
+            return True
+
+        return False
+        
+    def valid_NF_vigencia(self, numContracto):
+        hoje = datetime.today().date()
+        #pega do banco todas as notas fiscais relacionado ao contrato em questão
+        contrato = self.searchContractByNum(numContracto)
+        if contrato.dataFinal<hoje:
+            msg_vigencia = "NÃO FOI POSSIVEL CADASTRAR NOTAS, CONSULTE O PRAZO RESTANTE DO CONTRATO"
+            messages.add_message(self.request, messages.ERROR, msg_vigencia)
+            return True
+        
+        return False
+        
+    
+    def searchContractByNum(self, numContrato):
+        contrato = Contrato.objects.get(numero=numContrato)
+        return contrato
     
     def form_valid(self, form):
-        
         is_contract = self.kwargs['is_contract']
-        hoje = datetime.today().date()
-        mensagem = self.valid_NF_valor(form, is_contract)
-        if mensagem:
-            messages.add_message(self.request, messages.ERROR, mensagem)
-            return HttpResponseRedirect(reverse('biddingContracts:new_notas', kwargs={'is_contract': is_contract}))
-            #verificação da data de vigência
-            elif contrato.dataFinal<hoje:
-                messages.add_message(self.request, messages.ERROR, "NÃO FOI POSSIVEL CADASTRAR NOTAS, CONSULTE O PRAZO RESTANTE DO CONTRATO")
+        if is_contract ==1:
+            numContrato = form.cleaned_data['contrato_fk']
+            valorNFform = form.cleaned_data.get('valor')
+            print("valorNF =", valorNFform)
+            print("numContrato:", numContrato)
+            valid_valor = self.valid_NF_valor(numContrato, valorNFform)
+            valid_vigencia = self.valid_NF_vigencia(numContrato) 
+            if valid_valor:
+                return HttpResponseRedirect(reverse('biddingContracts:new_notas', kwargs={'is_contract': is_contract}))
+            elif valid_vigencia:
                 return HttpResponseRedirect(reverse("biddingContracts:new_notas", kwargs={'is_contract': is_contract}))
             else:
-                
                 form.save()
                 messages.add_message(self.request, messages.SUCCESS, "SALVO COM SUCESSO")
                 return HttpResponseRedirect(reverse('biddingContracts:notasfiscais', kwargs={'is_contract': is_contract}))
+        
         else:
             print("notafiscal - ata de registro de preços")
             arp = AtaRegistroPreco.objects.get(numero=form.cleaned_data['ataregistropreco_fk'])
-
             #pega do banco todas as notas fiscais relacionado a ARP em questão
             notasfiscais = NotaFiscal.objects.filter(ataregistropreco_fk_id = arp.id)
             soma = sum(nota.valor for nota in notasfiscais) + form.cleaned_data.get('valor')
-        
             # valida se o resultado da soma ultrapassa o valor total da ARP
             if soma > arp.valor:
                 messages.add_message(self.request, messages.INFO, "NÃO FOI POSSÍVEL CADASTRAR A NOTA FISCAL, VALOR DA NOTA MAIOR DO QUE O SALDO RESTANTE DA ATA DE REGISTRO DE PREÇOS")
                 return HttpResponseRedirect(reverse('biddingContracts:new_notas', kwargs={'is_contract': is_contract}))
             #verificação da data de vigência
-            if arp.dataFinal<hoje:
+            if arp.dataFinal<0:
                 messages.add_message(self.request, messages.INFO, "NÃO FOI POSSIVEL CADASTRAR NOTAS, ATA DE REGISTRO DE PREÇOS COM VALIDADE VENCIDA")
                 return HttpResponseRedirect(reverse("biddingContracts:new_notas", kwargs={'is_contract': is_contract}))
             # se tiver tudo certo salve os dados.
