@@ -160,9 +160,12 @@ class DetailMemberView(DetailView, PermissionRequiredMixin):
         email_form = UpdateEmailForm(request.POST, instance=user)
 
         if email_form.is_valid():
+            user = self.request.user
             email_form.save()
-            return redirect('usuario_perfil')  # Redireciona após a atualização bem-sucedida
+            messages.success(request, "Dados atualizados com sucesso!")
+            return redirect('usuarios:detail_member', user.pk)  # Redireciona após a atualização bem-sucedida
 
+        messages.error(request, "Dados inválidos, por favor verifique os dados!")
         return self.render_to_response(self.get_context_data(email_form=email_form))
     
     
