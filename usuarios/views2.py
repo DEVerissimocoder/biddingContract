@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 from django. urls import reverse_lazy
-from usuarios.forms2 import  CadastroForms, CustomLoginForm
+from usuarios.forms2 import  CadastroForms, CustomLoginForm, UpdateEmailForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib import messages, auth
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.decorators import permission_required
 from django.shortcuts import get_object_or_404
@@ -140,4 +140,33 @@ class ListMemberView(ListView, PermissionRequiredMixin):
     permission_required = ["auth.view_user"]
 
     
+class DetailMemberView(DetailView, PermissionRequiredMixin):
+    model = User
+    template_name = "usuario/detalhe_usuario.html"
+    context_object_name = "usuario"
+    permission_required = ["auth.view_user"]
 
+    def get_object(self):
+        # Exibe o usuário logado
+        return self.request.user
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['email_form'] = UpdateEmailForm(instance=self.request.user)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        user = self.get_object()
+        email_form = UpdateEmailForm(request.POST, instance=user)
+
+        if email_form.is_valid():
+            email_form.save()
+            return redirect('usuario_perfil')  # Redireciona após a atualização bem-sucedida
+
+        return self.render_to_response(self.get_context_data(email_form=email_form))
+    
+    
+
+    
+    
+    

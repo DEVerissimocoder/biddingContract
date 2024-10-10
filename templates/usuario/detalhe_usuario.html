@@ -1,0 +1,28 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+  <div class="container">
+    <h2>Perfil do Usuário</h2>
+    <table class="table table-bordered">
+      <tr>
+        <th>Nome de Usuário</th>
+        <td>{{ usuario.username }}</td>
+      </tr>
+      <tr>
+        <th>Email Atual</th>
+        <td>{{ usuario.email }}</td>
+      </tr>
+      <tr>
+        <th>Alterar Senha</th>
+        <td><a href="{% url 'usuarios:password_reset' %}">Alterar Senha</a></td>
+      </tr>
+    </table>
+
+    <h3>Alterar Email</h3>
+    <form method="post">
+      {% csrf_token %}
+      {{ email_form.as_p }}
+      <button type="submit" class="btn btn-primary">Atualizar Email</button>
+    </form>
+  </div>
+{% endblock %}

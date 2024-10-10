@@ -53,6 +53,19 @@
             </a>
         </li>
 
+        {% comment %} <a href="{% url "usuarios:detail_member" user.pk %}">teste</a> {% endcomment %}
+
+    
+        <li class="nav-item mb-3">
+            <div class="d-flex flex-column align-items-center">
+                <a class="nav-link text-white" href="{% url "usuarios:detail_member" user.pk %}">
+                    <i class="fa-solid fa-user" title="Menu Pessoal"></i> 
+                    <span class="nav-text text-white small">Menu do usuário</span> 
+                </a>
+            </div>
+        </li>
+       
+
         {% if perms.auth.add_user %} <!-- Visualiza somente com a permissão de criar secretaria -->
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
