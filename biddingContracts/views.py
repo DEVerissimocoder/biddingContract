@@ -596,6 +596,7 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     permission_required = ["biddingContracts.add_notafiscal"]
 
     def get_context_data(self, **kwargs):
+        
         # Captura o valor de is_contract da URL
         context = super().get_context_data(**kwargs)
         is_contract = self.kwargs['is_contract']
@@ -603,9 +604,7 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         context['is_contract'] = is_contract
         return context
     
-    def form_valid(self, form):
-        is_contract = self.kwargs['is_contract']
-        hoje = datetime.today().date()
+    def valid_NF_valor(form, is_contract):
         if is_contract==1:
             print("nota fiscal - contrato")
             contrato = Contrato.objects.get(numero=form.cleaned_data['contrato_fk'])
@@ -613,16 +612,26 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
             notasfiscais = NotaFiscal.objects.filter(contrato_fk_id = contrato.id)
             #soma os valores das notas fiscais do contrato, que já estão armazenadas no banco, mais a nota que está tentando cadastrar
             soma = sum(nota.valor for nota in notasfiscais) + form.cleaned_data.get('valor')
-        
             # valida se o resultado da soma ultrapassa o valor total do contrato.
             if soma > contrato.valor:
-                messages.add_message(self.request, messages.ERROR, "NÃO FOI POSSÍVEL CADASTRAR A NOTA FISCAL, VALOR DA NOTA MAIOR DO QUE O SALDO RESTANTO DO CONTRATO")
-                return HttpResponseRedirect(reverse('biddingContracts:new_notas', kwargs={'is_contract': is_contract}))
+                return "NÃO FOI POSSÍVEL CADASTRAR A NOTA FISCAL, VALOR DA NOTA MAIOR DO QUE O SALDO RESTANTE DO CONTRATO"
+            
+            return None
+    
+    def form_valid(self, form):
+        
+        is_contract = self.kwargs['is_contract']
+        hoje = datetime.today().date()
+        mensagem = self.valid_NF_valor(form, is_contract)
+        if mensagem:
+            messages.add_message(self.request, messages.ERROR, mensagem)
+            return HttpResponseRedirect(reverse('biddingContracts:new_notas', kwargs={'is_contract': is_contract}))
             #verificação da data de vigência
             elif contrato.dataFinal<hoje:
                 messages.add_message(self.request, messages.ERROR, "NÃO FOI POSSIVEL CADASTRAR NOTAS, CONSULTE O PRAZO RESTANTE DO CONTRATO")
                 return HttpResponseRedirect(reverse("biddingContracts:new_notas", kwargs={'is_contract': is_contract}))
             else:
+                
                 form.save()
                 messages.add_message(self.request, messages.SUCCESS, "SALVO COM SUCESSO")
                 return HttpResponseRedirect(reverse('biddingContracts:notasfiscais', kwargs={'is_contract': is_contract}))
