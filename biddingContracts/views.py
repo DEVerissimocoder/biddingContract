@@ -99,6 +99,14 @@ class ListContractsView(PermissionRequiredMixin, ListView):
         txt_fornecedor = self.request.GET.get("fornecedor")
         txt_licitacao = self.request.GET.get("licitacao")
         filter_expired = self.request.GET.get('search') == 'on'
+        valor = self.request.GET.get("valor")
+
+        if valor == "0":
+            return Contrato.objects.filter(valor=0)
+        if self.kwargs.get("zerados"):
+
+            return Contrato.objects.filter(valor=0)
+
         
         # Filtro de contratos vencidos
         if filter_expired:
@@ -136,6 +144,12 @@ class ListContractsView(PermissionRequiredMixin, ListView):
 
         return context
 
+def contrato_zerado(request):
+    zerado = Contrato.objects.filter(valor__lte=0)
+    context = {
+        "zerados": zerado
+    }
+    return render(request, "contratos/contratos_zerados.html", context)
 
 # View que atualiza os contratos
 class ContractsUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
@@ -627,7 +641,7 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
                 return HttpResponseRedirect(reverse('biddingContracts:new_notas', kwargs={'is_contract': is_contract}))
             #verificação da data de vigência
             if arp.dataFinal<hoje:
-                messages.add_message(messages.INFO, "NÃO FOI POSSIVEL CADASTRAR NOTAS, CONSULTE O VALOR RESTANTE DA ATA DE REGISTRO DE PREÇO")
+                messages.add_message(self.request, messages.INFO, "NÃO FOI POSSIVEL CADASTRAR NOTAS, ATA DE REGISTRO DE PREÇOS COM VALIDADE VENCIDA")
                 return HttpResponseRedirect(reverse("biddingContracts:new_notas", kwargs={'is_contract': is_contract}))
             # se tiver tudo certo salve os dados.
             form.save()
