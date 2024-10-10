@@ -82,7 +82,7 @@ def cadastro(request):
     return render(request, "registration/cadastro.html", {"form": form})
 
 
-@permission_required("usuarios:add_user")
+@permission_required("auth.add_user")
 def cadastro_secretaria(request):
     form = CadastroForms(mostrar_secretaria=True)
     
@@ -131,10 +131,13 @@ def logout(request):
     messages.success(request, "Deslogado com sucesso!")
     return redirect('login')
 
-class ListMemberView(ListView):
+
+
+class ListMemberView(ListView, PermissionRequiredMixin):
     model = User
     template_name = "secretaria/list_usuarios.html"
     context_object_name = "usuarios"
+    permission_required = ["auth.view_user"]
 
     
 
