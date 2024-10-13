@@ -171,6 +171,7 @@
                         {% endif %}
                         {% if perms.biddingContracts.delete_contrato %}
                         <a href="{% url "biddingContracts:delete_contracts" contrato.pk %}" class="btn btn-sm btn-outline-danger ml-3 ms-2">Deletar</a>
+                        
                         {% endif %}
                         {% endif %}
                     </div>
@@ -181,7 +182,7 @@
         {% else %}
             <p class="text-center">Não há contratos!</p>
         {% endif %}
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center flex-row-reverse gap-3">
             <a class="btn btn-secondary mt-2" href="{% url "biddingContracts:index" %}">Voltar</a>
             {% if perms.biddingContracts.add_contrato %}
             <a class="btn btn-success mt-2 ms-4" href="{% url "biddingContracts:cadContrato" 0 %}">Criar contratos</a>

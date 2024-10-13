@@ -16,6 +16,8 @@
                         <p class="text-dark text-center fs-5">
                             Você tem certeza de que deseja excluir o Contrato:
                             <span class="fw-bold text-danger">"{{ contrato.numero }}"</span> do tipo: <span class="fw-bold text-danger">  "<span>{{ contrato.assuntoDetalhado }}</span>"?
+                            <span class="text-dark">Caso o Fornecedor</span> <span class="text-danger">{{ contrato.fornecedor_fk.nome }}</span>
+                            <span class="text-dark">possua outro contrato ou outra licitação o valor atual desse contrato será zerado.</span>
                         </p>
                         <form method="post" action="{% url 'biddingContracts:delete_contracts' contrato.pk %}">
                             {% csrf_token %}
