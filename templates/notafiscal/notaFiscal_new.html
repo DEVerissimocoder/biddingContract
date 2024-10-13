@@ -94,8 +94,9 @@
                                     <div class="modal-body">
                                         
                                         {% for contrato in contratos%}                                            
-                                            <label for="{{ contrato.id }}">CONTRATO: {{contrato.numero}} OBJETO: {{ contrato.assuntoDetalhado }} FORNECEDOR: {{ nome_fornecedor }}</label>
-                                            <input id="{{ contrato.id }}" type="radio" name="escolha_contrato" value="{{contrato.id}}">                                             
+                                            <label for="{{ contrato.id }}">CONTRATO: {{contrato.numero}} OBJETO: {{ contrato.assuntoDetalhado }} FORNECEDOR: {{ fornecedor.nome }}
+                                                <input id="{{ contrato.id }}" type="radio" name="escolha_contrato" value="{{contrato.id}}">  
+                                            </label>                                           
                                         {% endfor %}
                                                                           
                                     </div>
@@ -150,7 +151,6 @@
             // Atribui o valor selecionado no modal > input radio ao campo oculto de contrato_fk
             okButton.addEventListener('click', function() {
             const contratoSelecionado = document.querySelector('input[name="escolha_contrato"]:checked').value;
-            
                 if(contratoSelecionado){
                     contrato.value = contratoSelecionado
                     numero_nf_id.value  = numero_nf

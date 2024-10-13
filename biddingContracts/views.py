@@ -623,11 +623,17 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         notasfiscais = notafiscal.values_list('valor', flat=True)
         return notasfiscais   
 
-    def searchContractByForn(self, nome_fornecedor):
-        fornecedor = Fornecedor.objects.filter(nome = nome_fornecedor).first()
-        contratos = Contrato.objects.filter(fornecedor_fk=fornecedor.id)
+    def searchContractByForn(self, id_fornecedor):
+        contratos = Contrato.objects.filter(fornecedor_fk=id_fornecedor)
         return contratos
     
+    def verificaContratoInserido(self, id_contrato, id_fornecedor):
+        contratos = Contrato.objects.filter(fornecedor_fk = id_fornecedor)
+        if contratos.filter(fornecedor_fk = id_fornecedor).exists():
+            return id_contrato
+        else:
+            return contratos is None
+
     def form_valid(self, form):
         
         is_contract = self.kwargs['is_contract']
@@ -635,32 +641,38 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         serieNF = form.cleaned_data['serie']
         valorNFform = form.cleaned_data['valor']
         tipoNF = form.cleaned_data['tipo']
-        nome_fornecedor = form.cleaned_data['fornecedor_fk']
+        id_fornecedor = form.cleaned_data['fornecedor_fk']
         id_contrato = self.request.POST.get('contrato_fk')
         context ={
             "numero_nf": numNFform,
             "serie_nf": serieNF,
             "valor_nf": valorNFform,
             "tipo_nf": tipoNF,
-            "nome_fornecedor": nome_fornecedor,
             "is_contract": is_contract,
             "form": form
         }
- 
+        print('id_contrato', id_contrato)
+        cTeste = Contrato.objects.filter(id=id_contrato)
+        print(f'teste: {cTeste}')
+
         print("dados do formulario:", context)
-        print(type(nome_fornecedor))
+        
+        print("tipo de id_fornecedor:", type(id_fornecedor))
         if is_contract ==1:
+            print("tipo de id_contrato antes da verificação:", type(id_contrato))
+            id_contrato = self.verificaContratoInserido(id_contrato, id_fornecedor) 
             if id_contrato:
-                contrato = Contrato.objects.get(id =  id_contrato)
-                print("contrato=",contrato)
+                
+                print("contrato=",id_contrato)
+                print("tipo de id_contrato depois da verificação", type(id_contrato))
                 #retorna uma lista de notas fiscais
-                notas=self.search_NF_ByContract(contrato.id) 
+                notas=self.search_NF_ByContract(id_contrato) 
                 #soma todos os valores retornados
                 vlrTotNotas = sum(notas)
                 #pega o valor do contrato
-                vlr_contrato = contrato.valor
+                vlr_contrato = id_contrato.valor
                 dataHoje = datetime.today().date()
-                dataFinalContrato = contrato.dataFinal            
+                dataFinalContrato = id_contrato.dataFinal            
                 if self.valid_NF_valor(valorNFform, vlr_contrato, vlrTotNotas):
                     return HttpResponseRedirect(reverse('biddingContracts:new_notas', kwargs={'is_contract': is_contract}))
                 elif self.valid_NF_vigencia(dataHoje, dataFinalContrato):
@@ -670,12 +682,12 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
                     messages.add_message(self.request, messages.SUCCESS, "SALVO COM SUCESSO")
                     return HttpResponseRedirect(reverse('biddingContracts:notasfiscais', kwargs={'is_contract': is_contract}))
             else:# se o campo contrato não tiver sido preenchido.
-                contrato = self.searchContractByForn(nome_fornecedor)
+                contrato = self.searchContractByForn(id_fornecedor)
                 print("contrats: ",contrato)
                 if contrato.count()>1:
                     context['contratos'] = contrato
                     context['mostramodal'] = True
-                    fornecedor = Fornecedor.objects.get(nome=nome_fornecedor)
+                    fornecedor = Fornecedor.objects.get(nome=id_fornecedor)
                     context['fornecedor'] = fornecedor
                     return render(self.request, "notafiscal/notaFiscal_new.html", context)
                 elif contrato.count()==1:
