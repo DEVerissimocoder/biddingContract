@@ -338,19 +338,22 @@ class NotaFiscalForm(forms.ModelForm):
             "serie": forms.TextInput(
                 attrs={
                     "type": "text",
-                    "class": "form-control"
+                    "class": "form-control",
+                    
                 }
             ),
             "valor": forms.NumberInput(
                 attrs={
                     "type":"number",
                     "class": "form-control",
+                    
                 }
             ),
             "tipo": forms.TextInput(
                 attrs={
                     "type":"text",
                     "class": "form-control",
+                    
                 }
             ),
             "dataEmissao": forms.DateInput(
@@ -358,25 +361,28 @@ class NotaFiscalForm(forms.ModelForm):
                 attrs={
                     "type": "date",
                     "class": "form-control",
+                    
                 }
             ),
           
-            "contrato_fk": forms.Select(
+            "contrato_fk": forms.HiddenInput(
                 attrs={
                     "blank": "true",
-                    "class": "form-select"
+                    "class": "form-control",
                 }
             ),
 
             "fornecedor_fk": forms.Select(
                 attrs={                  
-                    "class": "form-select"
+                    "class": "form-select",
+                    
                 }
             ),
             "ataregistropreco_fk": forms.Select(
                 attrs={
                     "blank": "true",
-                    "class": "form-select"
+                    "class": "form-select",
+                    
                 }
             )
         }
