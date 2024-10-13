@@ -223,66 +223,67 @@
     </ul>
 </div>
 
-
-<script>
-    document.getElementById('sidebarToggle').addEventListener('click', function () {
-        const sidebar = document.getElementById('sidebar');
-        const navItems = document.querySelectorAll('#navItems .sidebar-text');
-    
-        sidebar.classList.toggle('collapsed');
-    
-        navItems.forEach(item => {
-            item.classList.toggle('d-none');
+{% block javascript %}
+    <script>
+        document.getElementById('sidebarToggle').addEventListener('click', function () {
+            const sidebar = document.getElementById('sidebar');
+            const navItems = document.querySelectorAll('#navItems .sidebar-text');
+        
+            sidebar.classList.toggle('collapsed');
+        
+            navItems.forEach(item => {
+                item.classList.toggle('d-none');
+            });
+        
+            // Mudar a direção do ícone
+            if (sidebar.classList.contains('collapsed')) {
+                this.classList.remove('fa-chevron-left');
+                this.classList.add('fa-chevron-right');
+            } else {
+                this.classList.remove('fa-chevron-right');
+                this.classList.add('fa-chevron-left');
+            }
         });
-    
-        // Mudar a direção do ícone
-        if (sidebar.classList.contains('collapsed')) {
-            this.classList.remove('fa-chevron-left');
-            this.classList.add('fa-chevron-right');
-        } else {
-            this.classList.remove('fa-chevron-right');
-            this.classList.add('fa-chevron-left');
-        }
-    });
-    
-    // Verificar o estado inicial do sidebar para ajustar o ícone corretamente
-    window.addEventListener('DOMContentLoaded', function() {
-        const sidebar = document.getElementById('sidebar');
-        const toggleIcon = document.getElementById('sidebarToggle');
-    
-        if (sidebar.classList.contains('collapsed')) {
-            toggleIcon.classList.remove('fa-chevron-left');
-            toggleIcon.classList.add('fa-chevron-right');
-        } else {
-            toggleIcon.classList.remove('fa-chevron-right');
-            toggleIcon.classList.add('fa-chevron-left');
-        }
-    });
-
-        // 
-    document.addEventListener('DOMContentLoaded', function () {
-        var collapseElement = document.getElementById('nota-fiscal');
-        var collapseState = localStorage.getItem('collapseState');
-
-        // Verifica se há um estado salvo e aplica ao collapse
-        if (collapseState === 'shown') {
-        var collapse = new bootstrap.Collapse(collapseElement, {toggle: false});
-        collapse.show();  // Expande se o estado for 'shown'
-        } else {
-        var collapse = new bootstrap.Collapse(collapseElement, {toggle: false});
-        collapse.hide();  // Colapsa se o estado for 'hidden' ou null
-        }
-
-        // Escuta o evento de mostrar/esconder do collapse e salva o estado
-        collapseElement.addEventListener('show.bs.collapse', function () {
-        localStorage.setItem('collapseState', 'shown');
+        
+        // Verificar o estado inicial do sidebar para ajustar o ícone corretamente
+        window.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleIcon = document.getElementById('sidebarToggle');
+        
+            if (sidebar.classList.contains('collapsed')) {
+                toggleIcon.classList.remove('fa-chevron-left');
+                toggleIcon.classList.add('fa-chevron-right');
+            } else {
+                toggleIcon.classList.remove('fa-chevron-right');
+                toggleIcon.classList.add('fa-chevron-left');
+            }
         });
 
-        collapseElement.addEventListener('hide.bs.collapse', function () {
-        localStorage.setItem('collapseState', 'hidden');
+            // 
+        document.addEventListener('DOMContentLoaded', function () {
+            var collapseElement = document.getElementById('nota-fiscal');
+            var collapseState = localStorage.getItem('collapseState');
+
+            // Verifica se há um estado salvo e aplica ao collapse
+            if (collapseState === 'shown') {
+            var collapse = new bootstrap.Collapse(collapseElement, {toggle: false});
+            collapse.show();  // Expande se o estado for 'shown'
+            } else {
+            var collapse = new bootstrap.Collapse(collapseElement, {toggle: false});
+            collapse.hide();  // Colapsa se o estado for 'hidden' ou null
+            }
+
+            // Escuta o evento de mostrar/esconder do collapse e salva o estado
+            collapseElement.addEventListener('show.bs.collapse', function () {
+            localStorage.setItem('collapseState', 'shown');
+            });
+
+            collapseElement.addEventListener('hide.bs.collapse', function () {
+            localStorage.setItem('collapseState', 'hidden');
+            });
         });
-    });
-</script>
+    </script>
+{% endblock javascript%}
 
     
     
