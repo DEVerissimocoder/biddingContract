@@ -675,6 +675,8 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
                 if contrato.count()>1:
                     context['contratos'] = contrato
                     context['mostramodal'] = True
+                    fornecedor = Fornecedor.objects.get(nome=nome_fornecedor)
+                    context['fornecedor'] = fornecedor
                     return render(self.request, "notafiscal/notaFiscal_new.html", context)
                 elif contrato.count()==1:
                     print("para o caso de o fornecedor tiver apenas 1 contrato.")

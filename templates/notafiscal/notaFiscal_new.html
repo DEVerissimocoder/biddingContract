@@ -126,13 +126,14 @@
             const valor_nf="{{valor_nf}}"
             const tipo_nf="{{tipo_nf}}"
             const nome_fornecedor="{{nome_fornecedor}}"
+            const fornecedor_nf = "{{fornecedor.id}}"
             console.log(numero_nf, serie_nf, valor_nf, tipo_nf, nome_fornecedor);
             // captura os elementos para manipulação
             const numero_nf_id = document.getElementById('{{form.num.id_for_label}}')
             const serie_nf_id = document.getElementById('{{form.serie.id_for_label}}')
             const valor_nf_id = document.getElementById('{{form.valor.id_for_label}}')
             const tipo_nf_id = document.getElementById('{{form.tipo.id_for_label}}')
-            const nome_fornecedor_id = document.getElementById('{{form.fornecedor_fk.id_for_label}}'); //tenho que procurar por meio de um for.
+            const fornecedor_id = document.getElementById('{{form.fornecedor_fk.id_for_label}}'); //tenho que procurar por meio de um for.
             //declara o campo contrato
             const contrato = document.getElementById('{{ form.contrato_fk.id_for_label }}')
 
@@ -156,8 +157,9 @@
                     serie_nf_id.value   = serie_nf
                     valor_nf_id.value   = parseFloat(valor_nf.replace(',', '.')) 
                     tipo_nf_id.value    = tipo_nf
-                    nome_fornecedor_id.value = nome_fornecedor
+                    fornecedor_id.value = fornecedor_nf
                     console.log("numero do contrato", contrato.value)
+                    console.log("fornecedor_id= ", fornecedor_id.value)
                     $('#modal_contr').modal('hide');
 
                 }else{
