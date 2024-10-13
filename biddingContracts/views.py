@@ -604,7 +604,6 @@ class BiddingUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
 #         response.write(output.read()) 
 #     return response
 
-
 # # View que cria as notas fiscais
 class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model= NotaFiscal
@@ -621,43 +620,115 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         context['is_contract'] = is_contract
         return context
     
-    def form_valid(self, form):
-        is_contract = self.kwargs['is_contract']
-        hoje = datetime.today().date()
-        if is_contract==1:
-            print("nota fiscal - contrato")
-            contrato = Contrato.objects.get(numero=form.cleaned_data['contrato_fk'])
-            #pega do banco todas as notas fiscais relacionado ao contrato em questão
-            notasfiscais = NotaFiscal.objects.filter(contrato_fk_id = contrato.id)
-            #soma os valores das notas fiscais do contrato, que já estão armazenadas no banco, mais a nota que está tentando cadastrar
-            soma = sum(nota.valor for nota in notasfiscais) + form.cleaned_data.get('valor')
+    def valid_NF_valor(self, valor_nf, valor_contrato, valorTotalNotasFiscais):
+        resultado = valorTotalNotasFiscais + valor_nf
+        # valida se o resultado da soma ultrapassa o valor total do contrato.
+        if resultado > valor_contrato:
+            msg_valor="NÃO FOI POSSÍVEL CADASTRAR A NOTA FISCAL, VALOR DA NOTA MAIOR DO QUE O SALDO RESTANTE DO CONTRATO"
+            messages.add_message(self.request, messages.ERROR, msg_valor)
+            return True
+        return False
         
-            # valida se o resultado da soma ultrapassa o valor total do contrato.
-            if soma > contrato.valor:
-                messages.add_message(self.request, messages.ERROR, "NÃO FOI POSSÍVEL CADASTRAR A NOTA FISCAL, VALOR DA NOTA MAIOR DO QUE O SALDO RESTANTO DO CONTRATO")
-                return HttpResponseRedirect(reverse('biddingContracts:new_notas', kwargs={'is_contract': is_contract}))
-            #verificação da data de vigência
-            elif contrato.dataFinal<hoje:
-                messages.add_message(self.request, messages.ERROR, "NÃO FOI POSSIVEL CADASTRAR NOTAS, CONSULTE O PRAZO RESTANTE DO CONTRATO")
-                return HttpResponseRedirect(reverse("biddingContracts:new_notas", kwargs={'is_contract': is_contract}))
-            else:
-                form.save()
-                messages.add_message(self.request, messages.SUCCESS, "SALVO COM SUCESSO")
-                return HttpResponseRedirect(reverse('biddingContracts:notasfiscais', kwargs={'is_contract': is_contract}))
+    def valid_NF_vigencia(self, dataHoje, dataFinalContrato):
+        if dataFinalContrato<dataHoje:
+            msg_vigencia = "NÃO FOI POSSIVEL CADASTRAR NOTAS, CONSULTE O PRAZO RESTANTE DO CONTRATO"
+            messages.add_message(self.request, messages.ERROR, msg_vigencia)
+            return True
+        return False
+    
+    def search_NF_ByContract(self, id_contrato):
+        notafiscal = NotaFiscal.objects.filter(contrato_fk=id_contrato) 
+        notasfiscais = notafiscal.values_list('valor', flat=True)
+        return notasfiscais   
+
+    def searchContractByForn(self, nome_fornecedor):
+        fornecedor = Fornecedor.objects.filter(nome = nome_fornecedor).first()
+        contratos = Contrato.objects.filter(fornecedor_fk=fornecedor.id)
+        return contratos
+    
+    def form_valid(self, form):
+        
+        is_contract = self.kwargs['is_contract']
+        numNFform = form.cleaned_data['num']
+        serieNF = form.cleaned_data['serie']
+        valorNFform = form.cleaned_data['valor']
+        tipoNF = form.cleaned_data['tipo']
+        nome_fornecedor = form.cleaned_data['fornecedor_fk']
+        id_contrato = self.request.POST.get('contrato_fk')
+        context ={
+            "numero_nf": numNFform,
+            "serie_nf": serieNF,
+            "valor_nf": valorNFform,
+            "tipo_nf": tipoNF,
+            "nome_fornecedor": nome_fornecedor,
+            "is_contract": is_contract,
+            "form": form
+        }
+ 
+        print("dados do formulario:", context)
+        print(type(nome_fornecedor))
+        if is_contract ==1:
+            if id_contrato:
+                contrato = Contrato.objects.get(id =  id_contrato)
+                print("contrato=",contrato)
+                #retorna uma lista de notas fiscais
+                notas=self.search_NF_ByContract(contrato.id) 
+                #soma todos os valores retornados
+                vlrTotNotas = sum(notas)
+                #pega o valor do contrato
+                vlr_contrato = contrato.valor
+                dataHoje = datetime.today().date()
+                dataFinalContrato = contrato.dataFinal            
+                if self.valid_NF_valor(valorNFform, vlr_contrato, vlrTotNotas):
+                    return HttpResponseRedirect(reverse('biddingContracts:new_notas', kwargs={'is_contract': is_contract}))
+                elif self.valid_NF_vigencia(dataHoje, dataFinalContrato):
+                    return HttpResponseRedirect(reverse("biddingContracts:new_notas", kwargs={'is_contract': is_contract}))
+                else:
+                    form.save()
+                    messages.add_message(self.request, messages.SUCCESS, "SALVO COM SUCESSO")
+                    return HttpResponseRedirect(reverse('biddingContracts:notasfiscais', kwargs={'is_contract': is_contract}))
+            else:# se o campo contrato não tiver sido preenchido.
+                contrato = self.searchContractByForn(nome_fornecedor)
+                print("contrats: ",contrato)
+                if contrato.count()>1:
+                    context['contratos'] = contrato
+                    context['mostramodal'] = True
+                    return render(self.request, "notafiscal/notaFiscal_new.html", context)
+                elif contrato.count()==1:
+                    print("para o caso de o fornecedor tiver apenas 1 contrato.")
+
+                    notas=self.search_NF_ByContract(contrato.first().id) 
+                    #soma todos os valores retornados
+                    vlrTotNotas = sum(notas)
+                    #pega o valor do contrato
+                    vlr_contrato = contrato.first().valor
+                    dataHoje = datetime.today().date()
+                    dataFinalContrato = contrato.first().dataFinal            
+                    if self.valid_NF_valor(valorNFform, vlr_contrato, vlrTotNotas):
+                        return HttpResponseRedirect(reverse('biddingContracts:new_notas', kwargs={'is_contract': is_contract}))
+                    elif self.valid_NF_vigencia(dataHoje, dataFinalContrato):
+                        return HttpResponseRedirect(reverse("biddingContracts:new_notas", kwargs={'is_contract': is_contract}))
+                    else:
+                        notafiscal = form.save(commit=False)
+                        notafiscal.contrato_fk = contrato.first()
+                        notafiscal.save()
+                        messages.add_message(self.request, messages.SUCCESS, "SALVO COM SUCESSO")
+                        return HttpResponseRedirect(reverse('biddingContracts:notasfiscais', kwargs={'is_contract': is_contract}))
+                else:
+                    messages.add_message(self.request, messages.WARNING, "NÃO EXISTE CONTRATO PARA ESTE FORNECEDOR")
+                    return HttpResponseRedirect(reverse("biddingContracts:new_notas"))       
         else:
             print("notafiscal - ata de registro de preços")
             arp = AtaRegistroPreco.objects.get(numero=form.cleaned_data['ataregistropreco_fk'])
-
             #pega do banco todas as notas fiscais relacionado a ARP em questão
             notasfiscais = NotaFiscal.objects.filter(ataregistropreco_fk_id = arp.id)
             soma = sum(nota.valor for nota in notasfiscais) + form.cleaned_data.get('valor')
-        
             # valida se o resultado da soma ultrapassa o valor total da ARP
             if soma > arp.valor:
                 messages.add_message(self.request, messages.INFO, "NÃO FOI POSSÍVEL CADASTRAR A NOTA FISCAL, VALOR DA NOTA MAIOR DO QUE O SALDO RESTANTE DA ATA DE REGISTRO DE PREÇOS")
                 return HttpResponseRedirect(reverse('biddingContracts:new_notas', kwargs={'is_contract': is_contract}))
             #verificação da data de vigência
-            if arp.dataFinal<hoje:
+            if arp.dataFinal<0:
                 messages.add_message(self.request, messages.INFO, "NÃO FOI POSSIVEL CADASTRAR NOTAS, ATA DE REGISTRO DE PREÇOS COM VALIDADE VENCIDA")
                 return HttpResponseRedirect(reverse("biddingContracts:new_notas", kwargs={'is_contract': is_contract}))
             # se tiver tudo certo salve os dados.
@@ -689,7 +760,6 @@ class NotasFiscaisUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView
     form_class = NotaFiscalEditForm
     context_object_name = "notas"
     permission_required = ["biddingContracts.change_notafiscal"]
-
 
     def form_valid(self, form):
         messages.success(self.request, 'Nota Fiscal editada com sucesso!')
@@ -798,4 +868,3 @@ class SecretaryDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteVie
     def get_success_url(self):
         messages.success(self.request, 'Secretaria excluída com sucesso!')
         return reverse_lazy("biddingContracts:list_secretarias")
-    
