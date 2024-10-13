@@ -46,7 +46,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="{{ form.fornecedor_fk.id_for_label }}"> FORNECEDOR </label>
+                                    <label for="{{ form.fornecedor_fk.id_for_label }}" class="{{ form.fornecedor_fk.id_for_label }}"> FORNECEDOR </label>
                                     {{ form.fornecedor_fk }}
                                 </div> 
                                 <div class="col-md-6 mb-3">
@@ -77,7 +77,7 @@
                                                                                                         
                             <div class="d-flex justify-content-between">
                                 <a href="{% url 'biddingContracts:index' %}" class="btn btn-secondary">Cancelar</a>
-                                <button type="submit" class="btn btn-primary">Salvar</button>
+                                <button type="submit" class="btn btn-primary" id="btn-salvar">Salvar</button>
                             </div>
                         </form>
                         
@@ -134,11 +134,13 @@
             const serie_nf_id = document.getElementById('{{form.serie.id_for_label}}')
             const valor_nf_id = document.getElementById('{{form.valor.id_for_label}}')
             const tipo_nf_id = document.getElementById('{{form.tipo.id_for_label}}')
-            const fornecedor_id = document.getElementById('{{form.fornecedor_fk.id_for_label}}'); //tenho que procurar por meio de um for.
+            const fornecedor_id = document.getElementById('{{form.fornecedor_fk.id_for_label}}');
+            console.log(fornecedor_id.value)
             //declara o campo contrato
             const contrato = document.getElementById('{{ form.contrato_fk.id_for_label }}')
 
             const okButton = document.getElementById('confirmar')
+            const saveButton = document.getElementById('btn-salvar')
             const inputRadio = document.getElementById('{{ contrato}}')
             const abrirModal = $('#modal_contr')
 
@@ -165,7 +167,15 @@
                 }else{
                     alert("Por favor, selecione um contrato.")
                 }
-            });         
+            }); 
+            try{
+                saveButton.addEventListener('click', function(){
+                 // porque não captura o valor do campo fornecedor_fk?
+                console.log("fornecedor: ", document.getElementById("id_fornecedor_fk").value);
+                });       
+            }catch(erro){
+                console.error("Erro ao salvar fornecedor: ", erro)
+            }
         });
     
     </script>
