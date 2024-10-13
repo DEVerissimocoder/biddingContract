@@ -45,6 +45,9 @@
               {% if notafiscal.contrato_fk %}
               <td class="align-align-middle" style="font-size:14px;">
                 {{ notafiscal.contrato_fk }}
+                <p class="text-muted small">
+                  {{ notafiscal.fornecedor_fk }}
+                </p>
               </td>
               {% else %}
               <td class="align-align-middle" style="font-size:14px;">
@@ -68,7 +71,7 @@
                   {% if perms.biddingContracts.change_notafiscal %}
                     <a href="{% url "biddingContracts:updatenfe" notafiscal.pk is_contract %}">Editar</a>
                   {% endif %}
-                  {% if perms.biddingContracts.delete_notafiscal %}
+                  {% if perms.biddingContracts.delete_notafiscal and perms.biddingContracts.zero_notafiscal %}
                     <a class="text-danger" href="{% url "biddingContracts:deletenfe" notafiscal.pk %}">Excluir</a>
                   {% endif %}
                 </div>
@@ -80,8 +83,9 @@
         {% endif %}
       </tbody>
     </table>
-    <div class="d-flex">
+    <div class="d-flex justify-content-between">
       <a href="{% url "biddingContracts:index" %}" class="btn btn-dark">Voltar</a>
+      <a href="{% url "biddingContracts:new_notas" 1 %}" class="btn btn-success">+ Adicionar</a>
     </div>
   </div>
 </div>

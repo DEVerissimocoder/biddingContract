@@ -2,7 +2,7 @@ from django.db.models.query import QuerySet
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.decorators import permission_required
 from django.shortcuts import redirect, render
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpRequest, HttpResponseRedirect, HttpResponse
 from datetime import datetime, timedelta
 from django.db.models import Q
 from  biddingContracts.forms import formLicitacao, formFornecedor,NotaFiscalEditForm, formContrato, formARP, NotaFiscalForm, formSecretaria
@@ -45,10 +45,9 @@ from django.contrib.auth.decorators import login_required
 def cadContrato(request, fornecedor_id):
     if request.method == "POST":
         form = formContrato(request.POST)
-        print(f"Dados recebidos no POST: {request.POST}") 
         if form.is_valid():
             form.save()
-            messages.success(request, "Cadastro criado com sucesso!")
+            messages.success(request, "Contrato criado com sucesso!")
             return HttpResponseRedirect(reverse("biddingContracts:contratos"))
         else:
             print(f"Deu errado!{form.errors}")
@@ -189,7 +188,6 @@ def contratosRelatorio(request, id_contrato):
     
     # tipo datetime.date
     dataFinalContrato = contrato.dataFinal  
-    print(f'data final= {type(hoje)}')
     prazoRestante = relativedelta(dataFinalContrato, hoje)
     
     mensagem = verifica_prazo_validade(prazoRestante, dataFinalContrato, hoje)
@@ -246,8 +244,27 @@ class ContractDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView
     context_object_name = "contrato"
     permission_required = ["biddingContracts.delete_contrato"]
 
+    def form_valid(self, form):
+        contrato = self.get_object()
+        fornecedor = contrato.fornecedor_fk
+        licitacao = contrato.licitacao_fk
+
+        # Verifica se existem outros contratos relacionados ao mesmo fornecedor ou à mesma licitação
+        outro_contrato_fornecedor = Contrato.objects.filter(fornecedor_fk=fornecedor).exclude(pk=contrato.pk).exists()
+        outro_contrato_licitacao = Contrato.objects.filter(licitacao_fk=licitacao).exclude(pk=contrato.pk).exists()
+
+        # Só excluir o contrato se NÃO houver outros contratos relacionados ao mesmo fornecedor e à mesma licitação
+        if not outro_contrato_fornecedor and not outro_contrato_licitacao:
+            contrato.delete()
+            messages.success(self.request, 'Contrato excluído com sucesso!')
+            return redirect(self.get_success_url())
+        else:
+            contrato.valor = 0
+            contrato.save()
+            messages.error(self.request, 'Não é possível excluir o contrato, pois o fornecedor ou a licitação estão relacionados a outros contratos. Nesse caso o contrato foi zerado')
+            return redirect(self.get_success_url())
+
     def get_success_url(self):
-        messages.success(self.request, 'Contrato excluído com sucesso!')
         return reverse_lazy("biddingContracts:contratos")
 
 
@@ -781,7 +798,6 @@ class NotesDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     permission_required = ["biddingContracs.delete_notafiscal"]
 
     def get_success_url(self):
-        messages.success(self.request, 'Nota Fiscal excluída com sucesso!')
         return reverse_lazy("biddingContracts:notasfiscais", kwargs={"is_contract": 2})
     
 # View que cria as secretarias
