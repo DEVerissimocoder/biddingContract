@@ -2,37 +2,65 @@
 
 <style>
     #sidebar {
-        width: 200px; /* Largura padrão do sidebar */
-        transition: width 0.3s ease; /* Transição suave para a largura */
+        width: 200px;
+        transition: width 0.3s ease;
     }
     
     #sidebar.collapsed {
-        width: 60px; /* Largura do sidebar quando colapsado */
+        width: 60px;
     }
     
     #sidebar .sidebar-text {
-        transition: opacity 0.3s ease; /* Transição suave para a opacidade do texto */
+        transition: opacity 0.3s ease;
     }
     
     #sidebar.collapsed .sidebar-text {
-        opacity: 0; /* Oculta o texto quando colapsado */
-        pointer-events: none; /* Impede que os eventos de mouse afetem os itens ocultos */
+        opacity: 0;
+        pointer-events: none;
     }
     
     #navItems {
-        transition: transform 0.3s ease; /* Transição suave para a transformação do navItems */
+        transition: transform 0.3s ease;
     }
-
+    
     .collapsed .nav-text {
-        display: none; /* Oculta o texto */
+        display: none;
     }
-
+    
     .collapsed .menu {
         display: none;
     }
-
+    
     .nav-text {
-        font-size:0.9rem
+        font-size: 0.9rem;
+    }
+    
+    .nav-item .active {
+        background-color: white; /* Fundo branco para o item ativo */
+        color: black !important; /* Força o texto e o ícone a ficarem pretos */
+        border-radius: 5px;
+    }
+    
+        /* Define o estilo para o item ativo (ícone e texto) */
+    .nav-link.active {
+        background-color: white; /* Fundo branco para o item ativo */
+        color: black !important; /* Cor preta para o texto do item ativo */
+        border-radius: 5px; /* Borda arredondada */
+    }
+
+    /* Estilo para o ícone do item ativo */
+    .nav-link.active i {
+        color: black !important; /* Ícones em preto quando o item está ativo */
+    }
+
+    /* Estilo para o texto do item ativo */
+    .nav-link.active .nav-text {
+        color: black !important; /* Texto em preto quando o item está ativo */
+    }
+
+    
+    .nav-link i {
+        color: white; /* Ícone branco por padrão */
     }
     
     
@@ -47,29 +75,28 @@
     <hr class="w-100" style="background-color:#fff5f5" heigth="1px"> 
     <ul class="nav d-flex flex-column  justify-content-start" id="navItems">
         <li class="nav-item mb-3">
-            <a class="nav-link text-white" href="{% url 'biddingContracts:index' %}">
-                <i class="fa-solid fa-house" title="Inicio"></i>
+            <a class="nav-link text-white {% if request.path == '/' %}active{% endif %}" href="/">
+                <i class="fa-solid fa-house" title="Início"></i>
                 <span class="nav-text text-white small">Início</span>
             </a>
         </li>
+        
 
-        {% comment %} <a href="{% url "usuarios:detail_member" user.pk %}">teste</a> {% endcomment %}
-
-    
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
-                <a class="nav-link text-white" href="{% url "usuarios:detail_member" user.pk %}">
-                    <i class="fa-solid fa-user" title="Menu Pessoal"></i> 
-                    <span class="nav-text text-white small">Menu do usuário</span> 
+                <a class="nav-link text-white {% if request.resolver_match.url_name == 'detail_member' and request.resolver_match.namespace == 'usuarios' %}active{% endif %}" 
+                   href="{% url 'usuarios:detail_member' user.pk %}">
+                    <i class="fa-solid fa-user" title="Menu Pessoal"></i>
+                    <span class="nav-text text-white small">Menu do usuário</span>
                 </a>
             </div>
         </li>
-       
-
+        
         {% if perms.auth.add_user %} <!-- Visualiza somente com a permissão de criar secretaria -->
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
-                <a class="nav-link text-white" href="{% url 'usuarios:cad_user' %}">
+                <a class="nav-link text-white {% if request.resolver_match.url_name == 'cad_user' and request.resolver_match.namespace == 'usuarios' %}active{% endif %}" 
+                   href="{% url 'usuarios:cad_user' %}">
                     <i class="fa-solid fa-user-plus" title="Cadastrar Usuários Secretaria"></i> 
                     <span class="nav-text text-white small">Cadastrar Usuários</span> 
                 </a>
@@ -80,7 +107,8 @@
         {% if perms.auth.view_user %} <!-- Visualiza somente com a permissão de criar secretaria -->
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
-                <a class="nav-link text-white" href="{% url 'usuarios:list_member' %}">
+                <a class="nav-link text-white {% if request.resolver_match.url_name == 'list_member' and request.resolver_match.namespace == 'usuarios' %}active{% endif %}" 
+                   href="{% url 'usuarios:list_member' %}">
                     <i class="fa-solid fa-users" title="Listar Usuários Secretaria"></i> 
                     <span class="nav-text text-white small">Visualizar Usuários</span> 
                 </a>
@@ -91,7 +119,8 @@
         {% if perms.biddingContracts.add_secretaria %} <!-- Visualiza somente com a permissão de criar secretaria -->
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:new_secretaria' %}">
+                <a class="nav-link text-white {% if request.resolver_match.url_name == 'new_secretaria' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
+                   href="{% url 'biddingContracts:new_secretaria' %}">
                     <i class="fa-solid fa-s" title="Cadastrar Secretarias"></i> 
                     <span class="nav-text text-white small">Cadastrar Secretarias</span> 
                 </a>
@@ -102,7 +131,8 @@
         {% if perms.biddingContracts.view_secretaria %}
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:list_secretarias' %}">
+                <a class="nav-link text-white {% if request.resolver_match.url_name == 'list_secretarias' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
+                   href="{% url 'biddingContracts:list_secretarias' %}">
                     <i class="fa-solid fa-table-list" title="Listar Secretarias"></i> 
                     <span class="nav-text text-white small">Listar Secretarias</span> 
                 </a>
@@ -113,7 +143,8 @@
         {% if perms.biddingContracts.add_contrato %} <!-- Visualiza somente com a permissão de criar contrato -->
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:cadContrato' fornecedor_id=0 %}">
+                <a class="nav-link text-white {% if request.resolver_match.url_name == 'cadContrato' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
+                   href="{% url 'biddingContracts:cadContrato' fornecedor_id=0 %}">
                     <i class="fa-solid fa-c" title="Criar Contratos"></i>
                     <span class="nav-text text-white small">Cadastrar Contratos</span>
                 </a>
@@ -124,7 +155,8 @@
         {% if perms.biddingContracts.view_contrato %}
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:contratos' %}">
+                <a class="nav-link text-white {% if request.resolver_match.url_name == 'contratos' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
+                   href="{% url 'biddingContracts:contratos' %}">
                     <i class="fa-solid fa-list" title="Listar Contratos"></i>
                     <span class="nav-text text-white small">Listar Contratos</span>
                 </a>
@@ -144,11 +176,13 @@
             </div>
             <div class="collapse" id="nota-fiscal" data-bs-parent="collapse-nf">
                 <div>
-                    <a class="nav-link text-white" href="{% url 'biddingContracts:new_notas' 0 %}">
+                    <a class="nav-link text-white {% if request.resolver_match.url_name == 'new_notas' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
+                   href="{% url 'biddingContracts:new_notas' 0 %}">
                         <i class="fa-solid fa-file-contract" title="Nova Nota Fiscal ARP"></i>
                         <span class="nav-text text-white small"> nota fiscal (ARP)</span>
                     </a>
-                    <a class="nav-link text-white" href="{% url 'biddingContracts:new_notas' 1 %}">
+                    <a class="nav-link text-white {% if request.resolver_match.url_name == 'new_notas' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
+                   href="{% url 'biddingContracts:new_notas' 1 %}">
                         <i class="fa-regular fa-note-sticky" title="Nova Nota Fiscal Contrato"></i>
                         <span class="nav-text text-white small"> nota fiscal (contrato)</span>
                     </a>
@@ -161,7 +195,8 @@
         {% if perms.biddingContracts.view_notafiscal %}
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:notasfiscais' 2 %}">
+                <a class="nav-link text-white {% if request.resolver_match.url_name == 'notasfiscais' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
+                   href="{% url 'biddingContracts:notasfiscais' 2 %}">
                     <i class="fa-solid fa-list-ol" title="Listar Notas Fiscais"></i>
                     <span class="nav-text text-white small">Listar Notas Fiscais</span>
                 </a>
@@ -172,7 +207,8 @@
         {% if perms.biddingContracts.add_licitacao %}
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:create-bidding' %}">
+                <a class="nav-link text-white {% if request.resolver_match.url_name == 'create-bidding' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
+                   href="{% url 'biddingContracts:create-bidding' %}">
                     <i class="fa-solid fa-l" title="Cadastrar Licitações"></i> 
                     <span class="nav-text text-white small">Cadastrar Licitações</span> 
                 </a>
@@ -183,7 +219,8 @@
         {% if perms.biddingContracts.view_licitacao %}
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:list_bidding' %}">
+                <a class="nav-link text-white {% if request.resolver_match.url_name == 'list_bidding' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
+                   href="{% url 'biddingContracts:list_bidding' %}">
                     <i class="fa-solid fa-list-check" title="Listar Licitações"></i>
                     <span class="nav-text text-white small">Listar Licitações</span>
                 </a>
@@ -194,7 +231,8 @@
         {% if perms.biddingContracts.view_fornecedor %}
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
-                <a class="nav-link text-white" href="{% url 'biddingContracts:fornecedores' %}">
+                <a class="nav-link text-white {% if request.resolver_match.url_name == 'fornecedores' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
+                   href="{% url 'biddingContracts:fornecedores' %}">
                     <i class="fa-solid fa-truck-fast" title="Listar Fornecedores"></i>
                     <span class="nav-text text-white small">Listar Fornecedores</span>
                 </a>
@@ -204,7 +242,8 @@
 
         {% if perms.biddingContracts.add_ataregistropreco %}
         <li class="nav-item mb-3">
-            <a class="nav-link text-white" href="{% url 'biddingContracts:create-ARP' %}">
+            <a class="nav-link text-white {% if request.resolver_match.url_name == 'create-ARP' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
+                   href="{% url 'biddingContracts:create-ARP' %}">
                 <i class="fa-solid fa-a" title="Criar Atas de Registro de Preços"></i>
                 <span class="nav-text text-white small">Criar ARPs</span>
             </a>
@@ -213,7 +252,8 @@
 
         {% if perms.biddingContracts.view_ataregistropreco %}
         <li class="nav-item mb-3">
-            <a class="nav-link text-white" href="{% url 'biddingContracts:atas' %}">
+            <a class="nav-link text-white {% if request.resolver_match.url_name == 'atas' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
+                   href="{% url 'biddingContracts:atas' %}">
                 <i class="fa-solid fa-book" title="Listar Atas de Registros de Preços"></i>
                 <span class="nav-text text-white small">Listar ARPs</span>
             </a>
@@ -226,7 +266,7 @@
                     <form action="{% url 'logout' %}" method="post" class="">
                         {% csrf_token %}
                         <button class="nav-link link-danger text-danger" type="submit">
-                            <i class="fa-solid fa-circle-xmark" title="Sair do Sistema"></i>
+                            <i class="fa-solid fa-circle-xmark text-danger" title="Sair do Sistema"></i>
                             <span class="nav-text text-white text-small">Sair do sistema</span>
                         </button>
                     </form>

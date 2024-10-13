@@ -8,7 +8,7 @@
 <div class="d-flex">
     {% include "sidebar.html" %}
     <div class="container-sm">
-        <h1 class="text-center mt-2 text-muted">Lista de licitações</h1>
+        <h1 class="text-center mt-2 text-dark">Lista de licitações</h1>
         {% include "messages.html" %}
 
         {% if licitacoes %}
@@ -160,7 +160,7 @@
             </div>
         {% endfor %}
         </ul>
-        <div class="d-flex mt-4 justify-content-center mb-3">
+        <div class="d-flex mt-4 justify-content-center flex-row-reverse gap-3 mb-3">
             <a class="btn btn-secondary " href="{% url 'biddingContracts:index' %}">Voltar</a>
             {% if perms.biddingContracts.add_licitacao %}
             <a class="btn btn-success ms-2" href="{% url 'biddingContracts:create-bidding' %}">Criar Licitação</a>
@@ -169,7 +169,7 @@
         </div>
         {% else %}
             <h2 class="text-center text-uppercase">Sem licitações cadastradas</h2>
-            <div class="d-flex mt-4 justify-content-center mb-3">
+            <div class="d-flex mt-4 justify-content-center flex-row-reverse gap-3 mb-3">
                 <a class="btn btn-secondary " href="{% url 'biddingContracts:list_bidding' %}">Voltar</a>
                 {% if perms.biddingContracts.add_licitacao %}
                 <a class="btn btn-success ms-2" href="{% url 'biddingContracts:create-bidding' %}">Criar Licitação</a>
