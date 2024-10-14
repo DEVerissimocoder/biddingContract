@@ -8,7 +8,7 @@ User = get_user_model()
 admin.site.unregister(User)
 
 class CustomUserAdmin(UserAdmin):
-    list_display = ['username', 'email', 'is_active', 'secretaria',]
+    list_display = ['username', 'email', 'is_active']
     actions = ['add_permission']
 
     def add_permission(self, request, queryset):

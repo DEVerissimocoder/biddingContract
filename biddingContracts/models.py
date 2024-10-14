@@ -62,28 +62,33 @@ class Contrato(models.Model):
         return self.dataFinal < timezone.now().date()
     
 #Secretaria
-class Secretaria(models.Model):
-    nome = models.CharField(max_length=200, verbose_name="Nome da secretaria", null=True, blank=True)
-    usuario = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+class Secretaria(models.TextChoices):
+    ADMINISTRACAO = 'administracao_planejamento', 'Administração e Planejamento'
+    FINANCAS = 'financas', 'Finanças'
+    AGRICULTURA = 'agricultura_recursos_hidricos', 'Agricultura, Turismo e Lazer'
+    OBRAS = 'obras', 'Obras'
+    TRANSPORTE = "transporte", "Transporte"
+    MEIO_AMBIENTE= 'meio_ambiente', 'Meio Ambiente'
+    MULHER = "políticas_publicas_para_mulheres", "Políticas Públicas para Mulheres"
+    CULTURA = "cultura_turismo_lazer", "Cultura Turismo e Lazer" 
+    ASSISTENCIA_SOCIAL = "Assistencia_Social", "Assistência Social"
+    SAUDE = "Saude", "Saúde"
+    EDUCACAO = "Educacao", "Educação"
 
-    def __str__(self):
-        return f"{self.nome}"
-    
-    class Meta:
-        verbose_name = "Secretaria"
-        verbose_name_plural = "Secretarias"
-
+class Tipo(models.TextChoices):
+    PRESTACAO_SERVICO = "prestacao_servico", "Prestação de Serviços"
+    AQUISICAO_BENS = "Aquisicao de Bens", "Aquisicao de Bens"
 
 class NotaFiscal(models.Model):
     num = models.IntegerField(unique=True)
     serie = models.CharField(max_length=3)
     valor = models.FloatField()
-    tipo = models.CharField(max_length=50)
+    tipo = models.CharField(max_length=50, choices=Tipo.choices)
     dataEmissao = models.DateField()
     contrato_fk = models.ForeignKey("Contrato", blank=True, null=True, on_delete=models.CASCADE)
     fornecedor_fk = models.ForeignKey("Fornecedor", on_delete=models.CASCADE)
     ataregistropreco_fk = models.ForeignKey('AtaRegistroPreco', blank=True, null=True, on_delete=models.CASCADE)
-    secretaria = models.ForeignKey(Secretaria, on_delete=models.CASCADE, null=True, blank=True)
+    secretaria = models.CharField(max_length=100, choices=Secretaria.choices)
     
     class Meta:
         verbose_name_plural = "Notas Fiscais"
