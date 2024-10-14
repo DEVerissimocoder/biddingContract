@@ -637,66 +637,82 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         return False
     
     def search_NF_ByContract(self, id_contrato):
-        notafiscal = NotaFiscal.objects.filter(contrato_fk=id_contrato) 
+        notafiscal = NotaFiscal.objects.filter(contrato_fk=id_contrato.id) 
         notasfiscais = notafiscal.values_list('valor', flat=True)
         return notasfiscais   
 
-    def searchContractByForn(self, nome_fornecedor):
-        fornecedor = Fornecedor.objects.filter(nome = nome_fornecedor).first()
-        contratos = Contrato.objects.filter(fornecedor_fk=fornecedor.id)
+    def searchContractByForn(self, id_fornecedor):
+        contratos = Contrato.objects.filter(fornecedor_fk=id_fornecedor.id)
         return contratos
     
+    def verificaContratoInserido(self, id_contrato, id_fornecedor):
+        contrs = Contrato.objects.filter(fornecedor_fk = id_fornecedor.id)
+        print(f"dentro do verificarContratoInserido contratos {id_contrato}, {id_fornecedor}, {contrs}" )
+        listaID = contrs.values_list('id', flat=True)
+        if id_contrato.id in listaID:
+            print("o usuário não modificou o fornecedor após confirmar o modal ")
+            return id_contrato
+        else:
+            if contrs.count()>1:
+                print(" o usuario modificou o fornecedor no formulário depois confirmar o modal, atualize o valor do id_contrato")
+                return None
+            else:
+                return contrs.first()
+            
     def form_valid(self, form):
-        
         is_contract = self.kwargs['is_contract']
         numNFform = form.cleaned_data['num']
         serieNF = form.cleaned_data['serie']
         valorNFform = form.cleaned_data['valor']
         tipoNF = form.cleaned_data['tipo']
-        nome_fornecedor = form.cleaned_data['fornecedor_fk']
-        id_contrato = self.request.POST.get('contrato_fk')
+        id_fornecedor = form.cleaned_data['fornecedor_fk']
+        id_contrato = form.cleaned_data['contrato_fk']
+
         context ={
             "numero_nf": numNFform,
             "serie_nf": serieNF,
             "valor_nf": valorNFform,
             "tipo_nf": tipoNF,
-            "nome_fornecedor": nome_fornecedor,
             "is_contract": is_contract,
             "form": form
         }
- 
-        print("dados do formulario:", context)
-        print(type(nome_fornecedor))
         if is_contract ==1:
             if id_contrato:
-                contrato = Contrato.objects.get(id =  id_contrato)
-                print("contrato=",contrato)
+                id_contrato = self.verificaContratoInserido(id_contrato, id_fornecedor)
+            if id_contrato:                            
+                print(f"depois da verificação id_contrato:{id_contrato} tipo: {type(id_contrato)}")
+                print(f"depois da verificação id_fornecedor:{id_fornecedor} tipo: {type(id_fornecedor)}")
+                
                 #retorna uma lista de notas fiscais
-                notas=self.search_NF_ByContract(contrato.id) 
+                notas=self.search_NF_ByContract(id_contrato) 
                 #soma todos os valores retornados
                 vlrTotNotas = sum(notas)
                 #pega o valor do contrato
-                vlr_contrato = contrato.valor
+                vlr_contrato = id_contrato.valor
                 dataHoje = datetime.today().date()
-                dataFinalContrato = contrato.dataFinal            
+                dataFinalContrato = id_contrato.dataFinal            
                 if self.valid_NF_valor(valorNFform, vlr_contrato, vlrTotNotas):
                     return HttpResponseRedirect(reverse('biddingContracts:new_notas', kwargs={'is_contract': is_contract}))
                 elif self.valid_NF_vigencia(dataHoje, dataFinalContrato):
                     return HttpResponseRedirect(reverse("biddingContracts:new_notas", kwargs={'is_contract': is_contract}))
                 else:
-                    form.save()
+                    print("vai salvar agora", id_fornecedor, id_contrato)
+                    nf=form.save(commit=False)
+                    nf.contrato_fk = id_contrato
+                    nf.save()
                     messages.add_message(self.request, messages.SUCCESS, "SALVO COM SUCESSO")
                     return HttpResponseRedirect(reverse('biddingContracts:notasfiscais', kwargs={'is_contract': is_contract}))
-            else:# se o campo contrato não tiver sido preenchido.
-                contrato = self.searchContractByForn(nome_fornecedor)
+            else:# se o campo id_contrato for None
+                contrato = self.searchContractByForn(id_fornecedor)
                 print("contrats: ",contrato)
                 if contrato.count()>1:
                     context['contratos'] = contrato
                     context['mostramodal'] = True
+                    context['fornecedor'] = id_fornecedor
+
                     return render(self.request, "notafiscal/notaFiscal_new.html", context)
                 elif contrato.count()==1:
                     print("para o caso de o fornecedor tiver apenas 1 contrato.")
-
                     notas=self.search_NF_ByContract(contrato.first().id) 
                     #soma todos os valores retornados
                     vlrTotNotas = sum(notas)
