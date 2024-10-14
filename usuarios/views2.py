@@ -7,8 +7,6 @@ from django.contrib import messages, auth
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.decorators import permission_required
-from django.shortcuts import get_object_or_404
-from biddingContracts.models import Secretaria
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -50,13 +48,13 @@ def cadastro(request):
     form = CadastroForms(mostrar_secretaria=False)
 
     if request.method == 'POST':
-        form = CadastroForms(mostrar_secretaria=True)
+        form = CadastroForms(request.POST, mostrar_secretaria=False)
 
         if form.is_valid():
             
-            nome = form["nome_cadastro"].value()
-            email = form["email"].value()
-            senha = form["senha"].value()
+            nome = form.cleaned_data["nome_cadastro"]
+            email = form.cleaned_data["email"]
+            senha = form.cleaned_data["senha"]
             
             if User.objects.filter(username=nome).exists():
                 return redirect('login')
@@ -78,7 +76,9 @@ def cadastro(request):
             messages.success(request, aviso)
             messages.warning(request, aviso2)
             return redirect('login')
-
+        else:
+            print(form.error_class, "kkkkkkkkk")
+    
     return render(request, "registration/cadastro.html", {"form": form})
 
 
