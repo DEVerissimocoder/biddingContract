@@ -78,7 +78,7 @@ def cadastro(request):
             return redirect('login')
         else:
             print(form.error_class, "kkkkkkkkk")
-
+    
     return render(request, "registration/cadastro.html", {"form": form})
 
 
