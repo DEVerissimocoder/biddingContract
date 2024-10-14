@@ -18,6 +18,9 @@ from django.utils import timezone
 #import weasyprint
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
+from django.db.models.functions import TruncMonth
+from django.db.models.functions import ExtractMonth, ExtractYear
+from django.db.models import Sum
 
 
 # CONTRATOS + RELATORIOS
@@ -272,6 +275,21 @@ class ContractDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView
 @login_required
 def index(request):
     if request.user.is_authenticated:
+        contratos = Contrato.objects.annotate(
+        mes=TruncMonth('dataInicial'),
+        ano=ExtractYear('dataInicial')
+    ).values('mes', 'ano').annotate(
+        valor_total=Sum('valor')
+    ).order_by('ano', 'mes')
+
+    meses = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez']
+
+    data = []
+    labels = []
+    for contrato in contratos:
+        data.append(contrato['valor_total'])
+        labels.append(f"{meses[contrato['mes'].month-1]} {contrato['ano']}")
+        
         contratos = Contrato.objects.all()
         licitacoes = Licitacao.objects.all()
         notas_fiscais = NotaFiscal.objects.all()
@@ -284,11 +302,11 @@ def index(request):
             'notas_fiscais': notas_fiscais,
             'vencidos': vencidos,
             'zerados': zerados,
-            'arps': arp
+            'arps': arp,
+            'data': data,
+            'labels': labels,
         }
-        # nome_usuario = request.user.username.title()
-        # aviso = f"Olá, {nome_usuario }. Seja bem-vindo!"
-        # messages.success(request, aviso)
+
         return render(request, 'index.html', context)
 
 
