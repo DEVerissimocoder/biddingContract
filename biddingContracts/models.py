@@ -52,7 +52,7 @@ class Contrato(models.Model):
     valor = models.FloatField(null=False)
     licitacao_fk= models.ForeignKey("Licitacao", on_delete=models.CASCADE)
     fornecedor_fk = models.ForeignKey("Fornecedor", on_delete=models.CASCADE)
-    secretaria_fk = models.ManyToManyField("secretaria", related_name="contratos") # Para poder acessar de secretarias os contratos relacionados
+    secretaria_fk = models.ManyToManyField("Secretaria", related_name="Contratos") # Para poder acessar de secretarias os contratos relacionados
 
     def __str__(self):
         return f"{self.numero}"
@@ -64,28 +64,32 @@ class Contrato(models.Model):
     
 #Secretaria
 class Secretaria(models.Model):
-    nome = models.CharField(max_length=200, verbose_name="Nome da secretaria", null=True, blank=True)
-    usuario = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    nome = models.CharField(max_length=200, verbose_name="Nome da secretaria", null=False, blank=False)
+    programa = models.CharField(max_length=100)
+
 
     def __str__(self):
-        return f"{self.nome}"
+        return f"{self.nome, self.programa}"
     
     class Meta:
         verbose_name = "Secretaria"
         verbose_name_plural = "Secretarias"
 
+class Tipo(models.TextChoices):
+    PRESTACAO_SERVICO = "prestacao_servico", "Prestação de Serviço"
+    AQUISICAO_BENS = "aquisicao_bens", "Aquisicao de Bens"
 
 class NotaFiscal(models.Model):
     num = models.IntegerField(unique=True)
     serie = models.CharField(max_length=3)
     valor = models.FloatField()
-    tipo = models.CharField(max_length=50)
+    tipo = models.CharField(max_length=50, choices=Tipo.choices)
     dataEmissao = models.DateField()
     contrato_fk = models.ForeignKey("Contrato", blank=True, null=True, on_delete=models.CASCADE)
     fornecedor_fk = models.ForeignKey("Fornecedor", on_delete=models.CASCADE)
     ataregistropreco_fk = models.ForeignKey('AtaRegistroPreco', blank=True, null=True, on_delete=models.CASCADE)
-    
-    
+
+        
     class Meta:
         verbose_name_plural = "Notas Fiscais"
 

@@ -181,16 +181,11 @@ class formContrato(forms.ModelForm):
             "dataFinal": "DATA FINAL",
             "valor": "VALOR",
             "licitacao_fk": "Licitação",
-            "fornecedor_fk": "Fornecedor"
+            "fornecedor_fk": "Fornecedor",
+            "secretaria_fk": "SECRETARIA"
         }
         widgets = {
-            #"licitacao_fk": forms.TextInput(
-                #attrs={
-                    #"type": "text",
-                    #"class": "form-control",
-                    #"placeholder": "licitacoes ao lado",
-                #}
-            #),
+          
             "fornecedor_fk": forms.TextInput(
                 attrs={
                     "type": "text",
@@ -236,9 +231,9 @@ class formContrato(forms.ModelForm):
                     "id": "money",
                 }
             ),
-            "secretaria_fk": forms.Select(
+            "secretaria_fk": forms.SelectMultiple(
                 attrs={
-                    "blank": "true",
+                    "blank": "false",
                     "class": "form-select"
                 }
             )
@@ -331,7 +326,8 @@ class NotaFiscalForm(forms.ModelForm):
                 "dataEmissao": "DATA DE EMISSÃO",
                 "contrato_fk": "CONTRATO",
                 "fornecedor_fk": "FORNECEDOR",
-                "ataregistropreco_fk": "ARP"
+                "ataregistropreco_fk": "ARP",
+                
                 }
         
 
@@ -346,7 +342,6 @@ class NotaFiscalForm(forms.ModelForm):
                 attrs={
                     "type": "text",
                     "class": "form-control",
-                    
                 }
             ),
             "valor": forms.NumberInput(
@@ -356,10 +351,10 @@ class NotaFiscalForm(forms.ModelForm):
                     
                 }
             ),
-            "tipo": forms.TextInput(
+            "tipo": forms.Select(
                 attrs={
                     "type":"text",
-                    "class": "form-control",
+                    "class": "form-select",
                     
                 }
             ),
@@ -392,6 +387,7 @@ class NotaFiscalForm(forms.ModelForm):
                     
                 }
             )
+            
         }
 
 
@@ -408,7 +404,7 @@ class NotaFiscalEditForm(forms.ModelForm):
                 "dataEmissao": "DATA DE EMISSÃO",
                 "contrato_fk": "CONTRATO",
                 "ataregistropreco_fk": "ARP",
-                "secretaria": "Secretaria"
+                
                 }
         
 
@@ -457,12 +453,7 @@ class NotaFiscalEditForm(forms.ModelForm):
                     "class": "form-select"
                 }
             ),
-            # "secretaria": forms.Select(
-            #     attrs={
-            #         "blank": "true",
-            #         "class": "form-select"
-            #     }
-            # )
+            
         }
 
 
@@ -471,11 +462,12 @@ class formSecretaria(forms.ModelForm):
         model = Secretaria
         fields = [
             "nome",
+            "programa",
         ]
-        exclude = ["usuario"]
 
         labels = {
             "nome": "Setor",
+            "programa": "Programa"
         }
 
         widgets = {
@@ -484,8 +476,14 @@ class formSecretaria(forms.ModelForm):
                     "type": "text",
                     "class": "form-control",
                     "placeholder": "Setor de atuação",
-                    "id": "nome",
+                    
                 }
             ),
+            "programa": forms.TextInput(
+                attrs={
+                    "type": "text",
+                    "class": "form-control",
+                }
+            )
         }
             

@@ -8,85 +8,82 @@
   <div class="container my-5">
     {% include "messages.html" %}
     <h2 class="text-center mb-4 text-uppercase">Notas Fiscais Eletrônicas</h2>
-  {% if notafiscal_list %}
-    <table class="table">
-      <thead>
-        <tr>
-          <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">#</th>
-          <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">NÚMERO</th>
-          <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">VALOR</th>
-          <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">DATA EMISSAO</th>
-          <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">CONTRATO</th>
-          <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">ARP</th>
-          {% comment %} <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">SECRETARIA</th> {% endcomment %}
-          <th class="text-center text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">AÇÕES</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-          {% for notafiscal in notafiscal_list %}
-          <tr>
-              <th class="align align-middle" scope="row">{{ notafiscal.pk }}</th>
-              <td class="align-align-middle" style="font-size:14px;">
-                {{ notafiscal.num}}
-                <p class="text-muted small">
-                  SÉRIE: {{ notafiscal.serie }}
-                </p>
-              </td>
-              <td class="align-align-middle" style="font-size:14px;">
-                R${{ notafiscal.valor }}
-                <p class="text-muted small">
-                  TIPO: {{ notafiscal.tipo }}
-                </p>
-              </td>
-              <td class="align-align-middle" style="font-size:14px;">
-                {{ notafiscal.dataEmissao }}
-              </td>
-              {% if notafiscal.contrato_fk %}
-              <td class="align-align-middle" style="font-size:14px;">
-                {{ notafiscal.contrato_fk }}
-                <p class="text-muted small">
-                  {{ notafiscal.fornecedor_fk }}
-                </p>
-              </td>
-              {% else %}
-              <td class="align-align-middle" style="font-size:14px;">
-                -----
-              </td>
-              {% endif %}
-              {% if notafiscal.ataregistropreco_fk %}
-              <td class="align-align-middle" style="font-size:14px;">
-                {{ notafiscal.ataregistropreco_fk }}
-              </td>
-              {% else %}
-              <td class="align-align-middle" style="font-size:14px;">
-                -----
-              </td>
-              {% endif %}
-              {% comment %} <td class="align-align-middle" style="font-size:14px;">
-                {{ notafiscal.secretaria }}
-              </td> {% endcomment %}
-              <td class="">
-                <div class="d-flex gap-3 justify-content-center align-align-middle" style="font-size:14px;">
-                  {% if perms.biddingContracts.change_notafiscal %}
-                    <a href="{% url "biddingContracts:updatenfe" notafiscal.pk is_contract %}">Editar</a>
+        {% if notafiscal_list %}
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">#</th>
+                <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">NÚMERO</th>
+                <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">VALOR</th>
+                <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">DATA EMISSAO</th>
+                <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">CONTRATO</th>
+                <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">ARP</th>
+                <th class="text-center text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">AÇÕES</th>
+              </tr>
+            </thead>
+            <tbody>
+          
+            {% for notafiscal in notafiscal_list %}
+              <tr>
+                  <th class="align align-middle" scope="row">{{ notafiscal.pk }}</th>
+                  <td class="align-align-middle" style="font-size:14px;">
+                    {{ notafiscal.num}}
+                    <p class="text-muted small">
+                      SÉRIE: {{ notafiscal.serie }}
+                    </p>
+                  </td>
+                  <td class="align-align-middle" style="font-size:14px;">
+                    R${{ notafiscal.valor }}
+                    <p class="text-muted small">
+                      TIPO: {{ notafiscal.tipo }}
+                    </p>
+                  </td>
+                  <td class="align-align-middle" style="font-size:14px;">
+                    {{ notafiscal.dataEmissao }}
+                  </td>
+                  {% if notafiscal.contrato_fk %}
+                  <td class="align-align-middle" style="font-size:14px;">
+                    {{ notafiscal.contrato_fk }}
+                    <p class="text-muted small">
+                      {{ notafiscal.fornecedor_fk }}
+                    </p>
+                  </td>
+                  {% else %}
+                  <td class="align-align-middle" style="font-size:14px;">
+                    -----
+                  </td>
                   {% endif %}
-                  {% if perms.biddingContracts.delete_notafiscal and perms.biddingContracts.zero_notafiscal %}
-                    <a class="text-danger" href="{% url "biddingContracts:deletenfe" notafiscal.pk %}">Excluir</a>
+                  {% if notafiscal.ataregistropreco_fk %}
+                  <td class="align-align-middle" style="font-size:14px;">
+                    {{ notafiscal.ataregistropreco_fk }}
+                  </td>
+                  {% else %}
+                  <td class="align-align-middle" style="font-size:14px;">
+                    -----
+                  </td>
                   {% endif %}
-                </div>
-              </td>
-          </tr>
-          {% endfor %}
-    {% else %}
-        <h3 class="text-center text-uppercase">Sem notas Fiscais!</h3>
+                  
+                  <td class="">
+                    <div class="d-flex gap-3 justify-content-center align-align-middle" style="font-size:14px;">
+                      {% if perms.biddingContracts.change_notafiscal %}
+                        <a href="{% url "biddingContracts:updatenfe" notafiscal.pk is_contract %}">Editar</a>
+                      {% endif %}
+                      {% if perms.biddingContracts.delete_notafiscal and perms.biddingContracts.zero_notafiscal %}
+                        <a class="text-danger" href="{% url "biddingContracts:deletenfe" notafiscal.pk %}">Excluir</a>
+                      {% endif %}
+                    </div>
+                  </td>
+              </tr>
+            {% endfor %}
+        {% else %}
+          <h3 class="text-center text-uppercase">Sem notas Fiscais!</h3>
         {% endif %}
-      </tbody>
-    </table>
-    <div class="d-flex justify-content-center flex-row-reverse gap-3">
-      <a href="{% url "biddingContracts:index" %}" class="btn btn-dark">Voltar</a>
-      <a href="{% url "biddingContracts:new_notas" 1 %}" class="btn btn-success">+ Adicionar</a>
-    </div>
+            </tbody>
+          </table>
+      <div class="d-flex justify-content-center flex-row-reverse gap-3">
+        <a href="{% url "biddingContracts:index" %}" class="btn btn-dark">Voltar</a>
+        <a href="{% url "biddingContracts:new_notas" 1 %}" class="btn btn-success">+ Adicionar</a>
+      </div>
   </div>
 </div>
     

@@ -15,7 +15,7 @@ def login(request):
     form = CustomLoginForm()
 
     if request.method == 'POST':
-        form = CadastroForms(request.POST, mostrar_secretaria=False)
+        form = CadastroForms(request.POST)
 
         if form.is_valid():
             username = form["username"].value()
@@ -45,10 +45,10 @@ def login(request):
 
 
 def cadastro(request):
-    form = CadastroForms(mostrar_secretaria=False)
+    form = CadastroForms()
 
     if request.method == 'POST':
-        form = CadastroForms(request.POST, mostrar_secretaria=False)
+        form = CadastroForms(request.POST)
 
         if form.is_valid():
             
@@ -82,50 +82,6 @@ def cadastro(request):
     return render(request, "registration/cadastro.html", {"form": form})
 
 
-@permission_required("auth.add_user")
-def cadastro_secretaria(request):
-    form = CadastroForms(mostrar_secretaria=True)
-    
-    if request.method == "POST":
-        form = CadastroForms(request.POST, mostrar_secretaria=True)
-        
-        if form.is_valid():
-            nome = form.cleaned_data["nome_cadastro"]
-            email = form.cleaned_data["email"]
-            senha = form.cleaned_data["senha"]
-            secretaria = form.cleaned_data.get("secretaria")
-
-            # Verifica se já existe o usuário
-            if User.objects.filter(username=nome).exists():
-                messages.error(request, "Usuário já existe, insira outro nome de usuário")
-                return render(request, "secretaria/cad_user.html", {"form": form})
-            
-            # Verifica se já existe o email
-            if User.objects.filter(email=email).exists():
-                messages.error(request, "Email já cadastrado, use outro!")
-                return render(request, "secretaria/cad_user.html", {"form": form})
-            
-            # Cria o novo usuário
-            usuario = User.objects.create_user(
-                username=nome,
-                email=email,
-                password=senha
-            )
-
-            # Associa a secretaria ao usuário, se houver
-            if secretaria:
-                secretaria.usuario = usuario
-                secretaria.save()
-
-            messages.success(request, 'Cadastro efetuado com sucesso!')
-            return redirect('usuarios:list_member')
-    
-    return render(request, "secretaria/cad_user.html", {"form": form})
-
-
-
-
-
 def logout(request):
     auth.logout(request)
     messages.success(request, "Deslogado com sucesso!")
@@ -135,7 +91,7 @@ def logout(request):
 
 class ListMemberView(ListView, PermissionRequiredMixin):
     model = User
-    template_name = "secretaria/list_usuarios.html"
+    template_name = "usuario/list_usuarios.html"
     context_object_name = "usuarios"
     permission_required = ["auth.view_user"]
 

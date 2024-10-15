@@ -23,25 +23,6 @@ from django.db.models.functions import ExtractMonth, ExtractYear
 from django.db.models import Sum
 
 
-# CONTRATOS + RELATORIOS
-# def cadContrato(request):
-#     if request.method == "POST":
-#         form = formContrato(request.POST)
-#         print("post")
-#         if form.is_valid():
-#             print("formulario validado")
-#             form.save()
-#             return HttpResponseRedirect(reverse("biddingContracts:contratos"))
-#         else:
-#             print(f"Deu errado!{form.errors}")
-#     else:
-#         form = formContrato()
-        
-
-#     return render(request, "contrato_new.html", {"form": form})
-"""def teste(request):
-    return render(request, "modal_fornecedor_teste.html")"""
-
 
 @login_required
 @permission_required("biddingContracts.add_contrato") # Permissão de criar contratos
@@ -60,11 +41,6 @@ def cadContrato(request, fornecedor_id):
     return render(request, "contratos/contrato_new.html", {"form": form, "fornecedor_id": fornecedor_id})
     
 
-# def listContratos(request):
-#     contratos = Contrato.objects.all()
-#     context = {"contratos": contratos}
-#     print("chamando view")
-#     return render(request, "contratos.html", context)
 
 # class ListContractsView(LoginRequiredMixin, ListView):
     
@@ -671,8 +647,8 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
             print("o usuário não modificou o fornecedor após confirmar o modal ")
             return id_contrato
         else:
+            print(" o usuario modificou o fornecedor no formulário depois confirmar o modal, atualize o valor do id_contrato (none se tiver vários fornecedores e contrs se tiver apenas 1)")
             if contrs.count()>1:
-                print(" o usuario modificou o fornecedor no formulário depois confirmar o modal, atualize o valor do id_contrato")
                 return None
             else:
                 return contrs.first()
@@ -835,7 +811,8 @@ class NotesDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
         return reverse_lazy("biddingContracts:notasfiscais", kwargs={"is_contract": 2})
     
 # View que cria as secretarias
-class SecretaryNew(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+#class SecretaryNew(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+class SecretaryNew(LoginRequiredMixin, CreateView):
     """
     Faz o cadastro das Secretarias
     """
@@ -843,7 +820,7 @@ class SecretaryNew(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     form_class = formSecretaria
     template_name = 'secretaria/secretaria_new.html'
     message_success = 'Secretaria cadastrada com sucesso!'
-    permission_required = ["biddingContracts.add_secretaria"]
+    #permission_required = ["biddingContracts.add_secretaria"]
 
     def get_success_url(self) -> str:
         messages.success(self.request, self.message_success)
@@ -852,12 +829,12 @@ class SecretaryNew(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
 
 
 # View que lista as Secretarias
-class ListSecretary(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+class ListSecretary(LoginRequiredMixin, ListView):
     model = Secretaria
     template_name = "secretaria/list_secretaria.html"
     success_url = reverse_lazy("biddingContracts:list_secretarias")
     context_object_name = "secretarias"
-    permission_required = ["biddingContracts.view_secretaria"]
+    #permission_required = ["biddingContracts.view_secretaria"]
 
 
  # View que edita as secretarias 
@@ -893,11 +870,11 @@ def modal_secretaria(request):
 
 
 # View que deleta as Secretarias
-class SecretaryDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+class SecretaryDeleteView(LoginRequiredMixin, DeleteView):
     model = Secretaria
     template_name = "secretaria/delete_secretaria.html"
     context_object_name = "sec"
-    permission_required = ["biddingContracts.delete_secretaria"]
+    #permission_required = ["biddingContracts.delete_secretaria"]
 
     def get_success_url(self):
         messages.success(self.request, 'Secretaria excluída com sucesso!')
