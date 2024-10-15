@@ -655,7 +655,7 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         return False
     
     def search_NF_ByContract(self, id_contrato):
-        notafiscal = NotaFiscal.objects.filter(contrato_fk=id_contrato.id) 
+        notafiscal = NotaFiscal.objects.filter(contrato_fk=id_contrato)
         notasfiscais = notafiscal.values_list('valor', flat=True)
         return notasfiscais   
 
