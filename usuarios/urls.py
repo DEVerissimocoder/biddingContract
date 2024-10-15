@@ -15,7 +15,8 @@ urlpatterns = [
     path('reset/done/', views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('admin/add-permission/<int:pk>', views.add_permission, name='add_permission'),
     
-
+    # Cadastro de usuśrios secretaria
+    path('cadastro/membros-secretaria/', views2.cadastro_secretaria, name='cad_user'),
     path('listar/membros-secretaria/', views2.ListMemberView.as_view(), name='list_member'),
     #path('cadastro/membros-secretaria/<int:pk>/update/', views2.update_user_secret.as_view(), name='cad_update'),
 

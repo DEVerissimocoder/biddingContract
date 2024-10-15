@@ -1,5 +1,5 @@
 from django import forms
-from .models import Licitacao, Fornecedor, Contrato, AtaRegistroPreco, NotaFiscal
+from .models import Licitacao, Fornecedor, Contrato, AtaRegistroPreco, NotaFiscal, Secretaria
 
 class formLicitacao(forms.ModelForm):
     class Meta:
@@ -172,6 +172,7 @@ class formContrato(forms.ModelForm):
             "valor",
             "licitacao_fk",
             "fornecedor_fk",
+            "secretaria_fk",
         ]
         labels = {
             "numero": "NÚMERO",
@@ -235,6 +236,12 @@ class formContrato(forms.ModelForm):
                     "id": "money",
                 }
             ),
+            "secretaria_fk": forms.Select(
+                attrs={
+                    "blank": "true",
+                    "class": "form-select"
+                }
+            )
         }
 
 class formARP(forms.ModelForm):
@@ -307,10 +314,15 @@ class formARP(forms.ModelForm):
         }
 
 class NotaFiscalForm(forms.ModelForm):
-    
+    secretaria = forms.ModelChoiceField(
+         queryset=Secretaria.objects.all(),
+         label="Secretaria",
+         widget=forms.Select(attrs={'class': 'form-select'})
+     )
+
     class Meta:
         model = NotaFiscal
-        fields=["num", "serie", "valor", "tipo", "dataEmissao", "contrato_fk", "fornecedor_fk", "ataregistropreco_fk", "secretaria"]
+        fields=["num", "serie", "valor", "tipo", "dataEmissao", "contrato_fk", "fornecedor_fk", "ataregistropreco_fk"]
         labels={
                 "num": "NÚMERO",
                 "serie": "SERIE",
@@ -319,8 +331,7 @@ class NotaFiscalForm(forms.ModelForm):
                 "dataEmissao": "DATA DE EMISSÃO",
                 "contrato_fk": "CONTRATO",
                 "fornecedor_fk": "FORNECEDOR",
-                "ataregistropreco_fk": "ARP",
-                "secretaria": "SECRETARIA"
+                "ataregistropreco_fk": "ARP"
                 }
         
 
@@ -345,10 +356,10 @@ class NotaFiscalForm(forms.ModelForm):
                     
                 }
             ),
-            "tipo": forms.Select(
+            "tipo": forms.TextInput(
                 attrs={
                     "type":"text",
-                    "class": "form-select",
+                    "class": "form-control",
                     
                 }
             ),
@@ -380,12 +391,6 @@ class NotaFiscalForm(forms.ModelForm):
                     "class": "form-select",
                     
                 }
-            ),
-            "secretaria": forms.Select(
-                attrs={
-                    "blank": "false",
-                    "class": "form-select"
-                }
             )
         }
 
@@ -394,7 +399,7 @@ class NotaFiscalEditForm(forms.ModelForm):
 
     class Meta:
         model = NotaFiscal
-        fields=["num", "serie", "valor", "tipo", "dataEmissao", "contrato_fk", "ataregistropreco_fk", "secretaria"]
+        fields=["num", "serie", "valor", "tipo", "dataEmissao", "contrato_fk", "ataregistropreco_fk"]
         labels={
                 "num": "NÚMERO",
                 "serie": "SERIE",
@@ -452,12 +457,35 @@ class NotaFiscalEditForm(forms.ModelForm):
                     "class": "form-select"
                 }
             ),
-            "secretaria": forms.Select(
-                attrs={
-                    "blank": "true",
-                    "class": "form-select"
-                }
-            )
+            # "secretaria": forms.Select(
+            #     attrs={
+            #         "blank": "true",
+            #         "class": "form-select"
+            #     }
+            # )
         }
 
+
+class formSecretaria(forms.ModelForm):
+    class Meta:
+        model = Secretaria
+        fields = [
+            "nome",
+        ]
+        exclude = ["usuario"]
+
+        labels = {
+            "nome": "Setor",
+        }
+
+        widgets = {
+            "nome": forms.TextInput(
+                attrs={
+                    "type": "text",
+                    "class": "form-control",
+                    "placeholder": "Setor de atuação",
+                    "id": "nome",
+                }
+            ),
+        }
             

@@ -1,4 +1,5 @@
 from django import forms
+from biddingContracts.models import Secretaria
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -79,9 +80,34 @@ class CadastroForms(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        
-       pass
-    
+        self.mostrar_secretaria = kwargs.pop('mostrar_secretaria', False)
+        super().__init__(*args, **kwargs)
+        if not self.mostrar_secretaria:
+            self.fields.pop('secretaria', None)
+
+        if self.mostrar_secretaria:
+            self.fields['secretaria'] = forms.ModelChoiceField(
+                label="Secretaria",
+                required=True,
+                queryset=Secretaria.objects.all(),
+                widget=forms.Select(
+                    attrs={
+                        "class": "form-control"
+                    }
+                )
+            )
+        # else:
+        #     self.fields['secretaria'] = forms.ModelChoiceField(
+        #         label="Secretaria",
+        #         required=False,
+        #         queryset=Secretaria.objects.all(),
+        #         widget=forms.Select(
+        #             attrs={
+        #                 "class": "form-control"
+        #             }
+        #         )
+        #     )
+
     #Validação de Cadastro
     def clean_nome_cadastro(self):
         nome = self.cleaned_data.get("nome_cadastro")

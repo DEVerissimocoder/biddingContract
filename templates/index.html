@@ -177,6 +177,34 @@ Inicial {% endblock %} {% block content %}
             </div>
           </div>
         </div>
+        <div class="col-4">
+          <canvas id="myChart"></canvas>
+        </div>
+      
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      {% comment %} <script>
+          var ctx = document.getElementById('myChart').getContext('2d');
+          var chart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                  labels: {{ labels|safe }},
+                  datasets: [{
+                      label: 'Valores dos contratos',
+                      data: {{ data|safe }},
+                      backgroundColor: '#17A2B8',
+                      borderColor: '#17A2B8',
+                      borderWidth: 1
+                  }]
+              },
+              options: {
+                  scales: {
+                      y: {
+                          beginAtZero: true
+                      }
+                  }
+              }
+          });
+      </script> {% endcomment %}
       </section>
     </div>
   </div>

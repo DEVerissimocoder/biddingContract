@@ -91,7 +91,55 @@
                 </a>
             </div>
         </li>
+        
+        {% if perms.auth.add_user %} <!-- Visualiza somente com a permissão de criar secretaria -->
+        <li class="nav-item mb-3">
+            <div class="d-flex flex-column align-items-center">
+                <a class="nav-link text-white {% if request.resolver_match.url_name == 'cad_user' and request.resolver_match.namespace == 'usuarios' %}active{% endif %}" 
+                   href="{% url 'usuarios:cad_user' %}">
+                    <i class="fa-solid fa-user-plus" title="Cadastrar Usuários Secretaria"></i> 
+                    <span class="nav-text text-white small">Cadastrar Usuários</span> 
+                </a>
+            </div>
+        </li>
+        {% endif %}
 
+        {% if perms.auth.view_user %} <!-- Visualiza somente com a permissão de criar secretaria -->
+        <li class="nav-item mb-3">
+            <div class="d-flex flex-column align-items-center">
+                <a class="nav-link text-white {% if request.resolver_match.url_name == 'list_member' and request.resolver_match.namespace == 'usuarios' %}active{% endif %}" 
+                   href="{% url 'usuarios:list_member' %}">
+                    <i class="fa-solid fa-users" title="Listar Usuários Secretaria"></i> 
+                    <span class="nav-text text-white small">Visualizar Usuários</span> 
+                </a>
+            </div>
+        </li>
+        {% endif %}
+
+        {% if perms.biddingContracts.add_secretaria %} <!-- Visualiza somente com a permissão de criar secretaria -->
+        <li class="nav-item mb-3">
+            <div class="d-flex flex-column align-items-center">
+                <a class="nav-link text-white {% if request.resolver_match.url_name == 'new_secretaria' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
+                   href="{% url 'biddingContracts:new_secretaria' %}">
+                    <i class="fa-solid fa-s" title="Cadastrar Secretarias"></i> 
+                    <span class="nav-text text-white small">Cadastrar Secretarias</span> 
+                </a>
+            </div>
+        </li>
+        {% endif %}
+
+        {% if perms.biddingContracts.view_secretaria %}
+        <li class="nav-item mb-3">
+            <div class="d-flex flex-column align-items-center">
+                <a class="nav-link text-white {% if request.resolver_match.url_name == 'list_secretarias' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
+                   href="{% url 'biddingContracts:list_secretarias' %}">
+                    <i class="fa-solid fa-table-list" title="Listar Secretarias"></i> 
+                    <span class="nav-text text-white small">Listar Secretarias</span> 
+                </a>
+            </div>
+        </li>
+        {% endif %}
+        
         {% if perms.biddingContracts.add_contrato %} <!-- Visualiza somente com a permissão de criar contrato -->
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">

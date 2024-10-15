@@ -5,9 +5,9 @@ from django.shortcuts import redirect, render
 from django.http import HttpRequest, HttpResponseRedirect, HttpResponse
 from datetime import datetime, timedelta
 from django.db.models import Q
-from  biddingContracts.forms import formLicitacao, formFornecedor,NotaFiscalEditForm, formContrato, formARP, NotaFiscalForm
+from  biddingContracts.forms import formLicitacao, formFornecedor,NotaFiscalEditForm, formContrato, formARP, NotaFiscalForm, formSecretaria
 from django.urls import reverse, reverse_lazy
-from .models import Contrato, NotaFiscal, Fornecedor, Licitacao, AtaRegistroPreco
+from .models import Contrato, NotaFiscal, Fornecedor, Licitacao, AtaRegistroPreco, Secretaria
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
@@ -18,6 +18,9 @@ from django.utils import timezone
 #import weasyprint
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
+from django.db.models.functions import TruncMonth
+from django.db.models.functions import ExtractMonth, ExtractYear
+from django.db.models import Sum
 
 
 # CONTRATOS + RELATORIOS
@@ -272,6 +275,21 @@ class ContractDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView
 @login_required
 def index(request):
     if request.user.is_authenticated:
+        contratos = Contrato.objects.annotate(
+        mes=TruncMonth('dataInicial'),
+        ano=ExtractYear('dataInicial')
+    ).values('mes', 'ano').annotate(
+        valor_total=Sum('valor')
+    ).order_by('ano', 'mes')
+
+    meses = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez']
+
+    data = []
+    labels = []
+    for contrato in contratos:
+        data.append(contrato['valor_total'])
+        labels.append(f"{meses[contrato['mes'].month-1]} {contrato['ano']}")
+        
         contratos = Contrato.objects.all()
         licitacoes = Licitacao.objects.all()
         notas_fiscais = NotaFiscal.objects.all()
@@ -284,11 +302,11 @@ def index(request):
             'notas_fiscais': notas_fiscais,
             'vencidos': vencidos,
             'zerados': zerados,
-            'arps': arp
+            'arps': arp,
+            'data': data,
+            'labels': labels,
         }
-        # nome_usuario = request.user.username.title()
-        # aviso = f"Olá, {nome_usuario }. Seja bem-vindo!"
-        # messages.success(request, aviso)
+
         return render(request, 'index.html', context)
 
 
@@ -637,7 +655,7 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         return False
     
     def search_NF_ByContract(self, id_contrato):
-        notafiscal = NotaFiscal.objects.filter(contrato_fk=id_contrato.id) 
+        notafiscal = NotaFiscal.objects.filter(contrato_fk=id_contrato)
         notasfiscais = notafiscal.values_list('valor', flat=True)
         return notasfiscais   
 
@@ -816,3 +834,71 @@ class NotesDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     def get_success_url(self):
         return reverse_lazy("biddingContracts:notasfiscais", kwargs={"is_contract": 2})
     
+# View que cria as secretarias
+class SecretaryNew(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    """
+    Faz o cadastro das Secretarias
+    """
+    model = Secretaria
+    form_class = formSecretaria
+    template_name = 'secretaria/secretaria_new.html'
+    message_success = 'Secretaria cadastrada com sucesso!'
+    permission_required = ["biddingContracts.add_secretaria"]
+
+    def get_success_url(self) -> str:
+        messages.success(self.request, self.message_success)
+        return reverse_lazy('biddingContracts:list_secretarias')
+    
+
+
+# View que lista as Secretarias
+class ListSecretary(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    model = Secretaria
+    template_name = "secretaria/list_secretaria.html"
+    success_url = reverse_lazy("biddingContracts:list_secretarias")
+    context_object_name = "secretarias"
+    permission_required = ["biddingContracts.view_secretaria"]
+
+
+ # View que edita as secretarias 
+class SecretaryUpdateView(LoginRequiredMixin, UpdateView):
+    model = Secretaria
+    template_name = "secretaria/edit_secretarias.html"
+    form_class = formSecretaria
+    context_object_name = "secretaria"
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Secretaria editada com sucesso!')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Erro ao editar secretaria. Verifique os campos do formulário.')
+        return render(self.request, self.template_name, {"form": form})
+
+    def get_success_url(self):
+        return reverse_lazy("biddingContracts:list_secretarias")
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+    
+    
+@login_required
+# View que mostra fornecedor em um modal
+def modal_secretaria(request):
+    "mostra fornecedor em um modal"
+    secretarias = Secretaria.objects.all()
+    context = {"secretarias": secretarias}
+    return render(request, "secretaria/modal_secretaria.html", context)
+
+
+# View que deleta as Secretarias
+class SecretaryDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    model = Secretaria
+    template_name = "secretaria/delete_secretaria.html"
+    context_object_name = "sec"
+    permission_required = ["biddingContracts.delete_secretaria"]
+
+    def get_success_url(self):
+        messages.success(self.request, 'Secretaria excluída com sucesso!')
+        return reverse_lazy("biddingContracts:list_secretarias")

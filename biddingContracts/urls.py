@@ -1,4 +1,4 @@
-from . import views
+from . import views, views_dash
 from django.urls import path
 
 app_name = 'biddingContracts'
@@ -38,5 +38,16 @@ urlpatterns = [
     path('notasfiscais/<int:is_contract>/', views.ListNfe.as_view(), name='notasfiscais'), # Listar Notas Fiscais
     path('editarnfe/<int:pk>/<int:is_contract>/', views.NotasFiscaisUpdate.as_view(), name='updatenfe'), # Editar Notas Fiscais
     path('deletenfe/<int:pk>/', views.NotesDeleteView.as_view(), name='deletenfe'), # Deletar Notas Fiscais
+
+    # Secretarias
+    path('create/new-secretary/', views.SecretaryNew.as_view(), name='new_secretaria'),# Criar Secretarias
+    path('list-secretarys/', views.ListSecretary.as_view(), name='list_secretarias'), # Listar Secretarias
+    path('modal-secretaria/', views.modal_secretaria, name="modal_secretaria"), #Modal Secretaria
+    path('editar-secretaria/<int:pk>/', views.SecretaryUpdateView.as_view(), name='update_secretaria'), # Editar Secretarias
+    path('delete-secretary/<int:pk>/', views.SecretaryDeleteView.as_view(), name='del_secretaria'), # Deletar secretarias
+    
+    # Dashboard
+    path('teste/', views_dash.retorna_total_valores, name="teste"),
+    path('teste2/', views_dash.contrato_valor_por_mes, name="teste2"),
 
 ]
