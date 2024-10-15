@@ -68,14 +68,14 @@
                           {{ form.contrato_fk.errors }}
                         </div>
                     {% endif %}
-                    <div class="form-group col-12">
+                    {% comment %} <div class="form-group col-12">
                       <label for="{{ form.secretaria.id_for_label }}">Secretaria:</label>
                       {{ form.secretaria}}
                       {% if form.secretaria.errors %}
                       <div class="alert-danger pt-1 col-auto" role="alert">
                         {{ form.secretaria.errors }}
                       </div>
-                      {% endif %}
+                      {% endif %} {% endcomment %}
                     <div class="form-group col-12">
                       <label for="{{ form.ataregistropreco_fk.id_for_label }}">ARP:</label>
                       {{ form.ataregistropreco_fk}}

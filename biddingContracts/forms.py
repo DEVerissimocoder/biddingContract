@@ -172,6 +172,7 @@ class formContrato(forms.ModelForm):
             "valor",
             "licitacao_fk",
             "fornecedor_fk",
+            "secretaria_fk",
         ]
         labels = {
             "numero": "NÚMERO",
@@ -235,6 +236,12 @@ class formContrato(forms.ModelForm):
                     "id": "money",
                 }
             ),
+            "secretaria_fk": forms.Select(
+                attrs={
+                    "blank": "true",
+                    "class": "form-select"
+                }
+            )
         }
 
 class formARP(forms.ModelForm):
@@ -315,7 +322,7 @@ class NotaFiscalForm(forms.ModelForm):
 
     class Meta:
         model = NotaFiscal
-        fields=["num", "serie", "valor", "tipo", "dataEmissao", "contrato_fk", "fornecedor_fk", "ataregistropreco_fk", "secretaria"]
+        fields=["num", "serie", "valor", "tipo", "dataEmissao", "contrato_fk", "fornecedor_fk", "ataregistropreco_fk"]
         labels={
                 "num": "NÚMERO",
                 "serie": "SERIE",
@@ -392,7 +399,7 @@ class NotaFiscalEditForm(forms.ModelForm):
 
     class Meta:
         model = NotaFiscal
-        fields=["num", "serie", "valor", "tipo", "dataEmissao", "contrato_fk", "ataregistropreco_fk", "secretaria"]
+        fields=["num", "serie", "valor", "tipo", "dataEmissao", "contrato_fk", "ataregistropreco_fk"]
         labels={
                 "num": "NÚMERO",
                 "serie": "SERIE",
@@ -450,12 +457,12 @@ class NotaFiscalEditForm(forms.ModelForm):
                     "class": "form-select"
                 }
             ),
-            "secretaria": forms.Select(
-                attrs={
-                    "blank": "true",
-                    "class": "form-select"
-                }
-            )
+            # "secretaria": forms.Select(
+            #     attrs={
+            #         "blank": "true",
+            #         "class": "form-select"
+            #     }
+            # )
         }
 
 

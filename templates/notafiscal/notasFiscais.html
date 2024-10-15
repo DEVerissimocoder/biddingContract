@@ -18,7 +18,7 @@
           <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">DATA EMISSAO</th>
           <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">CONTRATO</th>
           <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">ARP</th>
-          <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">SECRETARIA</th>
+          {% comment %} <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">SECRETARIA</th> {% endcomment %}
           <th class="text-center text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">AÇÕES</th>
         </tr>
       </thead>
@@ -63,9 +63,9 @@
                 -----
               </td>
               {% endif %}
-              <td class="align-align-middle" style="font-size:14px;">
+              {% comment %} <td class="align-align-middle" style="font-size:14px;">
                 {{ notafiscal.secretaria }}
-              </td>
+              </td> {% endcomment %}
               <td class="">
                 <div class="d-flex gap-3 justify-content-center align-align-middle" style="font-size:14px;">
                   {% if perms.biddingContracts.change_notafiscal %}
