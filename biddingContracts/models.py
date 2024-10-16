@@ -80,7 +80,7 @@ class Tipo(models.TextChoices):
     AQUISICAO_BENS = "aquisicao_bens", "Aquisicao de Bens"
 
 class NotaFiscal(models.Model):
-    num = models.IntegerField(unique=True)
+    num = models.IntegerField()
     serie = models.CharField(max_length=3)
     valor = models.FloatField()
     tipo = models.CharField(max_length=50, choices=Tipo.choices)
