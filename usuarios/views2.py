@@ -72,7 +72,7 @@ def cadastro(request):
             usuario.is_active = False
             usuario.save()
             aviso = 'Cadastro efetuado com sucesso!'
-            aviso2 = 'Entre em contato com o administrador solicitando a liberação do sistema!'
+            aviso2 = 'Enviamos um e-mail com algumas informações inportantes, verifique a sua caixa de entrada!'
             messages.success(request, aviso)
             messages.warning(request, aviso2)
             return redirect('login')
