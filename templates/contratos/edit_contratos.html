@@ -65,6 +65,14 @@
                     </div>
 
                     <div class="col-md-6">
+                        <label for="{{ form.secretaria_fk.id_for_label }}" class="form-label" value="{{ form.secretaria_fk.id_for_label }}">{{ form.secretaria_fk.label }}</label>
+                        {{ form.secretaria_fk }}    
+                        {% if form.secretaria_fk.errors %}
+                            <div class="text-danger">{{ form.secretaria_fk.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-6">
                         <label for="{{ form.fornecedor_fk.id_for_label }}" class="form-label" value="{{ fornecedor.nome }}">{{ form.fornecedor_fk.label }}</label>
                         {{ form.fornecedor_fk }}
                         {% if form.fornecedor_fk.errors %}

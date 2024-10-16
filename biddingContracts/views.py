@@ -251,20 +251,6 @@ class ContractDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView
 @login_required
 def index(request):
     if request.user.is_authenticated:
-        contratos = Contrato.objects.annotate(
-        mes=TruncMonth('dataInicial'),
-        ano=ExtractYear('dataInicial')
-    ).values('mes', 'ano').annotate(
-        valor_total=Sum('valor')
-    ).order_by('ano', 'mes')
-
-    meses = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez']
-
-    data = []
-    labels = []
-    for contrato in contratos:
-        data.append(contrato['valor_total'])
-        labels.append(f"{meses[contrato['mes'].month-1]} {contrato['ano']}")
         
         contratos = Contrato.objects.all()
         licitacoes = Licitacao.objects.all()
@@ -279,8 +265,6 @@ def index(request):
             'vencidos': vencidos,
             'zerados': zerados,
             'arps': arp,
-            'data': data,
-            'labels': labels,
         }
 
         return render(request, 'index.html', context)
