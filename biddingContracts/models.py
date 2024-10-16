@@ -65,7 +65,7 @@ class Contrato(models.Model):
 #Secretaria
 class Secretaria(models.Model):
     nome = models.CharField(max_length=200, verbose_name="Nome da secretaria", null=False, blank=False)
-    programa = models.CharField(max_length=100)
+    programa = models.CharField(max_length=100, null=True, blank=True)
 
 
     def __str__(self):
@@ -80,7 +80,7 @@ class Tipo(models.TextChoices):
     AQUISICAO_BENS = "aquisicao_bens", "Aquisicao de Bens"
 
 class NotaFiscal(models.Model):
-    num = models.IntegerField(unique=True)
+    num = models.IntegerField()
     serie = models.CharField(max_length=3)
     valor = models.FloatField()
     tipo = models.CharField(max_length=50, choices=Tipo.choices)

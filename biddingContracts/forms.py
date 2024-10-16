@@ -314,11 +314,7 @@ class formARP(forms.ModelForm):
         }
 
 class NotaFiscalForm(forms.ModelForm):
-    secretaria = forms.ModelChoiceField(
-         queryset=Secretaria.objects.all(),
-         label="Secretaria",
-         widget=forms.Select(attrs={'class': 'form-select'})
-     )
+    
 
     class Meta:
         model = NotaFiscal

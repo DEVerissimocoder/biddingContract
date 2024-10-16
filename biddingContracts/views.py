@@ -636,7 +636,11 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
                 return None
             else:
                 return contrs.first()
-            
+    def form_invalid(self, form):
+        print("erro no formulário: ",form.errors)
+        messages.error(self.request, 'Erro ao salvar nota fiscal . Verifique os campos do formulário.')
+        return render(self.request, self.template_name, {"form": form})
+        
     def form_valid(self, form):
         is_contract = self.kwargs['is_contract']
         numNFform = form.cleaned_data['num']
