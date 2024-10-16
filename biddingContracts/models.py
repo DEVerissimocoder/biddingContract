@@ -65,7 +65,7 @@ class Contrato(models.Model):
 #Secretaria
 class Secretaria(models.Model):
     nome = models.CharField(max_length=200, verbose_name="Nome da secretaria", null=False, blank=False)
-    programa = models.CharField(max_length=100)
+    programa = models.CharField(max_length=100, null=True, blank=True)
 
 
     def __str__(self):
