@@ -95,6 +95,9 @@
                 <div class="col-md-6 mb-3">
                     <label class="{{ form.secretaria_fk.id_for_label }}"> Secretaria </label>
                     {{ form.secretaria_fk }}
+                    {% if form.secretaria_fk.errors %}
+                        <div class="text-danger">{{ form.secretaria_fk.errors }}</div>
+                    {% endif %}
                 </div> 
 
                 <div class="col-12 text-center">

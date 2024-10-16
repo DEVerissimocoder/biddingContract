@@ -795,8 +795,8 @@ class NotesDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
         return reverse_lazy("biddingContracts:notasfiscais", kwargs={"is_contract": 2})
     
 # View que cria as secretarias
-#class SecretaryNew(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
-class SecretaryNew(LoginRequiredMixin, CreateView):
+class SecretaryNew(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+
     """
     Faz o cadastro das Secretarias
     """
@@ -804,7 +804,7 @@ class SecretaryNew(LoginRequiredMixin, CreateView):
     form_class = formSecretaria
     template_name = 'secretaria/secretaria_new.html'
     message_success = 'Secretaria cadastrada com sucesso!'
-    #permission_required = ["biddingContracts.add_secretaria"]
+    permission_required = ["biddingContracts.add_secretaria"]
 
     def get_success_url(self) -> str:
         messages.success(self.request, self.message_success)
@@ -818,7 +818,7 @@ class ListSecretary(LoginRequiredMixin, ListView):
     template_name = "secretaria/list_secretaria.html"
     success_url = reverse_lazy("biddingContracts:list_secretarias")
     context_object_name = "secretarias"
-    #permission_required = ["biddingContracts.view_secretaria"]
+    permission_required = ["biddingContracts.view_secretaria"]
 
 
  # View que edita as secretarias 

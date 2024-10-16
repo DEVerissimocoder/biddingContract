@@ -93,7 +93,7 @@
         </li>
         
 
-        {% if perms.auth.view_user %} <!-- Visualiza somente com a permissão de criar secretaria -->
+        {% if perms.auth.view_user %} <!-- Visualiza somente com a permissão de ver usuários -->
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white {% if request.resolver_match.url_name == 'list_member' and request.resolver_match.namespace == 'usuarios' %}active{% endif %}" 
