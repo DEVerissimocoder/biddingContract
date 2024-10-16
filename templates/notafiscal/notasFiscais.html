@@ -68,7 +68,7 @@
                       {% if perms.biddingContracts.change_notafiscal %}
                         <a href="{% url "biddingContracts:updatenfe" notafiscal.pk is_contract %}">Editar</a>
                       {% endif %}
-                      {% if perms.biddingContracts.delete_notafiscal and perms.biddingContracts.zero_notafiscal %}
+                      {% if perms.biddingContracts.delete_notafiscal %}
                         <a class="text-danger" href="{% url "biddingContracts:deletenfe" notafiscal.pk %}">Excluir</a>
                       {% endif %}
                     </div>

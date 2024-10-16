@@ -730,7 +730,6 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
             messages.add_message(self.request, messages.SUCCESS, "SALVO COM SUCESSO")
             return HttpResponseRedirect(reverse('biddingContracts:notasfiscais', kwargs={'is_contract': is_contract}))
         
-
 # View que lista as Notas Fiscais
 class ListNfe(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = NotaFiscal
