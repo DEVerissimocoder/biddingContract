@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from django.db.models import Q
 from  biddingContracts.forms import formLicitacao, formFornecedor,NotaFiscalEditForm, formContrato, formARP, NotaFiscalForm, formSecretaria
 from django.urls import reverse, reverse_lazy
-from .models import Contrato, NotaFiscal, Fornecedor, Licitacao, AtaRegistroPreco, Secretaria
+from .models import Contrato, NotaFiscal, Fornecedor, Licitacao, AtaRegistroPreco, Secretaria, RegistroExcluido
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
@@ -251,20 +251,6 @@ class ContractDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView
 @login_required
 def index(request):
     if request.user.is_authenticated:
-        contratos = Contrato.objects.annotate(
-        mes=TruncMonth('dataInicial'),
-        ano=ExtractYear('dataInicial')
-    ).values('mes', 'ano').annotate(
-        valor_total=Sum('valor')
-    ).order_by('ano', 'mes')
-
-    meses = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez']
-
-    data = []
-    labels = []
-    for contrato in contratos:
-        data.append(contrato['valor_total'])
-        labels.append(f"{meses[contrato['mes'].month-1]} {contrato['ano']}")
         
         contratos = Contrato.objects.all()
         licitacoes = Licitacao.objects.all()
@@ -279,8 +265,6 @@ def index(request):
             'vencidos': vencidos,
             'zerados': zerados,
             'arps': arp,
-            'data': data,
-            'labels': labels,
         }
 
         return render(request, 'index.html', context)
@@ -505,18 +489,22 @@ class ARPsDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = AtaRegistroPreco
     template_name = "ARPs/ata_delete.html"
     context_object_name = "ata"
-    permission_required =["biddingContracts.delete_ataregistropreco"]
+    permission_required = ["biddingContracts.delete_ataregistropreco"]
+
+    def delete(self, request, *args, **kwargs):
+        # Obtém o objeto a ser excluído
+        self.object = self.get_object()
+        print(f"@@@@@@@@@ VEIO AQIU")
+        
+        # Chama o método delete no objeto, passando o usuário da requisição
+        self.object.delete(usuario=request.user)
+        
+        # Exibe uma mensagem de sucesso e redireciona
+        messages.success(self.request, 'ARP excluída com sucesso!')
+        return redirect(self.get_success_url())
 
     def get_success_url(self):
-        messages.success(self.request, 'ARP excluída com sucesso!')
         return reverse_lazy("biddingContracts:atas")
- 
- 
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['atas'] = AtaRegistroPreco.objects.all()
-        return context
 
 
 class RelatorioARPs(ListView):
@@ -750,7 +738,6 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
             messages.add_message(self.request, messages.SUCCESS, "SALVO COM SUCESSO")
             return HttpResponseRedirect(reverse('biddingContracts:notasfiscais', kwargs={'is_contract': is_contract}))
         
-
 # View que lista as Notas Fiscais
 class ListNfe(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     model = NotaFiscal
@@ -815,8 +802,8 @@ class NotesDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
         return reverse_lazy("biddingContracts:notasfiscais", kwargs={"is_contract": 2})
     
 # View que cria as secretarias
-#class SecretaryNew(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
-class SecretaryNew(LoginRequiredMixin, CreateView):
+class SecretaryNew(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+
     """
     Faz o cadastro das Secretarias
     """
@@ -824,7 +811,7 @@ class SecretaryNew(LoginRequiredMixin, CreateView):
     form_class = formSecretaria
     template_name = 'secretaria/secretaria_new.html'
     message_success = 'Secretaria cadastrada com sucesso!'
-    #permission_required = ["biddingContracts.add_secretaria"]
+    permission_required = ["biddingContracts.add_secretaria"]
 
     def get_success_url(self) -> str:
         messages.success(self.request, self.message_success)
@@ -838,7 +825,7 @@ class ListSecretary(LoginRequiredMixin, ListView):
     template_name = "secretaria/list_secretaria.html"
     success_url = reverse_lazy("biddingContracts:list_secretarias")
     context_object_name = "secretarias"
-    #permission_required = ["biddingContracts.view_secretaria"]
+    permission_required = ["biddingContracts.view_secretaria"]
 
 
  # View que edita as secretarias 
@@ -883,3 +870,9 @@ class SecretaryDeleteView(LoginRequiredMixin, DeleteView):
     def get_success_url(self):
         messages.success(self.request, 'Secretaria excluída com sucesso!')
         return reverse_lazy("biddingContracts:list_secretarias")
+    
+
+# View para exibir template dos dados excluídos
+def registros_excluidos(request):
+    registros = RegistroExcluido.objects.all()
+    return render(request, 'excluidos/registros_excluidos.html', {'registros': registros})

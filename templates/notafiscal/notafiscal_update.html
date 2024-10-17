@@ -6,7 +6,7 @@
     <div class="row">
       <div class="col-md-10 mx-auto">
         <div class="card">
-          <h4 class="font-weight-normal text-center m-3">Atualizar informações da Nota Fiscal de n°: {{notas.num}} e pk {{ notas.pk }}</h4>
+          <h4 class="font-weight-normal text-center m-3">Atualizar informações da Nota Fiscal de n°: {{notas.num}}</h4>
           <form action="{% url 'biddingContracts:updatenfe' notas.pk  is_contract %}" method="post" class="needs-validation" novalidate>
             {% csrf_token %}
             {{ form.media }}

@@ -93,12 +93,12 @@
         </li>
         
 
-        {% if perms.auth.view_user %} <!-- Visualiza somente com a permissão de criar secretaria -->
+        {% if perms.auth.view_user %} <!-- Visualiza somente com a permissão de ver usuários -->
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white {% if request.resolver_match.url_name == 'list_member' and request.resolver_match.namespace == 'usuarios' %}active{% endif %}" 
                    href="{% url 'usuarios:list_member' %}">
-                    <i class="fa-solid fa-users" title="Listar Usuários Secretaria"></i> 
+                    <i class="fa-solid fa-users" title="Listar Usuários do Sistema"></i> 
                     <span class="nav-text text-white small">Visualizar Usuários</span> 
                 </a>
             </div>
@@ -248,6 +248,16 @@
             </a>
         </li>
         {% endif %}
+
+        
+        <li class="nav-item mb-3">
+            <a class="nav-link text-white {% if request.resolver_match.url_name == 'excluidos' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
+                   href="{% url 'biddingContracts:excluidos' %}">
+                   <i class="fa-solid fa-trash" title="Listar exclusões"></i>
+                <span class="nav-text text-white small">Listar exclusões</span>
+            </a>
+        </li>
+    
 
         {% if user.is_authenticated %}
             <li class="nav-item mb-3">

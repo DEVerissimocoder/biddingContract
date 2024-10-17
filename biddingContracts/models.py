@@ -1,8 +1,38 @@
 from django.db import models
 from django.utils import timezone
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from datetime import date
 
 User  = get_user_model()
+
+
+# Classe para o armazenamento dos dados excluídos
+class RegistroExcluido(models.Model):
+    modelo = models.CharField(max_length=100)
+    dados_excluidos = models.JSONField() # Armazena os dados excluídos em formato JSON
+    data_exclusao = models.DateTimeField(auto_now_add=True)
+    usuario = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL, null=True, 
+    )
+
+    def __str__(self):
+        return f"{self.modelo} excluido por {self.usuario} em {self.data_exclusao}"
+    
+
+# Classe Para registrar o dia e hora separadaos 
+class UsuarioExclusao(models.Model):
+    usuario = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+    data_exclusão = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.usuario} excluiu um registro em  {self.data_exclusão}"
+
+
 
 class Modalidade(models.TextChoices):
     CONCORRENCIA = 'concorrência', 'Concorrência'
@@ -97,8 +127,11 @@ class NotaFiscal(models.Model):
         return f"{self.tipo}"
 
 
+from django.contrib.auth import get_user_model
+from datetime import date
+
 class AtaRegistroPreco(models.Model):
-    numero = models.CharField( max_length=7, null=False, blank=False)
+    numero = models.CharField(max_length=7, null=False, blank=False)
     assuntoDetalhado = models.TextField(max_length=200, verbose_name="Detalhe do contrato", null=False, blank=False)
     dataInicial = models.DateField()
     dataFinal = models.DateField()
@@ -111,5 +144,33 @@ class AtaRegistroPreco(models.Model):
     
     class Meta:
         verbose_name_plural = 'Atas de Registros de Preços'
+
+    def delete(self, usuario=None, using=None, keep_parents=False):
+    
+        print("Método delete chamado")
+        try:
+            # Armazenar os dados a serem excluídos
+            dados_excluidos = {}
+            for field in self._meta.get_fields():
+                if not field.is_relation:
+                    value = getattr(self, field.name)
+                    if isinstance(value, date):
+                        value = value.isoformat()  # Formato YYYY-MM-DD
+                    dados_excluidos[field.name] = value
+            
+            # Criar o registro da exclusão no modelo RegistroExcluido
+            RegistroExcluido.objects.create(
+                modelo=self.__class__.__name__,
+                dados_excluidos=dados_excluidos,
+                usuario=usuario  # Passar o usuário que fez a exclusão
+            )
+            print("Registro Excluido criado com sucesso!")
+        except Exception as e:
+            print(f"Erro ao registrar dados excluídos: {e}") 
+
+        # Chama o método de exclusão do pai
+        super().delete(using, keep_parents)
+
+    
     
     

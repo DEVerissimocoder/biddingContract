@@ -155,6 +155,11 @@ class formContrato(forms.ModelForm):
          label="Licitação",
          widget=forms.Select(attrs={'class': 'form-select'})
      )
+    # secretaria_fk = forms.ModelMultipleChoiceField(
+    #     queryset=Secretaria.objects.all(),
+    #     widget=forms.CheckboxSelectMultiple,  
+    #     required=True  
+    # )
   
     """fornecedor_fk = forms.ModelChoiceField(
         queryset=Fornecedor.objects.all(),

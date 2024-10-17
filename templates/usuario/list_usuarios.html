@@ -1,6 +1,6 @@
 {% extends "base_template.html" %}
 {% load static %}
-{% block title %} Usuários da secretarias  {% endblock %}
+{% block title %} Usuários do Sistema  {% endblock %}
 
 
 
@@ -9,7 +9,7 @@
     {% include "sidebar.html" %}
     <div class="container my-5">
         {% include "messages.html" %}
-        <h2 class="text-center mb-4">Lista de Usuários das Secretarias</h2>
+        <h2 class="text-center mb-4">Lista de Usuários do Sistema</h2>
         {% if usuarios %}
                 <div class="row">
                     <div class="col-md-12">
@@ -20,7 +20,6 @@
                                     <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">#</th>
                                     <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">USERNAME</th>
                                     <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">EMAIL</th>
-                                    <th class="text-white bg-secondary bg-gradient"style="font-size: 12px;" scope="col">SECRETARIA</th>
                                 </tr>                               
                             </thead>
                             <tbody>
@@ -61,13 +60,7 @@
                                         <td class="align-align-middle" style="font-size:14px;">
                                             {{ user.email }}
                                         </td>
-                                        <td class="align-align-middle" style="font-size:14px;">
-                                            {% if user.secretaria %}
-                                            {{ user.secretaria }}
-                                            {% else %}
-                                            -------
-                                            {% endif %}
-                                        </td>
+                                        
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -76,9 +69,7 @@
                 </div>
         
             <div class="d-flex justify-content-center">
-                {% if perms.biddingContracts.add_secretaria %}
-                <!--<a class="btn btn-success me-4" href="{% url "usuarios:cad_user" %}">Cadastrar Novo usuário secretaria</a>-->
-                {% endif %}
+                
                 <a class="btn btn-secondary" href="{% url "biddingContracts:index" %}">Voltar</a>
             </div>
             {% else %}
