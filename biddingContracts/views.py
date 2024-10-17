@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from django.db.models import Q
 from  biddingContracts.forms import formLicitacao, formFornecedor,NotaFiscalEditForm, formContrato, formARP, NotaFiscalForm, formSecretaria
 from django.urls import reverse, reverse_lazy
-from .models import Contrato, NotaFiscal, Fornecedor, Licitacao, AtaRegistroPreco, Secretaria
+from .models import Contrato, NotaFiscal, Fornecedor, Licitacao, AtaRegistroPreco, Secretaria, RegistroExcluido
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
@@ -489,18 +489,22 @@ class ARPsDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = AtaRegistroPreco
     template_name = "ARPs/ata_delete.html"
     context_object_name = "ata"
-    permission_required =["biddingContracts.delete_ataregistropreco"]
+    permission_required = ["biddingContracts.delete_ataregistropreco"]
+
+    def delete(self, request, *args, **kwargs):
+        # Obtém o objeto a ser excluído
+        self.object = self.get_object()
+        print(f"@@@@@@@@@ VEIO AQIU")
+        
+        # Chama o método delete no objeto, passando o usuário da requisição
+        self.object.delete(usuario=request.user)
+        
+        # Exibe uma mensagem de sucesso e redireciona
+        messages.success(self.request, 'ARP excluída com sucesso!')
+        return redirect(self.get_success_url())
 
     def get_success_url(self):
-        messages.success(self.request, 'ARP excluída com sucesso!')
         return reverse_lazy("biddingContracts:atas")
- 
- 
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['atas'] = AtaRegistroPreco.objects.all()
-        return context
 
 
 class RelatorioARPs(ListView):
@@ -866,3 +870,9 @@ class SecretaryDeleteView(LoginRequiredMixin, DeleteView):
     def get_success_url(self):
         messages.success(self.request, 'Secretaria excluída com sucesso!')
         return reverse_lazy("biddingContracts:list_secretarias")
+    
+
+# View para exibir template dos dados excluídos
+def registros_excluidos(request):
+    registros = RegistroExcluido.objects.all()
+    return render(request, 'excluidos/registros_excluidos.html', {'registros': registros})

@@ -249,6 +249,16 @@
         </li>
         {% endif %}
 
+        
+        <li class="nav-item mb-3">
+            <a class="nav-link text-white {% if request.resolver_match.url_name == 'excluidos' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
+                   href="{% url 'biddingContracts:excluidos' %}">
+                   <i class="fa-solid fa-trash" title="Listar exclusões"></i>
+                <span class="nav-text text-white small">Listar exclusões</span>
+            </a>
+        </li>
+    
+
         {% if user.is_authenticated %}
             <li class="nav-item mb-3">
                 <div class="d-flex flex-column align-items-center">

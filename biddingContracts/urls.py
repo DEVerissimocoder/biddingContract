@@ -50,4 +50,7 @@ urlpatterns = [
     path('teste/', views_dash.retorna_total_valores, name="teste"),
     path('teste2/', views_dash.contrato_valor_por_mes, name="teste2"),
 
+    # Excluídos
+    path('excluidos/', views.registros_excluidos, name="excluidos")
+
 ]
