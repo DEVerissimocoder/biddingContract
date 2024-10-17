@@ -20,6 +20,10 @@ class RegistroExcluido(models.Model):
     def __str__(self):
         return f"{self.modelo} excluido por {self.usuario} em {self.data_exclusao}"
     
+    class Meta:
+        verbose_name = "Registro Excluído"
+        verbose_name_plural = "Registros Excluídos"
+    
 
 # Classe Para registrar o dia e hora separadaos 
 class UsuarioExclusao(models.Model):
@@ -32,6 +36,9 @@ class UsuarioExclusao(models.Model):
     def __str__(self):
         return f"{self.usuario} excluiu um registro em  {self.data_exclusão}"
 
+    class Meta:
+        verbose_name = "Usuário que excluiu"
+        verbose_name_plural = "Usuários que excluíram"
 
 
 class Modalidade(models.TextChoices):
@@ -125,10 +132,35 @@ class NotaFiscal(models.Model):
 
     def __str__(self):
         return f"{self.tipo}"
+    
+    def delete(self, usuario=None, using=None, keep_parents=False):
+    
+        print("Método delete chamado")
+        try:
+            # Armazenar os dados a serem excluídos
+            dados_excluidos = {}
+            for field in self._meta.get_fields():
+                if not field.is_relation:
+                    value = getattr(self, field.name)
+                    if isinstance(value, date):
+                        value = value.isoformat()  # Formato YYYY-MM-DD
+                    dados_excluidos[field.name] = value
+            
+            # Criar o registro da exclusão no modelo RegistroExcluido
+            RegistroExcluido.objects.create(
+                modelo=self.__class__.__name__,
+                dados_excluidos=dados_excluidos,
+                usuario=usuario  # Passar o usuário que fez a exclusão
+            )
+            print("Registro Excluido criado com sucesso!")
+        except Exception as e:
+            print(f"Erro ao registrar dados excluídos: {e}") 
+
+        # Chama o método de exclusão do pai
+        super().delete(using, keep_parents)
 
 
-from django.contrib.auth import get_user_model
-from datetime import date
+
 
 class AtaRegistroPreco(models.Model):
     numero = models.CharField(max_length=7, null=False, blank=False)

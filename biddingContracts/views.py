@@ -646,6 +646,7 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         return render(self.request, self.template_name, {"form": form})
         
     def form_valid(self, form):
+        dataHoje = datetime.today().date()
         is_contract = self.kwargs['is_contract']
         numNFform = form.cleaned_data['num']
         serieNF = form.cleaned_data['serie']
@@ -730,7 +731,7 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
                 messages.add_message(self.request, messages.INFO, "NÃO FOI POSSÍVEL CADASTRAR A NOTA FISCAL, VALOR DA NOTA MAIOR DO QUE O SALDO RESTANTE DA ATA DE REGISTRO DE PREÇOS")
                 return HttpResponseRedirect(reverse('biddingContracts:new_notas', kwargs={'is_contract': is_contract}))
             #verificação da data de vigência
-            if arp.dataFinal<0:
+            if arp.dataFinal < dataHoje:
                 messages.add_message(self.request, messages.INFO, "NÃO FOI POSSIVEL CADASTRAR NOTAS, ATA DE REGISTRO DE PREÇOS COM VALIDADE VENCIDA")
                 return HttpResponseRedirect(reverse("biddingContracts:new_notas", kwargs={'is_contract': is_contract}))
             # se tiver tudo certo salve os dados.
@@ -791,12 +792,34 @@ class NotasFiscaisUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView
             
         return context
     
+from django.core.exceptions import PermissionDenied
+    
 # View que deleta as Notas fiscais
+
 class NotesDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = NotaFiscal
-    template_name = "notafiscal/nota_delete.html"
+    template_name = "notafiscal/nota_delete.html"  # Página de confirmação
     context_object_name = "note"
-    permission_required = ["biddingContracs.delete_notafiscal"]
+    permission_required = ["biddingContracts.delete_notafiscal"]
+
+    def get(self, request, *args, **kwargs):
+        # Exibir a página de confirmação
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        # Chama o método delete para excluir o objeto
+        return self.delete(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        # Obtém o objeto a ser excluído
+        self.object = self.get_object()
+        
+        # Chama o método delete no objeto
+        self.object.delete(usuario=self.request.user)
+        
+        # Exibe uma mensagem de sucesso e redireciona
+        messages.success(self.request, 'Nota Fiscal (ARP) excluída com sucesso!')
+        return redirect(self.get_success_url())
 
     def get_success_url(self):
         return reverse_lazy("biddingContracts:notasfiscais", kwargs={"is_contract": 2})

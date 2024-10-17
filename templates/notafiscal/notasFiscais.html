@@ -56,6 +56,9 @@
                   {% if notafiscal.ataregistropreco_fk %}
                   <td class="align-align-middle" style="font-size:14px;">
                     {{ notafiscal.ataregistropreco_fk }}
+                    <p class="text-muted small">
+                      {{ notafiscal.fornecedor_fk }}
+                    </p>
                   </td>
                   {% else %}
                   <td class="align-align-middle" style="font-size:14px;">
@@ -66,10 +69,10 @@
                   <td class="">
                     <div class="d-flex gap-3 justify-content-center align-align-middle" style="font-size:14px;">
                       {% if perms.biddingContracts.change_notafiscal %}
-                        <a href="{% url "biddingContracts:updatenfe" notafiscal.pk is_contract %}">Editar</a>
+                        <a class="btn btn-link text-indigo" href="{% url "biddingContracts:updatenfe" notafiscal.pk is_contract %}">Editar</a>
                       {% endif %}
                       {% if perms.biddingContracts.delete_notafiscal %}
-                        <a class="text-danger" href="{% url "biddingContracts:deletenfe" notafiscal.pk %}">Excluir</a>
+                        <a class="btn btn-link text-danger" href="{% url "biddingContracts:deletenfe" notafiscal.pk %}">Excluir</a>
                       {% endif %}
                     </div>
                   </td>
