@@ -114,7 +114,7 @@
                                 </div>
                             </div> 
                       </li>
-                    </form> <!-- Fim colapse fornecedor -->
+                    </form> <!-- Fim colapse datas -->
                     
                     
                     <div class="d-flex">
@@ -153,6 +153,9 @@
                         {% if licitacao %}
                         {% if perms.biddingContracts.change_licitacao %}
                         <a class="btn btn-outline-success ms-3 mt-2" href="{% url "biddingContracts:update_bidding" licitacao.pk %}">Editar</a>
+                        {% endif %}
+                        {% if perms.biddingContracts.delete_licitacao %}
+                        <a class="btn btn-outline-danger ms-3 mt-2" href="{% url "biddingContracts:delete_licitacao" licitacao.pk %}">Excluir</a>
                         {% endif %}
                         {% endif %}
                     </div>

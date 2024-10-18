@@ -1,6 +1,7 @@
 from django.db.models.query import QuerySet
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.decorators import permission_required
+from django.forms import BaseModelForm
 from django.shortcuts import redirect, render
 from django.http import HttpRequest, HttpResponseRedirect, HttpResponse
 from datetime import datetime, timedelta
@@ -234,7 +235,8 @@ class ContractDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView
 
         # Só excluir o contrato se NÃO houver outros contratos relacionados ao mesmo fornecedor e à mesma licitação
         if not outro_contrato_fornecedor and not outro_contrato_licitacao:
-            contrato.delete()
+            self.object.delete(usuario=self.request.user)
+            #contrato.delete() # O método de excluir já é chamado na linha de cima
             messages.success(self.request, 'Contrato excluído com sucesso!')
             return redirect(self.get_success_url())
         else:
@@ -426,28 +428,130 @@ class ListBiddingView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             queryset = Licitacao.objects.all()
         return queryset
 
+# View que atualiza as licitações
+class BiddingUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    model = Licitacao
+    template_name = "licitacoes/edit_licitacoes.html"
+    form_class = formLicitacao
+    context_object_name = "licitacao"
+    permission_required = ["biddingContracts.change_licitacao"]
 
-@login_required
-@permission_required("biddingContracts.add_ataregistropreco")
-# Função que cria as ARPs
-def createArp(request):
-    if request.method == "POST":
-        form = formARP(request.POST)
-        print("enviando método POST")
-        if form.is_valid():
-            arp = form.save(commit=False)
-            dataInicial = arp.dataInicial
-            print("formulario valido", dataInicial)
-            if dataInicial:
-                dataFinal = dataInicial + relativedelta(days=365)
-                arp.dataFinal = dataFinal
-                print("dataInicial Validada", arp.dataFinal)
-            arp.save()
-            return HttpResponseRedirect(reverse('biddingContracts:atas'))
-    else:
-        form = formARP()
-    context = {'form': form}
-    return render(request, "ARPs/ataRegistroPreco_new.html", context)
+    def form_valid(self, form):
+        messages.success(self.request, 'Licitação editada com sucesso!')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Erro ao editar licitação. Verifique os campos do formulário.')
+        return render(self.request, self.template_name, {"form": form})
+
+    def get_success_url(self):
+        return reverse_lazy("biddingContracts:list_bidding")
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+# View que deleta as licitações
+class LicitacaoDeleteView(DeleteView, PermissionRequiredMixin):
+    model = Licitacao
+    template_name = "licitacoes/delete_licitacoes.html"
+    context_object_name = "licitacao"
+    permission_required = ["biddingContracts.delete_licitacao"]
+        
+
+    def get(self, request, *args, **kwargs):
+        # Exibir a página de confirmação
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        # Chama o método delete para excluir o objeto
+        return self.delete(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        # Obtém o objeto a ser excluído
+        self.object = self.get_object()
+        
+        # Faz a verificação se existem contratos ou ARPS relacionados a esta licitação
+        contratos_relacionados = self.object.contrato_set.exists()  # Verifica se há contratos relacionados
+        arps_relacionadas = AtaRegistroPreco.objects.filter(licitacao_fk=self.object).exists()  # Verifica se há ARPs relacionadas
+        
+        # Só exclui a licitação se NÃO houver contratos ou ARPS relacionadas
+        if not contratos_relacionados and not arps_relacionadas:
+            # Chama o método delete no objeto e atribui o usuário que excluiu
+            self.object.delete(usuario=self.request.user)
+             # Exibe uma mensagem de sucesso e redireciona
+            messages.success(self.request, 'Licitação excluída com sucesso!')
+            return redirect(self.get_success_url())
+        else:
+            messages.error(self.request, 'Não é possível excluir a licitação, pois está vinculada a contratos ou ARPs.')
+            return redirect(self.get_success_url())
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['contratos'] = self.object.contrato_set.all() # Obtem todos os contratos associados a licitação
+        context['arps'] = self.object.ataregistropreco_set.all() # Obtem todas as ats relacionadas com a licitação a ser excluída
+        print(f'BBBB {context["arps"]}')
+        return context
+
+
+    def get_success_url(self):
+        return reverse_lazy("biddingContracts:list_bidding")
+    
+    
+
+# @login_required
+# @permission_required("biddingContracts.add_ataregistropreco")
+# # Função que cria as ARPs
+# def createArp(request):
+#     if request.method == "POST":
+#         form = formARP(request.POST)
+#         print("enviando método POST")
+#         if form.is_valid():
+#             arp = form.save(commit=False)
+#             dataInicial = arp.dataInicial
+#             print("formulario valido", dataInicial)
+#             if dataInicial:
+#                 dataFinal = dataInicial + relativedelta(days=365)
+#                 arp.dataFinal = dataFinal
+#                 print("dataInicial Validada", arp.dataFinal)
+#             arp.save()
+#             return HttpResponseRedirect(reverse('biddingContracts:atas'))
+#     else:
+#         form = formARP()
+#     context = {'form': form}
+#     return render(request, "ARPs/ataRegistroPreco_new.html", context)
+
+# View que cria as ARPs
+class ARPCreateView(CreateView, PermissionRequiredMixin):
+    model = AtaRegistroPreco
+    form_class = formARP
+    template_name = "ARPs/ataRegistroPreco_new.html"
+    success_url = reverse_lazy('biddingContracts:atas')
+    permission_required = ["biddingContracts.add_ataregistropreco"]
+    
+    def get_context_data(self, **kwargs):
+        return  super().get_context_data(**kwargs)
+
+    
+    def form_valid(self, form: BaseModelForm): 
+        arp = form.save(commit=False)
+        dataInicial = arp.dataInicial
+        print("formulario valido", dataInicial)
+        if dataInicial:
+            dataFinal = dataInicial + relativedelta(days=365)
+            arp.dataFinal = dataFinal
+            print("dataInicial Validada", arp.dataFinal)
+        arp.save()
+        messages.success(self.request, 'ARP cadastrada com sucesso!')
+        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        messages.error(self.request, 'Erro ao cadastrar ARP. Verifique os campos do formulário!')
+        return render(self.request, self.template_name, {'form': form})
+
+    
+    def get_success_url(self):
+        return reverse_lazy("biddingContracts:atas")
 
 
 # View que lista as ARPs
@@ -490,17 +594,25 @@ class ARPsDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     template_name = "ARPs/ata_delete.html"
     context_object_name = "ata"
     permission_required = ["biddingContracts.delete_ataregistropreco"]
+    
+    
+    def get(self, request, *args, **kwargs):
+        # Exibir a página de confirmação
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        # Chama o método delete para excluir o objeto
+        return self.delete(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
         # Obtém o objeto a ser excluído
         self.object = self.get_object()
-        print(f"@@@@@@@@@ VEIO AQIU")
         
-        # Chama o método delete no objeto, passando o usuário da requisição
-        self.object.delete(usuario=request.user)
+        # Chama o método delete no objeto
+        self.object.delete(usuario=self.request.user)
         
         # Exibe uma mensagem de sucesso e redireciona
-        messages.success(self.request, 'ARP excluída com sucesso!')
+        messages.success(self.request, 'Arp excluída com sucesso!')
         return redirect(self.get_success_url())
 
     def get_success_url(self):
@@ -546,28 +658,7 @@ def calcula_saldo_restante(notasfiscais, valorARP):
     return valorARP - soma
     
     
- # View que atualiza as licitações
-class BiddingUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
-    model = Licitacao
-    template_name = "licitacoes/edit_licitacoes.html"
-    form_class = formLicitacao
-    context_object_name = "licitacao"
-    permission_required = ["biddingContracts.change_licitacao"]
-
-    def form_valid(self, form):
-        messages.success(self.request, 'Licitação editada com sucesso!')
-        return super().form_valid(form)
-
-    def form_invalid(self, form):
-        messages.error(self.request, 'Erro ao editar licitação. Verifique os campos do formulário.')
-        return render(self.request, self.template_name, {"form": form})
-
-    def get_success_url(self):
-        return reverse_lazy("biddingContracts:list_bidding")
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
+ 
     
 
 # #view para salvar as licitações como pdf
@@ -890,12 +981,71 @@ class SecretaryDeleteView(LoginRequiredMixin, DeleteView):
     context_object_name = "sec"
     #permission_required = ["biddingContracts.delete_secretaria"]
 
-    def get_success_url(self):
+    def get(self, request, *args, **kwargs):
+        # Exibir a página de confirmação
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        # Chama o método delete para excluir o objeto
+        return self.delete(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        # Obtém o objeto a ser excluído
+        self.object = self.get_object()
+        
+        # Chama o método delete no objeto
+        self.object.delete(usuario=self.request.user)
+        
+        # Exibe uma mensagem de sucesso e redireciona
         messages.success(self.request, 'Secretaria excluída com sucesso!')
+        return redirect(self.get_success_url())
+
+    def get_success_url(self):
         return reverse_lazy("biddingContracts:list_secretarias")
     
 
+
+# def registros_excluidos(request):
+#     registros = RegistroExcluido.objects.all()
+#     return render(request, 'excluidos/registros_excluidos.html', {'registros': registros})
+
+
 # View para exibir template dos dados excluídos
-def registros_excluidos(request):
-    registros = RegistroExcluido.objects.all()
-    return render(request, 'excluidos/registros_excluidos.html', {'registros': registros})
+class ListRegister(ListView):
+    model = RegistroExcluido
+    template_name = "excluidos/registros_excluidos.html"
+    context_object_name = "registros"
+    # paginate_by = 10
+    # ordering = ['-id']
+    #permission_required = ["biddingContracts.list_registroexcluido"]
+    
+    
+    # Adicionando filtros ao object_list através do get_queryset
+    def get_queryset(self):
+        txt_modelo = self.request.GET.get("modelos")
+        txt_usuario = self.request.GET.get("usuarios")
+        txt_datas = self.request.GET.get("datas")
+        
+        queryset = RegistroExcluido.objects.all()
+        
+        
+        if txt_modelo:
+            queryset = RegistroExcluido.objects.filter(modelo__icontains=txt_modelo)
+            return queryset
+        
+        elif txt_usuario:
+            queryset = RegistroExcluido.objects.filter(usuario__username__icontains=txt_usuario)
+            return queryset
+        
+        elif txt_datas:
+            try:
+                data_formatada = datetime.strptime(txt_datas, '%d/%m/%Y').date()
+                queryset = RegistroExcluido.objects.filter(data_exclusao=data_formatada)
+                return queryset
+            except ValueError:
+                messages.error(self.request, 'Data inválida! Por favor, insira uma data no formato dd/mm/yyyy.')
+                return redirect('biddingContracts:excluidos')      
+        else:
+            queryset = RegistroExcluido.objects.all()
+        return queryset
+        

@@ -159,7 +159,13 @@
                     <div class="d-flex">
                         <small>Fornecedor: {{ contrato.fornecedor_fk.nome }}</small>
                     </div>
-                    <div class="d-flex"><small>Licitação: {{ contrato.licitacao_fk.numProcess }}</small></div>
+                    <div class="d-flex"><small>Licitação:
+                        {% if contrato.licitacao_fk.numProcess %}
+                         {{ contrato.licitacao_fk.numProcess }}
+                         {% else %}
+                        <span class="text-danger">Licitação foi excluída</span>
+                         {% endif %}
+                    </small></div>
 
                     {% for secretaria in contrato.secretaria_fk.all %}
                         <div class="d-flex"><small>Secretaria: {{ secretaria.nome }}</small></div>

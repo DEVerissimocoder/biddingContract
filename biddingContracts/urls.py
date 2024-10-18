@@ -24,10 +24,11 @@ urlpatterns = [
     path('licitacoes/', views.ListBiddingView.as_view(), name="list_bidding"), # Listar Licitações
     path('licitacoes/<int:pk>/editar/', views.BiddingUpdateView.as_view(), name='update_bidding'), # Atualiza Licitações
     path('modal-licitacao/', views.modal_licitacao, name='modal-licitacao'), # Modal Licitação
+    path('licitacoes/<int:pk>/deletar', views.LicitacaoDeleteView.as_view(), name='delete_licitacao'), # Deletar licitações
     #path('export-pdf/', views.export_pdf, name='export-pdf'),
     
     # ARPs
-    path('criar-ARP/', views.createArp, name='create-ARP'), # Criar ARPs
+    path('criar-ARP/', views.ARPCreateView.as_view(), name='create-ARP'), # Criar ARPs
     path('atas/', views.listARPs.as_view(), name="atas"), # Listar ARPs
     path('relatorio-atas/<int:pk>', views.RelatorioARPs.as_view(), name='relatorioARP'), # Relatório ARPs
     path('atas-edit/<int:pk>/', views.ARPsUpdate.as_view(), name="updateARP"), # Editar ARPS
@@ -51,6 +52,6 @@ urlpatterns = [
     path('teste2/', views_dash.contrato_valor_por_mes, name="teste2"),
 
     # Excluídos
-    path('excluidos/', views.registros_excluidos, name="excluidos")
+    path('excluidos/', views.ListRegister.as_view(), name="excluidos")
 
 ]
