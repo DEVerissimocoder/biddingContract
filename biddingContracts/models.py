@@ -61,6 +61,32 @@ class Licitacao (models.Model):
         verbose_name = "licitação"
         verbose_name_plural = "licitações"
 
+    def delete(self, usuario=None, using=None, keep_parents=False):
+    
+        print("Método delete chamado")
+        try:
+            # Armazenar os dados a serem excluídos
+            dados_excluidos = {}
+            for field in self._meta.get_fields():
+                if not field.is_relation:
+                    value = getattr(self, field.name)
+                    if isinstance(value, date):
+                        value = value.isoformat()  # Formato YYYY-MM-DD
+                    dados_excluidos[field.name] = value
+            
+            # Criar o registro da exclusão no modelo RegistroExcluido
+            RegistroExcluido.objects.create(
+                modelo=self.__class__.__name__,
+                dados_excluidos=dados_excluidos,
+                usuario=usuario  # Passar o usuário que fez a exclusão
+            )
+            print("Registro Excluido criado com sucesso!")
+        except Exception as e:
+            print(f"Erro ao registrar dados excluídos: {e}") 
+
+        # Chama o método de exclusão do pai
+        super().delete(using, keep_parents)
+
 #Fornecedor
 class Fornecedor(models.Model):
     nome = models.CharField(max_length=200, verbose_name="Nome do fornecedor", null=False, blank=False)
@@ -87,7 +113,7 @@ class Contrato(models.Model):
     dataInicial = models.DateField()
     dataFinal = models.DateField()
     valor = models.FloatField(null=False)
-    licitacao_fk= models.ForeignKey("Licitacao", on_delete=models.CASCADE)
+    licitacao_fk= models.ForeignKey("Licitacao", on_delete=models.SET_NULL, null=True)
     fornecedor_fk = models.ForeignKey("Fornecedor", on_delete=models.CASCADE)
     secretaria_fk = models.ManyToManyField("Secretaria", related_name="Contratos") # Para poder acessar de secretarias os contratos relacionados
 
@@ -221,7 +247,7 @@ class AtaRegistroPreco(models.Model):
     dataInicial = models.DateField()
     dataFinal = models.DateField()
     valor = models.FloatField(null=False)
-    licitacao_fk= models.ForeignKey("Licitacao", on_delete=models.CASCADE)
+    licitacao_fk= models.ForeignKey("Licitacao", on_delete=models.SET_NULL, null=True)
     fornecedor_fk = models.ForeignKey("Fornecedor", on_delete=models.CASCADE)
     
     def __str__(self):

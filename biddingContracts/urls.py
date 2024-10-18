@@ -24,6 +24,7 @@ urlpatterns = [
     path('licitacoes/', views.ListBiddingView.as_view(), name="list_bidding"), # Listar Licitações
     path('licitacoes/<int:pk>/editar/', views.BiddingUpdateView.as_view(), name='update_bidding'), # Atualiza Licitações
     path('modal-licitacao/', views.modal_licitacao, name='modal-licitacao'), # Modal Licitação
+    path('licitacoes/<int:pk>/deletar', views.LicitacaoDeleteView.as_view(), name='delete_licitacao'), # Deletar licitações
     #path('export-pdf/', views.export_pdf, name='export-pdf'),
     
     # ARPs

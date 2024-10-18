@@ -427,6 +427,66 @@ class ListBiddingView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             queryset = Licitacao.objects.all()
         return queryset
 
+# View que atualiza as licitações
+class BiddingUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    model = Licitacao
+    template_name = "licitacoes/edit_licitacoes.html"
+    form_class = formLicitacao
+    context_object_name = "licitacao"
+    permission_required = ["biddingContracts.change_licitacao"]
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Licitação editada com sucesso!')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Erro ao editar licitação. Verifique os campos do formulário.')
+        return render(self.request, self.template_name, {"form": form})
+
+    def get_success_url(self):
+        return reverse_lazy("biddingContracts:list_bidding")
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+
+class LicitacaoDeleteView(DeleteView, PermissionRequiredMixin):
+    model = Licitacao
+    template_name = "licitacoes/delete_licitacoes.html"
+    context_object_name = "licitacao"
+    permission_required = ["biddingContracts.delete_licitacao"]
+        
+
+    def get(self, request, *args, **kwargs):
+        # Exibir a página de confirmação
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        # Chama o método delete para excluir o objeto
+        return self.delete(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        # Obtém o objeto a ser excluído
+        self.object = self.get_object()
+        
+        # Chama o método delete no objeto
+        self.object.delete(usuario=self.request.user)
+        
+        # Exibe uma mensagem de sucesso e redireciona
+        messages.success(self.request, 'Licitação excluída com sucesso!')
+        return redirect(self.get_success_url())
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['contratos'] = self.object.contrato_set.all() # Obtem todos os contratos associados a licitação
+        return context
+
+
+    def get_success_url(self):
+        return reverse_lazy("biddingContracts:list_bidding")
+    
+    
 
 @login_required
 @permission_required("biddingContracts.add_ataregistropreco")
@@ -556,28 +616,7 @@ def calcula_saldo_restante(notasfiscais, valorARP):
     return valorARP - soma
     
     
- # View que atualiza as licitações
-class BiddingUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
-    model = Licitacao
-    template_name = "licitacoes/edit_licitacoes.html"
-    form_class = formLicitacao
-    context_object_name = "licitacao"
-    permission_required = ["biddingContracts.change_licitacao"]
-
-    def form_valid(self, form):
-        messages.success(self.request, 'Licitação editada com sucesso!')
-        return super().form_valid(form)
-
-    def form_invalid(self, form):
-        messages.error(self.request, 'Erro ao editar licitação. Verifique os campos do formulário.')
-        return render(self.request, self.template_name, {"form": form})
-
-    def get_success_url(self):
-        return reverse_lazy("biddingContracts:list_bidding")
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
+ 
     
 
 # #view para salvar as licitações como pdf
