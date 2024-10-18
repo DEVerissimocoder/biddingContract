@@ -28,7 +28,7 @@ urlpatterns = [
     #path('export-pdf/', views.export_pdf, name='export-pdf'),
     
     # ARPs
-    path('criar-ARP/', views.createArp, name='create-ARP'), # Criar ARPs
+    path('criar-ARP/', views.ARPCreateView.as_view(), name='create-ARP'), # Criar ARPs
     path('atas/', views.listARPs.as_view(), name="atas"), # Listar ARPs
     path('relatorio-atas/<int:pk>', views.RelatorioARPs.as_view(), name='relatorioARP'), # Relatório ARPs
     path('atas-edit/<int:pk>/', views.ARPsUpdate.as_view(), name="updateARP"), # Editar ARPS
