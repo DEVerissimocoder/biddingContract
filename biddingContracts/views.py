@@ -332,6 +332,53 @@ class FornecedorUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         return context
 
+class FornecedorDeleteView(DeleteView, PermissionRequiredMixin):
+    model = Fornecedor
+    template_name = "fornecedor/fornecedor_delete.html"
+    context_object_name = "fornecedor"
+    permission_required = ["biddingContracts.delete_fornecedor"]
+
+
+    def get(self, request, *args, **kwargs):
+        # Exibir a página de confirmação
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        # Chama o método delete para excluir o objeto
+        return self.delete(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        # Obtém o objeto a ser excluído
+        self.object = self.get_object()
+        
+        # Faz a verificação se existem contratos ou ARPS relacionados a este fornecedor
+        contratos_relacionados = self.object.contrato_set.exists()  # Verifica se há contratos relacionados
+        arps_relacionadas = AtaRegistroPreco.objects.filter(fornecedor_fk=self.object).exists()  # Verifica se há ARPs relacionadas
+        
+        # Só exclui o fornecedor se NÃO houver contratos ou ARPS relacionadas
+        if not contratos_relacionados and not arps_relacionadas:
+            # Chama o método delete no objeto e atribui o usuário que excluiu
+            self.object.delete(usuario=self.request.user)
+             # Exibe uma mensagem de sucesso e redireciona
+            messages.success(self.request, 'Fornecedor excluído com sucesso!')
+            return redirect(self.get_success_url())
+        else:
+            messages.error(self.request, 'Não é possível excluir o fornecedor, pois está vinculado a contratos ou ARPs.')
+            return redirect(self.get_success_url())
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['contratos'] = self.object.contrato_set.all() # Obtem todos os contratos associados ao fornecedor
+        context['arps'] = self.object.ataregistropreco_set.all() # Obtem todas as arps relacionadas com o fornecedor a ser excluído
+    
+        return context
+
+
+    def get_success_url(self):
+        return reverse_lazy("biddingContracts:fornecedores")
+
+
+
 
 @login_required
 # View que mostra fornecedor em um modal

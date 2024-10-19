@@ -1,0 +1,62 @@
+{% extends 'base_template.html' %}
+{% block title %} Deletar Fornecedor {% endblock %}
+
+{% block content %}
+<div class="d-flex">
+    {% include "sidebar.html" %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 col-sm-10">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-danger text-white text-center">
+                        <h1 class="h4 mb-0">Confirmar Exclusão</h1>
+                    </div>
+                    <div class="card-body p-4">
+                        <p class="text-center fs-5 text-muted">
+                            Você tem certeza de que deseja excluir o fornecedor:
+                            <span class="fw-bold text-danger">"{{ fornecedor.nome }}"</span> possuindo o cnpj:
+                            <span class="fw-bold text-danger">"{{ fornecedor.cnpj }}"</span>?
+                        </p>
+
+                        {% if contratos %}
+                        <div class="mt-4">
+                            <h5 class="text-center text-primary">Contratos Associados</h5>
+                            <ul class="list-group list-group-flush">
+                                {% for contrato in contratos %}
+                                <li class="list-group-item">
+                                    <span class="fw-bold">Número:</span> {{ contrato.numero }}<br>
+                                    <span class="fw-bold">Assunto:</span> {{ contrato.assuntoDetalhado }}<br>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+
+                        {% if arps %}
+                        <div class="mt-4">
+                            <h5 class="text-center text-primary">ARPs Associadas</h5>
+                            <ul class="list-group list-group-flush">
+                                {% for arp in arps %}
+                                <li class="list-group-item">
+                                    <span class="fw-bold">Número:</span> {{ arp.numero }}<br>
+                                    <span class="fw-bold">Assunto:</span> {{ arp.assuntoDetalhado }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+
+                        <form method="post" action="{% url 'biddingContracts:delete_fornecedor' fornecedor.pk %}" class="mt-4">
+                            {% csrf_token %}
+                            <div class="d-flex justify-content-center gap-3">
+                                <button type="submit" class="btn btn-danger px-5 py-2">Confirmar</button>
+                                <a href="{% url 'biddingContracts:fornecedores' %}" class="btn btn-secondary px-5 py-2">Cancelar</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

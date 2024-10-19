@@ -34,11 +34,12 @@
                                     <tr>
                                         <td>
                                             {% if perms.biddingContracts.change_fornecedor %}
-                                            <ul class="nav">
-                                                <li class="nav-item">
-                                                    <a href="{% url 'biddingContracts:updateforn' fornecedor.id %}" data-id="{{ fornecedor.id }}" class="nav-link active bot-fornecedor" aria-current="page" data-bs-toggle="modal" data-bs-target="#modal-upd-forn">editar</a>
-                                                </li>
-                                            </ul>
+                        
+                                                    <div class="d-flex gap-3">
+                                                        <a href="{% url 'biddingContracts:updateforn' fornecedor.id %}" data-id="{{ fornecedor.id }}" class="text-info bot-fornecedor" aria-current="page" data-bs-toggle="modal" data-bs-target="#modal-upd-forn">editar</a>
+                                                        <a class="text-danger" href="{% url "biddingContracts:delete_fornecedor" fornecedor.id %}">Deletar</a>
+                                                    </div>
+                                              
                                             {% endif %}
                                             <div class="modal fade" id="modal-upd-forn" aria-labelledby="head-mod-upd" aria-hidden="True">
                                                 <div class="modal-dialog modal-dialog-centered">
