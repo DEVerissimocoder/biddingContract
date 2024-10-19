@@ -68,10 +68,10 @@
                                     <!-- </div> -->
                                     
                                 {% else %}
-                                    <div class="col-md-6 mb-3">
-                                        <label for="{{form.ataregistropreco_fk.id_for_label}}" class="form-label">ARP</label>
-                                        {{ form.ataregistropreco_fk }}
-                                    </div>
+                                    <!--<div class="col-md-6 mb-3">-->
+                                    <!--<label for="{{form.ataregistropreco_fk.id_for_label}}" class="form-label">ARP</label>-->                                                                                                                                                 
+                                        {{ form.ataregistropreco_fk }} <!--campo oculto-->
+                                        <!--</div>-->                                    
                                 {% endif %}
                             </div>
                                                                                                         
@@ -88,15 +88,20 @@
                             <div class="modal-dialog modal-lg modal-dialog-centered">
                                 <div class="modal-content border-0 shadow-lg">
                                     <div class="modal-header bg-light border-bottom-0">
-                                        <h5 id="tit_modal_contr" class="modal-title text-dark fw-bold">Selecione o Contrato Referente à Nota Fiscal</h5>
+                                        <h5 id="tit_modal_contr" class="modal-title text-dark fw-bold">ESCOLHA UMA DAS OPÇÕES ABAIXO</h5>
                                         <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <div class="list-group">
+                                           
                                             {% for contrato in contratos %}
                                             <label for="{{ contrato.id }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-start border-0 shadow-sm mb-2 p-3">
                                                 <div>
-                                                    <h6 class="fw-bold mb-1">Contrato: <span class="text-primary">{{ contrato.numero }}</span></h6>
+                                                    {% if is_contract %}
+                                                        <h6 class="fw-bold mb-1">Contrato: <span class="text-primary">{{ contrato.numero }}</span></h6>
+                                                    {% else %}
+                                                        <h6 class="fw-bold mb-1">Ata de Registro de Preços: <span class="text-primary">{{ contrato.numero }}</span></h6>
+                                                    {% endif %}
                                                     <p class="mb-1">Objeto: <span class="text-muted">{{ contrato.assuntoDetalhado }}</span></p>
                                                     <p class="mb-1">Fornecedor: <span class="text-muted">{{ fornecedor.nome }}</span></p>
                                                     <p>Saldo: <span class="text-success">{{ contrato.valor }}</span></p>
@@ -136,18 +141,27 @@
             const fornecedor_nf = "{{fornecedor.id}}"
             console.log(numero_nf, serie_nf, valor_nf, tipo_nf, nome_fornecedor);
             // captura os elementos para manipulação
-            const numero_nf_id = document.getElementById('{{form.num.id_for_label}}')
-            const serie_nf_id = document.getElementById('{{form.serie.id_for_label}}')
-            const valor_nf_id = document.getElementById('{{form.valor.id_for_label}}')
-            const tipo_nf_id = document.getElementById('{{form.tipo.id_for_label}}')
-            const fornecedor_id = document.getElementById('{{form.fornecedor_fk.id_for_label}}');
+            const numero_nf_id = document.querySelector('#id_num');
+            const serie_nf_id = document.querySelector('#id_serie');
+            const valor_nf_id = document.querySelector('#id_valor');
+            const tipo_nf_id = document.querySelector('#id_tipo');
+            const fornecedor_id = document.querySelector('#id_fornecedor_fk');
+            const contrato_id = document.querySelector('#id_contrato_fk');
             console.log(fornecedor_id.value)
             //declara o campo contrato
-            const contrato = document.getElementById('{{ form.contrato_fk.id_for_label }}')
+            console.log("{{ is_contract }}")
+            
+            if ("{{is_contract}}"==1){
+                console.log("true")
+                var contrato = document.getElementById('{{ form.contrato_fk.id_for_label}}')
+            }else{
+                console.log("false")
+                var contrato = document.getElementById('{{form.ataregistropreco_fk.id_for_label}}')
 
+            }                          
             const okButton = document.getElementById('confirmar')
             const saveButton = document.getElementById('btn-salvar')
-            const inputRadio = document.getElementById('{{ contrato}}')
+            const inputRadio = document.getElementById('{{contrato}}')
             const abrirModal = $('#modal_contr')
 
             // abrir o modal automaticamente
@@ -182,7 +196,6 @@
             }catch(erro){
                 console.error("Erro ao salvar fornecedor: ", erro)
             }
-        });
-    
+        });    
     </script>
 {% endblock javascript%}
