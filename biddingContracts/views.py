@@ -627,6 +627,7 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
             notafiscal = NotaFiscal.objects.filter(contrato_fk=id_contrato)
         else:
             notafiscal = NotaFiscal.objects.filter(ataregistropreco_fk = id_contrato)
+            print("notafiscal kk", notafiscal)
             
         notasfiscais = notafiscal.values_list('valor', flat=True)
         return notasfiscais   
@@ -767,7 +768,7 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
                 dataFinalContrato = ataregistropreco.dataFinal
                 dhoje = datetime.today().date()
                 #pega do banco todas as notas fiscais relacionado a ARP em questão
-                notas=self.search_NF_ByContract(id_contrato, is_contract) 
+                notas=self.search_NF_ByContract(ataregistropreco, is_contract) 
                 somaNotas = sum(notas)
                 vlr_arp = ataregistropreco.valor
                 # valida se o resultado da soma ultrapassa o valor total da ARP
