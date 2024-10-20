@@ -249,6 +249,13 @@
         </li>
         {% endif %}
 
+        <li class="nav-item mb-3">
+            <a class="nav-link text-white {% if request.resolver_match.url_name == 'logados' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
+                   href="{% url 'biddingContracts:logados' %}">
+                   <i class="fa-solid fa-users-rectangle" title="Listar acessos"></i>
+                <span class="nav-text text-white small">Relatório de Acessos</span>
+            </a>
+        </li>
         
         <li class="nav-item mb-3">
             <a class="nav-link text-white {% if request.resolver_match.url_name == 'excluidos' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 

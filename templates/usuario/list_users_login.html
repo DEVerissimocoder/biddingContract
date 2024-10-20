@@ -1,0 +1,139 @@
+{% extends "base_template.html" %}
+{% load static %}
+{% block title %} Registros de Login {% endblock %}
+
+{% block content %}
+<div class="d-flex">
+    {% include "sidebar.html" %}
+    <div class="container my-5">
+        {% include "messages.html" %}
+        <h2 class="text-center mb-4">Lista de Acessos no Sistema</h2>
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="todos-tab" data-bs-toggle="tab" data-bs-target="#todos" type="button" role="tab" aria-controls="todos" aria-selected="true">Todos os Logins</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="usuario-tab" data-bs-toggle="tab" data-bs-target="#usuario" type="button" role="tab" aria-controls="usuario" aria-selected="false">Filtrar por Usuário</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="data-tab" data-bs-toggle="tab" data-bs-target="#data" type="button" role="tab" aria-controls="data" aria-selected="false">Filtrar por Data</button>
+            </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content" id="myTabContent">
+            <!-- Todos os logins -->
+            <div class="tab-pane fade show active" id="todos" role="tabpanel" aria-labelledby="todos-tab">
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="text-white bg-secondary bg-gradient" style="font-size: 12px;" scope="col">#</th>
+                                    <th class="text-white bg-secondary bg-gradient" style="font-size: 12px;" scope="col">Usuário</th>
+                                    <th class="text-white bg-secondary bg-gradient" style="font-size: 12px;" scope="col">Data e hora do login</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for login in logins %}
+                                    <tr>
+                                        <th class="align-middle" scope="row">{{ forloop.counter }}</th>
+                                        <td class="align-middle" style="font-size:14px;">{{ login.user.username }}</td>
+                                        <td class="align-middle" style="font-size:14px;">{{ login.login_time }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filtrar por usuário -->
+            <div class="tab-pane fade" id="usuario" role="tabpanel" aria-labelledby="usuario-tab">
+                <div class="mt-4">
+                    <form action="?" method="GET">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Nome do usuário" name="usuarios" value="{{ request.GET.usuarios }}">
+                            <button class="btn btn-primary" type="submit">Buscar</button>
+                        </div>
+                    </form>
+
+                    {% if logins %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-white bg-secondary bg-gradient" style="font-size: 12px;" scope="col">#</th>
+                                            <th class="text-white bg-secondary bg-gradient" style="font-size: 12px;" scope="col">Usuário</th>
+                                            <th class="text-white bg-secondary bg-gradient" style="font-size: 12px;" scope="col">Data e hora do login</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for login in logins %}
+                                            <tr>
+                                                <th class="align-middle" scope="row">{{ forloop.counter }}</th>
+                                                <td class="align-middle" style="font-size:14px;">{{ login.user.username }}</td>
+                                                <td class="align-middle" style="font-size:14px;">{{ login.login_time }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Filtrar por data -->
+            <div class="tab-pane fade" id="data" role="tabpanel" aria-labelledby="data-tab">
+                <div class="mt-4">
+                    <form action="?" method="GET">
+                        <div class="input-group mb-3">
+                            <input type="date" class="form-control" name="datas" value="{{ request.GET.datas }}">
+                            <button class="btn btn-primary" type="submit">Buscar</button>
+                        </div>
+                    </form>
+
+                    {% if logins %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-white bg-secondary bg-gradient" style="font-size: 12px;" scope="col">#</th>
+                                            <th class="text-white bg-secondary bg-gradient" style="font-size: 12px;" scope="col">Usuário</th>
+                                            <th class="text-white bg-secondary bg-gradient" style="font-size: 12px;" scope="col">Data e hora do login</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for login in logins %}
+                                            <tr>
+                                                <th class="align-middle" scope="row">{{ forloop.counter }}</th>
+                                                <td class="align-middle" style="font-size:14px;">{{ login.user.username }}</td>
+                                                <td class="align-middle" style="font-size:14px;">{{ login.login_time }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center align-items-center mt-0">
+            <a class="btn btn-secondary" href="{% url 'biddingContracts:index' %}">Voltar</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+{% endblock %}
