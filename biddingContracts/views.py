@@ -1059,13 +1059,13 @@ class SecretaryDeleteView(LoginRequiredMixin, DeleteView):
 
 
 # View para exibir template dos dados excluídos
-class ListRegister(ListView):
+class ListRegister(ListView, PermissionRequiredMixin):
     model = RegistroExcluido
     template_name = "excluidos/registros_excluidos.html"
     context_object_name = "registros"
     # paginate_by = 10
     # ordering = ['-id']
-    #permission_required = ["biddingContracts.list_registroexcluido"]
+    permission_required = ["biddingContracts.view_registroexcluido"]
     
     
     # Adicionando filtros ao object_list através do get_queryset
@@ -1098,11 +1098,12 @@ class ListRegister(ListView):
         return queryset
         
 
-class UserLoginReportView(ListView):
+class UserLoginReportView(ListView, PermissionRequiredMixin):
     model = UserLogin
     template_name = 'usuario/list_users_login.html'
     context_object_name = 'logins'
     ordering = ['-login_time'] # Vai ordenar por data de login mais recente
+    permission_required = ["biddingContracts.view_userlogin"]
 
     def get_queryset(self):
         queryset = super().get_queryset()

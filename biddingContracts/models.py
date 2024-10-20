@@ -321,7 +321,7 @@ class UserLogin(models.Model):
         return f"{self.user.username} - {self.login_time}"
     
     class Meta:
-        verbose_name = "Usuário que fez login"
-        verbose_name_plural = "Usuários que fizeram login"
+        verbose_name = "Usuario que fez login"
+        verbose_name_plural = "Usuarios que fizeram login"
     
     

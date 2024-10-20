@@ -249,6 +249,7 @@
         </li>
         {% endif %}
 
+        {% if perms.biddingContracts.view_userlogin %}
         <li class="nav-item mb-3">
             <a class="nav-link text-white {% if request.resolver_match.url_name == 'logados' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
                    href="{% url 'biddingContracts:logados' %}">
@@ -256,7 +257,9 @@
                 <span class="nav-text text-white small">Relatório de Acessos</span>
             </a>
         </li>
-        
+        {% endif %}
+
+        {% if perms.biddingContracts.view_registroexcluido %}
         <li class="nav-item mb-3">
             <a class="nav-link text-white {% if request.resolver_match.url_name == 'excluidos' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
                    href="{% url 'biddingContracts:excluidos' %}">
@@ -264,7 +267,7 @@
                 <span class="nav-text text-white small">Listar exclusões</span>
             </a>
         </li>
-    
+        {% endif %}
 
         {% if user.is_authenticated %}
             <li class="nav-item mb-3">
