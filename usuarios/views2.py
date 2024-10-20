@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django. urls import reverse_lazy
 from usuarios.forms2 import  CadastroForms, CustomLoginForm, UpdateEmailForm
+from biddingContracts.models import UserLogin
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib import messages, auth
@@ -15,7 +16,7 @@ def login(request):
     form = CustomLoginForm()
 
     if request.method == 'POST':
-        form = CadastroForms(request.POST)
+        form = CustomLoginForm(request.POST)
 
         if form.is_valid():
             username = form["username"].value()
@@ -26,7 +27,7 @@ def login(request):
                 username=username,
                 password=password
             )
-            if  usuario.is_active:
+            if usuario is not None and usuario.is_active:
                 aviso = 'Login efetuado com sucesso!'
                 auth.login(request, usuario)
                 messages.success(request, aviso)
@@ -36,9 +37,7 @@ def login(request):
                 messages.error(request, aviso)
                 return redirect('login')  # Redireciona para a view de login em caso de erro
     else:
-
-        if not request.user.is_authenticated:
-            messages.info(request, 'Por favor, faça login para acessar.')
+        messages.info(request, 'Por favor, faça login para acessar.')
         #messages.info(request, 'Por favor, faça login para acessar.')
     
     return render(request, "registration/login.html", {"form": form})

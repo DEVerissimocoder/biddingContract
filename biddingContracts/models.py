@@ -309,5 +309,19 @@ class AtaRegistroPreco(models.Model):
         super().delete(using, keep_parents)
 
     
+class UserLogin(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL, 
+        null=True
+    )
+    login_time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.login_time}"
+    
+    class Meta:
+        verbose_name = "Usuário que fez login"
+        verbose_name_plural = "Usuários que fizeram login"
     
     
