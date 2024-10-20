@@ -101,7 +101,7 @@ Inicial {% endblock %} {% block content %}
         Sistema para Controle de Contratos Licitatórios da Prefeitura de <br />
         <span class="text-uppercase">Paranatama</span>
       </h3>
-
+      {% if perms.biddingContracts.view_contrato or perms.biddingContracts.view_licitacao or perms.biddingContracts.view_notafiscal %}
       <section class="content">
         <div class="container-fluid">
           <div class="card-container">
@@ -113,9 +113,11 @@ Inicial {% endblock %} {% block content %}
                 <h3>{{contratos.count}}</h3>
                 <p>Contratos</p>
               </div>
+              {% if perms.biddingContracts.view_contrato %}
               <a href="{% url "biddingContracts:contratos" %}" class="small-box-footer"
                 >Mais informações <i class="fas fa-arrow-circle-right"></i
               ></a>
+              {% endif %}
             </div>
 
             <div class="small-box bg-success">
@@ -126,9 +128,11 @@ Inicial {% endblock %} {% block content %}
                 <h3>{{licitacoes.count}}</h3>
                 <p>Licitações</p>
               </div>
+              {% if perms.biddingContracts.view_licitacao %}
               <a href="{% url "biddingContracts:list_bidding" %}" class="small-box-footer"
                 >Mais informações <i class="fas fa-arrow-circle-right"></i
               ></a>
+              {% endif %}
             </div>
 
             <div class="small-box bg-warning">
@@ -145,9 +149,11 @@ Inicial {% endblock %} {% block content %}
                 {% endif %}
                 <p>Notas Fiscais</p>
               </div>
+              {% if perms.biddingContracts.view_notafiscal %}
               <a href="{% url "biddingContracts:notasfiscais" 2 %}" class="small-box-footer">
                 Mais informações <i class="fas fa-arrow-circle-right"></i>
               </a>
+              {% endif %}
             </div>
 
             <div class="small-box bg-danger">
@@ -158,9 +164,11 @@ Inicial {% endblock %} {% block content %}
                 <h3>{{vencidos.count}}</h3>
                 <p>Contratos Vencidos</p>
               </div>
+              {% if perms.biddingContracts.view_contrato %}
               <a href="{% url "biddingContracts:contratos"%}?search=on" class="small-box-footer"
                 >Mais informações <i class="fas fa-arrow-circle-right"></i
               ></a>
+              {% endif %}
             </div>
             
             <div class="small-box bg-maroon">
@@ -171,9 +179,11 @@ Inicial {% endblock %} {% block content %}
                 <h3>{{zerados.count}}</h3>
                 <p>Contratos sem Saldo</p>
               </div>
+              {% if perms.biddingContracts.view_contrato %}
               <a href="{% url "biddingContracts:contratos" %}?valor=0" class="small-box-footer"
                 >Mais informações <i class="fas fa-arrow-circle-right"></i
               ></a>
+              {% endif %}
             </div>
           </div>
         </div>
@@ -182,6 +192,10 @@ Inicial {% endblock %} {% block content %}
         </div>
       
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      {% else %}
+      <img src="{% static "imagens/error403.png" %}" alt="">
+      <h3 class="text-center">Você não tem nenhuma permissão liberada, solicite ao administrador a permissão a qual você faz parte!</h3>
+      {% endif %}
       </section>
     </div>
   </div>

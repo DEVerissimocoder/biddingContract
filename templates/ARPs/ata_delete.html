@@ -3,6 +3,7 @@
 
 {% block content %}
 
+{% if perms.biddingContracts.delete_ataregistropreco %}
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-lg-6 col-md-8 col-sm-10">
@@ -29,5 +30,11 @@
         </div>
     </div>
 </div>
+{% else %}
+    <div class="d-flex flex-column">
+        <img src="{% static "imagens/error403.png" %}" alt="">
+        <h3 class="text-center">Você não tem nenhuma permissão liberada, solicite ao administrador a permissão a qual você faz parte!</h3>
+    </div>
+{% endif %}
 
 {% endblock content %}
