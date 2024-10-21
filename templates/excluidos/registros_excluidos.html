@@ -3,6 +3,7 @@
 {% block title %} Registros Excluídos {% endblock %}
 
 {% block content %}
+{% if perms.biddingContracts.view_registroexcluido %}
 <div class="d-flex">
     {% include "sidebar.html" %}
     <div class="container my-5">
@@ -144,6 +145,12 @@
         {% endif %}
     </div>
 </div>
+{% else %}
+<div class="d-flex flex-column align-items-center">
+    <img style="width: 650px;" src="{% static "imagens/error403.png" %}" alt="">
+    <h3 class="text-center">Você não tem nenhuma permissão para ver isso, solicite ao administrador a permissão a qual você faz parte!</h3>
+</div>
+{% endif %}
 {% endblock %}
 
 {% block javascript %}
@@ -153,7 +160,7 @@
 
 <script>
     $('#pesq_proc').mask('00/0000', {placeholder: ''});
-    //$('#pesq_datas').mask('00/00/0000', {placeholder: ''});
+    $('#pesq_datas').mask('00/00/0000', {placeholder: ''});
     
 </script>
 {% endblock %}

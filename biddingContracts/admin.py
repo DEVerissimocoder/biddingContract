@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Licitacao, Contrato, Fornecedor, NotaFiscal, AtaRegistroPreco, Secretaria, UsuarioExclusao, RegistroExcluido
+from .models import Licitacao, Contrato, Fornecedor, NotaFiscal, AtaRegistroPreco, Secretaria, UsuarioExclusao, RegistroExcluido, UserLogin
 from .forms import formLicitacao
 # Register your models here.
 @admin.register(Licitacao)
@@ -20,3 +20,4 @@ admin.site.register(AtaRegistroPreco)
 admin.site.register(Secretaria)
 admin.site.register(UsuarioExclusao)
 admin.site.register(RegistroExcluido)
+admin.site.register(UserLogin)
