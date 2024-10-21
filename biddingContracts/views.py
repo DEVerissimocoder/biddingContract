@@ -618,7 +618,7 @@ class ARPsUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     context_object_name = "ata"
     permission_required = ["biddingContracts.change_ataregistropreco"]
 
-
+    
     def form_valid(self, form):
         messages.success(self.request, 'ARP editada com sucesso!')
         return super().form_valid(form)
@@ -977,14 +977,39 @@ class NotasFiscaisUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView
     form_class = NotaFiscalEditForm
     context_object_name = "notas"
     permission_required = ["biddingContracts.change_notafiscal"]
+    
 
     def form_valid(self, form):
+        
+        
+        fornecedor = form.cleaned_data['fornecedor_fk']
+        print(f"provider {fornecedor}")
+        context = self.get_context_data()        
+        is_contract = context['is_contract']
+        notafiscal = form.save(commit=False)
+        context['notas'] = notafiscal
+        print(f'')        
+            
+        if is_contract==0:
+            contr_ata = AtaRegistroPreco.objects.filter(fornecedor_fk = fornecedor)
+            print(f'atas do fornecedor {fornecedor} = {contr_ata}')
+            arp = form.cleaned_data['ataregistropreco_fk']
+            print(f"arp: {arp} id dessa arp é: {arp.id}")
+            idsArp=contr_ata.values_list('id', flat=True)
+            print(f"id da arp: {idsArp}")
+            if not (arp.id in idsArp):
+                if contr_ata.count()>1:
+                    context['fornecedor'] = fornecedor
+                    context['mostramodal'] = True
+                    context['contrs_atas'] = contr_ata
+                    return render(self.request, "notafiscal/notafiscal_update.html", context)
+                                
         messages.success(self.request, 'Nota Fiscal editada com sucesso!')
-
         return super().form_valid(form)
 
     def form_invalid(self, form):
         messages.error(self.request, 'Erro ao editar nota fiscal . Verifique os campos do formulário.')
+        print("formulario inválido", form.errors)
         return render(self.request, self.template_name, {"form": form})
 
     def get_success_url(self):
@@ -992,19 +1017,25 @@ class NotasFiscaisUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['is_contract'] = self.kwargs['is_contract']
-        is_contract = context['is_contract']
-        print(is_contract)
-        if (is_contract == 2):
-            id_notafiscal = self.kwargs['pk']
-           
-            notafiscal = NotaFiscal.objects.get(id=id_notafiscal)
-            print(" numero da nota fiscal é:", notafiscal.num)
+        context['is_contract'] = self.kwargs['is_contract']        
+        is_contract = context['is_contract']        
+        
+        notafiscal=self.get_object()
+        context['notas'] = notafiscal
+        
+        print(f'nota fiscal:{notafiscal} fornecedor: {notafiscal.fornecedor_fk}')
+        
+        if (is_contract == 2):           
+                       
             if notafiscal.ataregistropreco_fk is None:
                 context["is_contract"] = 1
+                print("ata de registro de preço é None", notafiscal.ataregistropreco_fk)
+
+                
             elif notafiscal.contrato_fk is None:
                 context["is_contract"] = 0
-            
+                
+                                          
         return context
     
 from django.core.exceptions import PermissionDenied
