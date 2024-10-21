@@ -6,6 +6,7 @@
 <div class="d-flex">
     {% include "sidebar.html" %}
     <div class="container my-5">
+        {% if perms.biddingContracts.view_userlogin %}
         {% include "messages.html" %}
         <h2 class="text-center mb-4">Lista de Acessos no Sistema</h2>
 
@@ -130,6 +131,12 @@
         </div>
     </div>
 </div>
+{% else %}
+<div class="d-flex flex-column align-items-center">
+    <img style="width: 650px;" src="{% static "imagens/error403.png" %}" alt="">
+    <h3 class="text-center">Você não tem nenhuma permissão para ver isso, solicite ao administrador a permissão a qual você faz parte!</h3>
+</div>
+{% endif %}
 {% endblock %}
 
 {% block javascript %}
