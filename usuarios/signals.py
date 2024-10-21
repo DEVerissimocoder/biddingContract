@@ -1,4 +1,7 @@
 from django.core.mail import send_mail
+from django.contrib.auth.signals import user_logged_in
+from django.dispatch import receiver
+from biddingContracts.models import UserLogin
 
 
 def send_welcome_email(sender, instance, created, **kwargs):
@@ -9,3 +12,7 @@ def send_welcome_email(sender, instance, created, **kwargs):
             "devmarcelo.gus@gmail.com",
             [instance.email],
         )
+
+@receiver(user_logged_in)
+def log_user_login(sender, request, user, **kwargs):
+    UserLogin.objects.create(user=user)

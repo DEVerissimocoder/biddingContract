@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from django.db.models import Q
 from  biddingContracts.forms import formLicitacao, formFornecedor,NotaFiscalEditForm, formContrato, formARP, NotaFiscalForm, formSecretaria
 from django.urls import reverse, reverse_lazy
-from .models import Contrato, NotaFiscal, Fornecedor, Licitacao, AtaRegistroPreco, Secretaria, RegistroExcluido
+from .models import Contrato, NotaFiscal, Fornecedor, Licitacao, AtaRegistroPreco, Secretaria, RegistroExcluido, UserLogin
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
@@ -16,6 +16,7 @@ from django.contrib import messages
 
 import tempfile
 from django.utils import timezone
+from django.utils.dateparse import parse_date
 #import weasyprint
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
@@ -1135,13 +1136,13 @@ class SecretaryDeleteView(LoginRequiredMixin, DeleteView):
 
 
 # View para exibir template dos dados excluídos
-class ListRegister(ListView):
+class ListRegister(ListView, PermissionRequiredMixin):
     model = RegistroExcluido
     template_name = "excluidos/registros_excluidos.html"
     context_object_name = "registros"
     # paginate_by = 10
     # ordering = ['-id']
-    #permission_required = ["biddingContracts.list_registroexcluido"]
+    permission_required = ["biddingContracts.view_registroexcluido"]
     
     
     # Adicionando filtros ao object_list através do get_queryset
@@ -1173,3 +1174,29 @@ class ListRegister(ListView):
             queryset = RegistroExcluido.objects.all()
         return queryset
         
+
+class UserLoginReportView(ListView, PermissionRequiredMixin):
+    model = UserLogin
+    template_name = 'usuario/list_users_login.html'
+    context_object_name = 'logins'
+    ordering = ['-login_time'] # Vai ordenar por data de login mais recente
+    permission_required = ["biddingContracts.view_userlogin"]
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        usuarios = self.request.GET.get('usuarios')
+        datas = self.request.GET.get('datas')
+
+        # Filtro por nome de usuário
+        if usuarios:
+            queryset = queryset.filter(user__username__icontains=usuarios)
+
+        # Filtro por datas
+        if datas:
+            try:
+                date_filter = parse_date(datas)
+                queryset = queryset.filter(login_time__date=date_filter)
+            except (ValueError, TypeError):
+                pass  # Ignora o filtro caso a data esteja errada
+            
+        return queryset

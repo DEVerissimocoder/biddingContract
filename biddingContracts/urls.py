@@ -54,7 +54,10 @@ urlpatterns = [
     path('teste3/', views_dash.renderizar, name="renderizardash"),
 
     # Excluídos
-    path('excluidos/', views.ListRegister.as_view(), name="excluidos")
+    path('excluidos/', views.ListRegister.as_view(), name="excluidos"),
+
+    # Logados
+    path('usuarios_logados/', views.UserLoginReportView.as_view(), name="logados")
     
 
 ]
