@@ -381,10 +381,10 @@ class NotaFiscalForm(forms.ModelForm):
                     
                 }
             ),
-            "ataregistropreco_fk": forms.Select(
+            "ataregistropreco_fk": forms.HiddenInput(
                 attrs={
                     "blank": "true",
-                    "class": "form-select",
+                    "class": "form-control",
                     
                 }
             )
