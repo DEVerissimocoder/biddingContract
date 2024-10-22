@@ -978,19 +978,45 @@ class NotasFiscaisUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView
     context_object_name = "notas"
     permission_required = ["biddingContracts.change_notafiscal"]
     
-
-    def form_valid(self, form):
-        
-        
+    def valid_NF_valor(self, valor_nf, valor_contrato, valorTotalNotasFiscais, contr_arp):
+        print(f"notafiscal:{valor_nf}, contrato: {valor_contrato}, todasNotas: {valorTotalNotasFiscais}")
+        resultado = valorTotalNotasFiscais + valor_nf
+        # valida se o resultado da soma ultrapassa o valor total do contrato.
+        if resultado > valor_contrato:
+            msg_valor=f"NÃO FOI POSSÍVEL CADASTRAR A NOTA FISCAL, VALOR DA NOTA MAIOR DO QUE O SALDO RESTANTE DO {contr_arp}"
+            messages.add_message(self.request, messages.ERROR, msg_valor)
+            return True
+        return False
+    
+    def form_valid(self, form):               
         fornecedor = form.cleaned_data['fornecedor_fk']
         print(f"provider {fornecedor}")
         context = self.get_context_data()        
         is_contract = context['is_contract']
-        notafiscal = form.save(commit=False)
+        notafiscal = form.save(commit=False)        
         context['notas'] = notafiscal
+        
         print(f'')        
-            
-        if is_contract==0:
+        if is_contract == 1:
+            contr_ata = Contrato.objects.filter(fornecedor_fk = fornecedor)
+            print(f'contrato {fornecedor} = {contr_ata}')
+            contrato = form.cleaned_data['contrato_fk']
+            print(f"contrato: {contrato} id do contrato é: {contrato.id}")
+            idsContrato=contr_ata.values_list('id', flat=True)
+            print(f"id do contrato: {idsContrato}")
+            if not (contrato.id in idsContrato):
+                if contr_ata.count()>1:
+                    context['fornecedor'] = fornecedor
+                    context['mostramodal'] = True
+                    context['contrs_atas'] = contr_ata
+                    return render(self.request, "notafiscal/notafiscal_update.html", context)
+            #ATENÇÃO ESTAS 5 LINHAS NA LINHA DE IDENTAÇÃO AINDA NÃO FORAM TESTADAS
+            notas = NotaFiscal.objects.filter(contrato_fk = contrato.id).values_list('valor', flat=True)            
+            resultado = sum(notas)
+            valid_valor = self.valid_NF_valor( notafiscal.valor, contr_ata.valor, resultado, c_a="CONTRATO")
+            if valid_valor:
+                return render(self.request, "notafiscal/notafiscal_update.html", context)
+        elif is_contract==0:
             contr_ata = AtaRegistroPreco.objects.filter(fornecedor_fk = fornecedor)
             print(f'atas do fornecedor {fornecedor} = {contr_ata}')
             arp = form.cleaned_data['ataregistropreco_fk']
@@ -1003,8 +1029,16 @@ class NotasFiscaisUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView
                     context['mostramodal'] = True
                     context['contrs_atas'] = contr_ata
                     return render(self.request, "notafiscal/notafiscal_update.html", context)
-                                
-        messages.success(self.request, 'Nota Fiscal editada com sucesso!')
+            #ATENÇÃO ESTAS 5 LINHAS NA LINHA DE IDENTAÇÃO AINDA NÃO FORAM TESTADAS
+            notas = NotaFiscal.objects.filter(ataregistropreco_fk = arp.id).values_list('valor', flat=True)            
+            resultado = sum(notas)
+            valid_valor = self.valid_NF_valor( notafiscal.valor, contr_ata.valor, resultado, c_a="ARP")
+            if valid_valor:
+                return render(self.request, "notafiscal/notafiscal_update.html", context)
+        else:
+            messages.add_message(self.request, "opção inválida")
+            return render(self.request, "notafiscal/notafiscal_update.html", context)
+        messages.success(self.request, 'Nota Fiscal editada com sucesso!')        
         return super().form_valid(form)
 
     def form_invalid(self, form):
