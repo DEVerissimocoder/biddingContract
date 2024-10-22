@@ -43,7 +43,7 @@
                             <tbody>
                                 {% for login in logins %}
                                     <tr>
-                                        <th class="align-middle" scope="row">{{ forloop.counter }}</th>
+                                        <th class="align-middle" scope="row">{{ login.id }}</th>
                                         <td class="align-middle" style="font-size:14px;">{{ login.user.username }}</td>
                                         <td class="align-middle" style="font-size:14px;">{{ login.login_time }}</td>
                                     </tr>
