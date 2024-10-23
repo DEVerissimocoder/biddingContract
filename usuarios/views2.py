@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect
 from django. urls import reverse_lazy
 from usuarios.forms2 import  CadastroForms, CustomLoginForm, UpdateEmailForm
-from biddingContracts.models import UserLogin
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth import authenticate, login
 from django.contrib import messages, auth
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import PermissionRequiredMixin
@@ -76,7 +75,7 @@ def cadastro(request):
             messages.warning(request, aviso2)
             return redirect('login')
         else:
-            print(form.error_class, "kkkkkkkkk")
+            print(form.errors, "kkkkkkkkk")
     
     return render(request, "registration/cadastro.html", {"form": form})
 
