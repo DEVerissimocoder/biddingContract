@@ -978,12 +978,12 @@ class NotasFiscaisUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView
     context_object_name = "notas"
     permission_required = ["biddingContracts.change_notafiscal"]
     
-    def valid_NF_valor(self, valor_nf, valor_contrato, valorTotalNotasFiscais, contr_arp):
+    def valid_NF_valor(self, valor_nf, valor_contrato, valorTotalNotasFiscais, c_a):
         print(f"notafiscal:{valor_nf}, contrato: {valor_contrato}, todasNotas: {valorTotalNotasFiscais}")
         resultado = valorTotalNotasFiscais + valor_nf
         # valida se o resultado da soma ultrapassa o valor total do contrato.
         if resultado > valor_contrato:
-            msg_valor=f"NÃO FOI POSSÍVEL CADASTRAR A NOTA FISCAL, VALOR DA NOTA MAIOR DO QUE O SALDO RESTANTE DO {contr_arp}"
+            msg_valor=f"NÃO FOI POSSÍVEL CADASTRAR A NOTA FISCAL, VALOR DA NOTA MAIOR DO QUE O SALDO RESTANTE DO {c_a}"
             messages.add_message(self.request, messages.ERROR, msg_valor)
             return True
         return False
@@ -1013,7 +1013,8 @@ class NotasFiscaisUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView
             #ATENÇÃO ESTAS 5 LINHAS NA LINHA DE IDENTAÇÃO AINDA NÃO FORAM TESTADAS
             notas = NotaFiscal.objects.filter(contrato_fk = contrato.id).values_list('valor', flat=True)            
             resultado = sum(notas)
-            valid_valor = self.valid_NF_valor( notafiscal.valor, contr_ata.valor, resultado, c_a="CONTRATO")
+            print(f"resultado da soma: {resultado}")
+            valid_valor = self.valid_NF_valor( notafiscal.valor, contrato.valor, resultado, c_a="CONTRATO")
             if valid_valor:
                 return render(self.request, "notafiscal/notafiscal_update.html", context)
         elif is_contract==0:
@@ -1030,9 +1031,11 @@ class NotasFiscaisUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView
                     context['contrs_atas'] = contr_ata
                     return render(self.request, "notafiscal/notafiscal_update.html", context)
             #ATENÇÃO ESTAS 5 LINHAS NA LINHA DE IDENTAÇÃO AINDA NÃO FORAM TESTADAS
-            notas = NotaFiscal.objects.filter(ataregistropreco_fk = arp.id).values_list('valor', flat=True)            
+            notas = NotaFiscal.objects.filter(ataregistropreco_fk = arp.id).values_list('valor', flat=True)   
+            print(f"{notas}")         
             resultado = sum(notas)
-            valid_valor = self.valid_NF_valor( notafiscal.valor, contr_ata.valor, resultado, c_a="ARP")
+            print(f"resultado da soma: {resultado}")
+            valid_valor = self.valid_NF_valor( notafiscal.valor, arp.valor, resultado, c_a="ARP")
             if valid_valor:
                 return render(self.request, "notafiscal/notafiscal_update.html", context)
         else:

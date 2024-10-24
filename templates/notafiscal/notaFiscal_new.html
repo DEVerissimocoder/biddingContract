@@ -22,7 +22,7 @@
                         {% block messages %}
                             {% include "messages.html" %}
                         {% endblock %}
-                        {{is_contract}}
+                        
                         <form id="id_form" method="post" action="{% url 'biddingContracts:new_notas' is_contract=is_contract %}">
                             {% csrf_token %}
                             {{ form.media }}
