@@ -429,12 +429,13 @@ class NotaFiscalEditForm(forms.ModelForm):
                     "class": "form-control",
                 }
             ),
-            "tipo": forms.TextInput(
+           "tipo": forms.Select(
                 attrs={
                     "type":"text",
-                    "class": "form-control",
+                    "class": "form-select",
+                    
                 }
-            ),
+            ),  
             "dataEmissao": forms.DateInput(
                 format=("%Y-%m-%d"),
                 attrs={
