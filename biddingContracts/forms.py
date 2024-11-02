@@ -303,9 +303,9 @@ class formARP(forms.ModelForm):
                 }
             ),
 
-            "fornecedor_fk": forms.TextInput(
+            "fornecedor_fk": forms.HiddenInput(
                 attrs={
-                    "type":"text",
+                    "type":"hidden",
                     "class":"form-control"
 
                 }
