@@ -64,11 +64,36 @@
     
                     <div class="col-md-6">
                         <label for="{{ form.fornecedor_fk.id_for_label }}" class="form-label">{{ form.fornecedor_fk.label }}</label>
-                        {{ form.fornecedor_fk }}
+                        {{ form.fornecedor_fk }} <!--field hidden-->
                         {% if form.fornecedor_fk.errors %}
                             <div class="text-danger">{{ form.fornecedor_fk.errors }}</div>
-                        {% endif %}
+                        {% endif %}                        
+                        <input type="text" class="form-control" id="only_user_see" value="{{forn}}">  
+                        <!-- TRIGGER -->
+                        <div class="d-flex">
+                            <i class="fa-solid fa-magnifying-glass mt-2 cursor-pointer" id="bot-fornecedor" data-bs-toggle="modal" data-bs-target="#fornecedor-modal" title="procurar fornecedor"></i>
+                        </div>                          
                     </div>
+                     
+                        <!-- MODAL -->
+                    <div class="modal fade" id="fornecedor-modal" tabindex="-1" aria-labelledby="modal-forn-label" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">                      
+                                    <a href="{% url 'biddingContracts:fornecedor_new' %}" id="modal-forn-label">novo</a>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body" id="modal-body-content-forn">
+                                <!-- AQUI É EXIBIDO A LISTA DE FORNECEDORES CADASTRADO-->
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">cancelar</button>
+                                    <button type="button" class="btn btn-primary" id="btn-confirmar-forn">confirmar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
     
                     <div class="col-12 text-center">
                         <button type="submit" class="btn btn-primary">Atualizar</button>
@@ -81,3 +106,31 @@
     </div>
 </div>
 {% endblock %}
+
+{% block javascript %}
+    <script>
+        document.getElementById('bot-fornecedor').addEventListener('click', function(){
+            fetch("{% url 'biddingContracts:modal-fornecedor' %}")
+            .then(response => response.text())
+            .then(data=>{
+                document.getElementById('modal-body-content-forn').innerHTML = data;
+            })
+        })
+
+        document.getElementById('btn-confirmar-forn').addEventListener('click', function(){
+            var fornecedorSelecionado = document.querySelector("input[name='flexRadioProvider']:checked");
+            document.getElementById('{{ form.fornecedor_fk.id_for_label }}').value = fornecedorSelecionado.value;
+
+            var fornecedorElement = fornecedorSelecionado.closest('.form-check').querySelector('.accordion-button li');
+            if (fornecedorElement){
+                forn_nome= fornecedorElement.textContent.trim()
+                document.getElementById('only_user_see').value = forn_nome
+            }
+            else{
+                console.log("não foi encontrato nenhum fornecedor para atualizar")
+            }
+            var modal = bootstrap.Modal.getInstance(document.getElementById('fornecedor-modal'));
+            modal.hide()
+        })
+    </script>
+{% endblock javascript %}
