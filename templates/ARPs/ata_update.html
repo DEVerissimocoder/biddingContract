@@ -68,7 +68,7 @@
                         {% if form.fornecedor_fk.errors %}
                             <div class="text-danger">{{ form.fornecedor_fk.errors }}</div>
                         {% endif %}                        
-                        <input type="text" class="form-control" id="only_user_see" value="{{forn}}">  
+                        <input type="text" class="form-control" id="only_user_see" value="{{forn}}" readonly>  
                         <!-- TRIGGER -->
                         <div class="d-flex">
                             <i class="fa-solid fa-magnifying-glass mt-2 cursor-pointer" id="bot-fornecedor" data-bs-toggle="modal" data-bs-target="#fornecedor-modal" title="procurar fornecedor"></i>
