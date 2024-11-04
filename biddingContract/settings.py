@@ -118,19 +118,59 @@ WSGI_APPLICATION = 'biddingContract.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),#.split('/')[0],
-        'PORT': os.getenv('DB_PORT'),
-        'OPTIONS': {
-            'sslmode': 'require',  # Adicione esta linha para exigir SSL
-        },
+# Configuração do banco de dados
+DEBUG = config('DEBUG', default=False, cast=bool)
+
+ 
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),  # Caminho do banco de dados SQLite
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('DB_NAME', default='default_db_name'),
+            'USER': config('DB_USER', default='default_user'),
+            'PASSWORD': config('DB_PASSWORD', default='default_password'),
+            'HOST': config('DB_HOST', default='localhost'),
+            'PORT': config('DB_PORT', default='5432', cast=int),
+            'OPTIONS': {
+                'sslmode': 'require', 
+            },
+        }
+    }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': config('DB_NAME', default='default_db_name'),  # Valor padrão
+#         'USER': config('DB_USER', default='default_user'),
+#         'PASSWORD': config('DB_PASSWORD', default='default_password'),
+#         'HOST': config('DB_HOST', default='localhost'),
+#         'PORT': config('DB_PORT', default='5432', cast=int),  # Converte para inteiro
+#         'OPTIONS': {
+#             'sslmode': 'require', 
+#         },
+#     }
+# }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.getenv('DB_NAME'),
+#         'USER': os.getenv('DB_USER'),
+#         'PASSWORD': os.getenv('DB_PASSWORD'),
+#         'HOST': os.getenv('DB_HOST'),
+#         'PORT': os.getenv('DB_PORT'),
+#         'OPTIONS': {
+#             'sslmode': 'require', 
+#         },
+#     }
+# }
 
 
 # Password validation
