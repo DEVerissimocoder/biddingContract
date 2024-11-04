@@ -15,11 +15,13 @@
                     <!--fornecedor-->
                     <div class="col-md-6">
                         <label for="{{ form.fornecedor_fk.id_for_label }}" value="{{ fornecedor.pk }}" class="form-label">{{ form.fornecedor_fk.label }}</label>
-                        {{ form.fornecedor_fk }}
+                        {{ form.fornecedor_fk }} <!--field oculto-->
                         {% if form.fornecedor_fk.errors %}
                             <div class="text-danger">{{ form.fornecedor_fk.errors }}</div>
                         {% endif %}
+                        <input type="text" class='form-control' id="only_user_see" value="{{fornecedor}}" readonly>
                     </div>
+
                         <!-- TRIGGER -->
                     <div class="d-flex">
                         <i class="fa-solid fa-magnifying-glass mt-2 cursor-pointer" id="bot-fornecedor" data-bs-toggle="modal" data-bs-target="#fornecedor-modal" title="procurar fornecedor"></i>
@@ -42,6 +44,13 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <label for="{{ form.licitacao_fk.id_for_label }}" class="form-label">{{ form.licitacao_fk.label }}</label>
+                        {{ form.licitacao_fk }}
+                        {% if form.licitacao_fk.errors %}
+                            <div class="text-danger">{{ form.licitacao_fk.errors }}</div>
+                        {% endif %}
+                    </div>        
                     <div class="col-md-6">
                         <label for="{{ form.numero.id_for_label }}" class="form-label">{{ form.numero.label }}</label>
                         {{ form.numero }}
@@ -83,13 +92,7 @@
                         {% endif %}
                     </div>
     
-                    <div class="col-md-6">
-                        <label for="{{ form.licitacao_fk.id_for_label }}" class="form-label">{{ form.licitacao_fk.label }}</label>
-                        {{ form.licitacao_fk }}
-                        {% if form.licitacao_fk.errors %}
-                            <div class="text-danger">{{ form.licitacao_fk.errors }}</div>
-                        {% endif %}
-                    </div>                                        
+                                                    
                     <div class="col-12 text-center d-flex justify-content-center gap-3">
                         <button type="submit"  class="btn btn-success">Cadastrar</button>
                         <a class="btn btn-secondary mr-2" href="{% url 'biddingContracts:index' %}">Voltar</a>
@@ -127,6 +130,13 @@
     document.getElementById('btn-confirmar-forn').addEventListener('click', function(){
         var selector_fornecedor = document.querySelector("input[name='flexRadioProvider']:checked");
         document.getElementById('{{ form.fornecedor_fk.id_for_label }}').value = selector_fornecedor.value
+        var fornecedorElement = selector_fornecedor.closest('.form-check').querySelector('.accordion-button li');
+        if (fornecedorElement){
+            var nome_fornecedor = fornecedorElement.textContent.trim()
+            document.getElementById('only_user_see').value = nome_fornecedor
+        }else{
+            console.log('nome do fornecedor não foi capturado')
+        }
         var modal = bootstrap.Modal.getInstance(document.getElementById('fornecedor-modal'));
         modal.hide()
     })  

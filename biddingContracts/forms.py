@@ -191,11 +191,11 @@ class formContrato(forms.ModelForm):
         }
         widgets = {
           
-            "fornecedor_fk": forms.TextInput(
+            "fornecedor_fk": forms.HiddenInput(
                 attrs={
-                    "type": "text",
+                    "type": "hidden",
                     "class": "form-control",
-                    "placeholder": "fornecedor",
+                    
                 }
             ),
 
@@ -303,9 +303,9 @@ class formARP(forms.ModelForm):
                 }
             ),
 
-            "fornecedor_fk": forms.TextInput(
+            "fornecedor_fk": forms.HiddenInput(
                 attrs={
-                    "type":"text",
+                    "type":"hidden",
                     "class":"form-control"
 
                 }

@@ -15,10 +15,12 @@
                 <div class="d-flex">
                     <div class="col-md-6">
                         <label for="{{ form.fornecedor_fk.id_for_label }}" class="form-label" value="{{fornecedor_id}}">{{ form.fornecedor_fk.label }}</label>
-                        {{ form.fornecedor_fk }}
+                        {{ form.fornecedor_fk }} <!--campo oculto-->
                         {% if form.fornecedor_fk.errors %}
                             <div class="text-danger">{{ form.fornecedor_fk.errors }}</div>
                         {% endif %}
+
+                        <input id="only_user_see" type="text" class="form-control" value="{{fornecedor.nome}}" readonly>
                         <!-- TRIGGER -->
                         <div class="d-flex align-items-center">
                             <i class="fa-solid fa-magnifying-glass mt-2 cursor-pointer" id="bot-fornecedor" data-bs-toggle="modal" data-bs-target="#fornecedor-modal" title="procurar fornecedor"></i>
@@ -127,7 +129,22 @@
 
     document.getElementById('btn-confirmar-forn').addEventListener('click', function(){
         var selectedFornecedor = document.querySelector("input[name='flexRadioProvider']:checked");
-        document.getElementById('{{ form.fornecedor_fk.id_for_label }}').value = selectedFornecedor.value;
+
+        if (selectedFornecedor){
+            document.getElementById('{{ form.fornecedor_fk.id_for_label }}').value = selectedFornecedor.value;
+
+            var fornecedorNomeElement = selectedFornecedor.closest('.form-check').querySelector('.accordion-button li');
+            if(fornecedorNomeElement){
+                var fornecedor_nome = fornecedorNomeElement.textContent.trim();
+                document.getElementById('only_user_see').value = fornecedor_nome;
+            }
+            else {
+            console.error("Label não encontrado para o fornecedor selecionado.");
+            }
+            
+        }
+        
+
         var modal = bootstrap.Modal.getInstance(document.getElementById('fornecedor-modal')); 
         modal.hide();
     });

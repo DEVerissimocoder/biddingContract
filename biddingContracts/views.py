@@ -156,7 +156,12 @@ class ContractsUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateVie
         return reverse_lazy("biddingContracts:contratos")
     
     def get_context_data(self, **kwargs):
+
+        print("chamando agora")
+        contratoParaAlterar = self.get_object()
         context = super().get_context_data(**kwargs)
+        fornecedor = contratoParaAlterar.fornecedor_fk
+        context['forn']=fornecedor
         context['fornecedores'] = Fornecedor.objects.all()
         return context
 
@@ -646,6 +651,9 @@ class ARPsUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        contratoParaAlterar = self.get_object()
+        forn = contratoParaAlterar.fornecedor_fk
+        context['forn'] = forn
         return context
 
 
@@ -1011,7 +1019,7 @@ class NotasFiscaisUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView
         notafiscal = form.save(commit=False)        
         context['notas'] = notafiscal
         
-        print(f'')        
+             
         if is_contract == 1:
             contr_ata = Contrato.objects.filter(fornecedor_fk = fornecedor)
             print(f'contrato {fornecedor} = {contr_ata}')
@@ -1064,10 +1072,11 @@ class NotasFiscaisUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView
         print("formulario inválido", form.errors)
         return render(self.request, self.template_name, {"form": form})
 
-    def get_success_url(self):
+    def get_success_url(self):        
         return reverse_lazy("biddingContracts:notasfiscais", kwargs={'is_contract': 2})
     
     def get_context_data(self, **kwargs):
+        print("get_context_data")
         context = super().get_context_data(**kwargs)
         context['is_contract'] = self.kwargs['is_contract']        
         is_contract = context['is_contract']        
