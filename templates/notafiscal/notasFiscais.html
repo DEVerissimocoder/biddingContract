@@ -9,6 +9,23 @@
     {% include "messages.html" %}
     <h2 class="text-center mb-4 text-uppercase">Notas Fiscais Eletrônicas</h2>
         {% if notafiscal_list %}
+
+        <!-- Filtros para as notas fiscais -->
+      {% comment %} <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="todos-tab" data-bs-toggle="tab" data-bs-target="#todos" type="button" role="tab" aria-controls="todos" aria-selected="true">Todos os Logins</button>
+          </li>
+          <li class="nav-item" role="presentation">
+              <button class="nav-link" id="usuario-tab" data-bs-toggle="tab" data-bs-target="#usuario" type="button" role="tab" aria-controls="usuario" aria-selected="false">Filtrar por Usuário</button>
+          </li>
+          <li class="nav-item" role="presentation">
+              <button class="nav-link" id="data-tab" data-bs-toggle="tab" data-bs-target="#data" type="button" role="tab" aria-controls="data" aria-selected="false">Filtrar por Data</button>
+          </li>
+          <li>
+              <a class="text-muted ms-2" style="text-decoration:none;" href="."><i title="Resetar página" class="fa-solid fa-arrows-rotate"></i></a> <!-- ícone de resetar página -->
+          </li>
+      </ul> {% endcomment %}
+      
           <table class="table">
             <thead>
               <tr>

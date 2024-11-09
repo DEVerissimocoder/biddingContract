@@ -1,4 +1,4 @@
-from . import views, views_dash
+from . import views
 from django.urls import path
 
 app_name = 'biddingContracts'
@@ -47,11 +47,6 @@ urlpatterns = [
     path('modal-secretaria/', views.modal_secretaria, name="modal_secretaria"), #Modal Secretaria
     path('editar-secretaria/<int:pk>/', views.SecretaryUpdateView.as_view(), name='update_secretaria'), # Editar Secretarias
     path('delete-secretary/<int:pk>/', views.SecretaryDeleteView.as_view(), name='del_secretaria'), # Deletar secretarias
-    
-    # Dashboard
-    path('teste/', views_dash.retorna_total_valores, name="teste"),
-    path('teste2/', views_dash.contrato_valor_por_mes, name="teste2"),
-    path('teste3/', views_dash.renderizar, name="renderizardash"),
 
     # Excluídos
     path('excluidos/', views.ListRegister.as_view(), name="excluidos"),
