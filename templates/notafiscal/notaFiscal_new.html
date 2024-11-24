@@ -65,13 +65,15 @@
                                     <div class="col-md-6 mb-3"> 
                                     <label for="{{ form.contrato_fk.id_for_label }}" class="form-label">Contrato</label>
                                         {{ form.contrato_fk }} <!--CAMPO OCULTO-->
+
                                         <input id="only_user_see" class="form-control" value="{{contratoNumero}}" readonly>
                                     </div>
                                      
                                     
                                 {% else %}
                                     <!--<div class="col-md-6 mb-3">-->
-                                    <!--<label for="{{form.ataregistropreco_fk.id_for_label}}" class="form-label">ARP</label>-->                                                                                                                                                 
+                                    <!--<label for="{{form.ataregistropreco_fk.id_for_label}}" class="form-label">ARP</label>--> 
+                                                                                                                                                                                    
                                         {{ form.ataregistropreco_fk }} <!--campo oculto-->
                                         <!--</div>-->                                    
                                 {% endif %}

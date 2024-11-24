@@ -1006,12 +1006,11 @@ class NotasFiscaisUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView
             print(f"contrato: {contrato} id do contrato é: {contrato.id}")
             idsContrato=contr_ata.values_list('id', flat=True)
             print(f"id do contrato: {idsContrato}")
-            if not (contrato.id in idsContrato):
-                if contr_ata.count()>1:
-                    context['fornecedor'] = fornecedor
-                    context['mostramodal'] = True
-                    context['contrs_atas'] = contr_ata
-                    return render(self.request, "notafiscal/notafiscal_update.html", context)
+            if not (contrato.id in idsContrato):               
+                context['fornecedor'] = fornecedor
+                context['mostramodal'] = True
+                context['contrs_atas'] = contr_ata
+                return render(self.request, "notafiscal/notafiscal_update.html", context)
             #ATENÇÃO ESTAS 5 LINHAS NA LINHA DE IDENTAÇÃO AINDA NÃO FORAM TESTADAS
             notas = NotaFiscal.objects.filter(contrato_fk = contrato.id).values_list('valor', flat=True)            
             resultado = sum(notas)
