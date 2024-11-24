@@ -795,7 +795,7 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     def searchContractByForn(self, id_fornecedor, is_contract):
         if is_contract==1:
             contratos = Contrato.objects.filter(fornecedor_fk=id_fornecedor.id)
-            if contratos is None:
+            if not contratos.exists():
                 return "NÃO EXISTE CONTRATOS PARA ESTE FORNECEDOR"
             return contratos
         
@@ -880,9 +880,9 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
                     return HttpResponseRedirect(reverse('biddingContracts:notasfiscais', kwargs={'is_contract': is_contract}))
             else:# se o campo id_contrato for None
                 contrato = self.searchContractByForn(id_fornecedor, is_contract)
-                print("contracts: ",CONTRATO)
+                print("contracts: ",contrato)
                 if isinstance(contrato, str):
-                    messages.add_message(self.request, messages.WARNING, id_fornecedor.nome)
+                    messages.add_message(self.request, messages.WARNING, id_fornecedor.nome + ',' + contrato)
                     return HttpResponseRedirect(reverse('biddingContracts:new_notas', kwargs={'is_contract': is_contract})) 
                 
                 context['contratos'] = contrato
