@@ -77,9 +77,14 @@
                             
                         </div>  
                         {% if is_contract %}
-                          {{ form.contrato_fk}} <!-- este campo deveria ser input hidden mas está sendo select-->
-                              {% if form.contrato_fk.errors %}
-                                <div class="alert-danger pt-1 col-auto" role="alert">
+                          {{ form.contrato_fk}} <!-- input hidden mas está sendo select -->
+                          <div class="form-group col-12">
+                            <label for="only_user_see">CONTRATO</label>        
+                            <input id="only_user_see" class="form-control" value="{{contratoNumero}}" readonly>
+                          </div>
+                              {% if form.contrato_fk.errors %}                                
+                                <div class="alert-danger pt-1 col-auto" role="alert">                                
+                                  
                                   {{ form.contrato_fk.errors }}
                                 </div>
                               {% endif %}                      
@@ -173,13 +178,18 @@
               }
           // Atribui o valor selecionado no modal > input radio ao campo oculto de contrato_fk
           okButton.addEventListener('click', function() {                    
-            const contratoSelecionado = document.querySelector('input[name="escolha_contrato"]:checked').value;
+            const contratoSelecionado = document.querySelector('input[name="escolha_contrato"]:checked');
             
             if(contratoSelecionado){
               if ("{{is_contract}}"==1){              
-                document.getElementById('{{ form.contrato_fk.id_for_label}}').value = contratoSelecionado;
+                document.getElementById('{{ form.contrato_fk.id_for_label}}').value = contratoSelecionado.value;
+                var contrato_element = contratoSelecionado.closest('label').querySelector('span');
+                if(contrato_element){
+                  contratoNumero = contrato_element.textContent.trim();
+                  document.getElementById('only_user_see').value=contratoNumero
+                }
               }else{              
-                document.getElementById('{{form.ataregistropreco_fk.id_for_label}}').value = contratoSelecionado;
+                document.getElementById('{{form.ataregistropreco_fk.id_for_label}}').value = contratoSelecionado.value;
               }                           
               $('#modal_contr').modal('hide');
 

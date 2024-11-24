@@ -98,56 +98,34 @@
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white {% if request.resolver_match.url_name == 'list_member' and request.resolver_match.namespace == 'usuarios' %}active{% endif %}" 
                    href="{% url 'usuarios:list_member' %}">
-                    <i class="fa-solid fa-users" title="Listar Usuários do Sistema"></i> 
-                    <span class="nav-text text-white small">Visualizar Usuários</span> 
+                    <i class="fa-solid fa-users" title="Usuários do Sistema"></i> 
+                    <span class="nav-text text-white small">Usuários</span> 
                 </a>
             </div>
         </li>
         {% endif %}
 
-        {% if perms.biddingContracts.add_secretaria %} <!-- Visualiza somente com a permissão de criar secretaria -->
-        <li class="nav-item mb-3">
-            <div class="d-flex flex-column align-items-center">
-                <a class="nav-link text-white {% if request.resolver_match.url_name == 'new_secretaria' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
-                   href="{% url 'biddingContracts:new_secretaria' %}">
-                    <i class="fa-solid fa-s" title="Cadastrar Secretarias"></i> 
-                    <span class="nav-text text-white small">Cadastrar Secretarias</span> 
-                </a>
-            </div>
-        </li>
-        {% endif %}
+        
 
         {% if perms.biddingContracts.view_secretaria %}
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white {% if request.resolver_match.url_name == 'list_secretarias' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
                    href="{% url 'biddingContracts:list_secretarias' %}">
-                    <i class="fa-solid fa-list-ol" title="Listar Secretarias"></i> 
-                    <span class="nav-text text-white small">Listar Secretarias</span> 
+                    <i class="fa-solid fa-list-ol" title="Secretarias"></i> 
+                    <span class="nav-text text-white small">Secretaria</span> 
                 </a>
             </div>
         </li>
-        {% endif %}
-        
-        {% if perms.biddingContracts.add_contrato %} <!-- Visualiza somente com a permissão de criar contrato -->
-        <li class="nav-item mb-3">
-            <div class="d-flex flex-column align-items-center">
-                <a class="nav-link text-white {% if request.resolver_match.url_name == 'cadContrato' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
-                   href="{% url 'biddingContracts:cadContrato' fornecedor_id=0 %}">
-                    <i class="fa-solid fa-c" title="Criar Contratos"></i>
-                    <span class="nav-text text-white small">Cadastrar Contratos</span>
-                </a>
-            </div>
-        </li>
-        {% endif %}
-
+        {% endif %}        
+       
         {% if perms.biddingContracts.view_contrato %}
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white {% if request.resolver_match.url_name == 'contratos' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
                    href="{% url 'biddingContracts:contratos' %}">
-                    <i class="fa-solid fa-list-ol" title="Listar Contratos"></i>
-                    <span class="nav-text text-white small">Listar Contratos</span>
+                    <i class="fa-solid fa-list-ol" title="Contratos"></i>
+                    <span class="nav-text text-white small">Contratos</span>
                 </a>
             </div>
         </li>
@@ -186,56 +164,23 @@
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white {% if request.resolver_match.url_name == 'notasfiscais' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
                    href="{% url 'biddingContracts:notasfiscais' 2 %}">
-                    <i class="fa-solid fa-list-ol" title="Listar Notas Fiscais"></i>
-                    <span class="nav-text text-white small">Listar Notas Fiscais</span>
+                    <i class="fa-solid fa-list-ol" title="Notas Fiscais"></i>
+                    <span class="nav-text text-white small">Lista de NF-Es</span>
                 </a>
             </div>
         </li>
-        {% endif %}
-    
-        {% if perms.biddingContracts.add_licitacao %}
-        <li class="nav-item mb-3">
-            <div class="d-flex flex-column align-items-center">
-                <a class="nav-link text-white {% if request.resolver_match.url_name == 'create-bidding' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
-                   href="{% url 'biddingContracts:create-bidding' %}">
-                    <i class="fa-solid fa-l" title="Cadastrar Licitações"></i> 
-                    <span class="nav-text text-white small">Cadastrar Licitações</span> 
-                </a>
-            </div>
-        </li>
-        {% endif %}
+        {% endif %}    
+
         
         {% if perms.biddingContracts.view_licitacao %}
         <li class="nav-item mb-3">
             <div class="d-flex flex-column align-items-center">
                 <a class="nav-link text-white {% if request.resolver_match.url_name == 'list_bidding' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
                    href="{% url 'biddingContracts:list_bidding' %}">
-                    <i class="fa-solid fa-list-ol" title="Listar Licitações"></i>
-                    <span class="nav-text text-white small">Listar Licitações</span>
+                    <i class="fa-solid fa-list-ol" title="Licitações"></i>
+                    <span class="nav-text text-white small">Licitações</span>
                 </a>
             </div>
-        </li>
-        {% endif %}
-
-        {% if perms.biddingContracts.view_fornecedor %}
-        <li class="nav-item mb-3">
-            <div class="d-flex flex-column align-items-center">
-                <a class="nav-link text-white {% if request.resolver_match.url_name == 'fornecedores' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
-                   href="{% url 'biddingContracts:fornecedores' %}">
-                    <i class="fa-solid fa-truck-fast" title="Listar Fornecedores"></i>
-                    <span class="nav-text text-white small">Listar Fornecedores</span>
-                </a>
-            </div>
-        </li>
-        {% endif %}
-
-        {% if perms.biddingContracts.add_ataregistropreco %}
-        <li class="nav-item mb-3">
-            <a class="nav-link text-white {% if request.resolver_match.url_name == 'create-ARP' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
-                   href="{% url 'biddingContracts:create-ARP' %}">
-                <i class="fa-solid fa-a" title="Criar Atas de Registro de Preços"></i>
-                <span class="nav-text text-white small">Criar ARPs</span>
-            </a>
         </li>
         {% endif %}
 
@@ -243,8 +188,8 @@
         <li class="nav-item mb-3">
             <a class="nav-link text-white {% if request.resolver_match.url_name == 'atas' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
                    href="{% url 'biddingContracts:atas' %}">
-                <i class="fa-solid fa-list-ol" title="Listar Atas de Registros de Preços"></i>
-                <span class="nav-text text-white small">Listar ARPs</span>
+                <i class="fa-solid fa-list-ol" title="Atas de Registros de Preços"></i>
+                <span class="nav-text text-white small">ARPs</span>
             </a>
         </li>
         {% endif %}
@@ -253,7 +198,7 @@
         <li class="nav-item mb-3">
             <a class="nav-link text-white {% if request.resolver_match.url_name == 'logados' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
                    href="{% url 'biddingContracts:logados' %}">
-                   <i class="fa-solid fa-users-rectangle" title="Listar acessos"></i>
+                   <i class="fa-solid fa-users-rectangle" title="Todos acessos"></i>
                 <span class="nav-text text-white small">Relatório de Acessos</span>
             </a>
         </li>
@@ -263,8 +208,8 @@
         <li class="nav-item mb-3">
             <a class="nav-link text-white {% if request.resolver_match.url_name == 'excluidos' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
                    href="{% url 'biddingContracts:excluidos' %}">
-                   <i class="fa-solid fa-trash" title="Listar exclusões"></i>
-                <span class="nav-text text-white small">Listar exclusões</span>
+                   <i class="fa-solid fa-trash" title="exclusões"></i>
+                <span class="nav-text text-white small">exclusões</span>
             </a>
         </li>
         {% endif %}

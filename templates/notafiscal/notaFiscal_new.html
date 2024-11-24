@@ -62,14 +62,18 @@
                                 
                                 {% if is_contract %}
                                     
-                                    <!-- <div class="col-md-6 mb-3"> -->
-                                    <!--<label for="{{ form.contrato_fk.id_for_label }}" class="form-label">Contrato</label> -->
+                                    <div class="col-md-6 mb-3"> 
+                                    <label for="{{ form.contrato_fk.id_for_label }}" class="form-label">Contrato</label>
                                         {{ form.contrato_fk }} <!--CAMPO OCULTO-->
-                                    <!-- </div> -->
+
+                                        <input id="only_user_see" class="form-control" value="{{contratoNumero}}" readonly>
+                                    </div>
+                                     
                                     
                                 {% else %}
                                     <!--<div class="col-md-6 mb-3">-->
-                                    <!--<label for="{{form.ataregistropreco_fk.id_for_label}}" class="form-label">ARP</label>-->                                                                                                                                                 
+                                    <!--<label for="{{form.ataregistropreco_fk.id_for_label}}" class="form-label">ARP</label>--> 
+                                                                                                                                                                                    
                                         {{ form.ataregistropreco_fk }} <!--campo oculto-->
                                         <!--</div>-->                                    
                                 {% endif %}
@@ -154,6 +158,7 @@
             if ("{{is_contract}}"==1){
                 console.log("true")
                 var contrato = document.getElementById('{{ form.contrato_fk.id_for_label}}')
+                
             }else{
                 console.log("false")
                 var contrato = document.getElementById('{{form.ataregistropreco_fk.id_for_label}}')
@@ -172,9 +177,15 @@
                 }
             // Atribui o valor selecionado no modal > input radio ao campo oculto de contrato_fk
             okButton.addEventListener('click', function() {
-            const contratoSelecionado = document.querySelector('input[name="escolha_contrato"]:checked').value;
+            const contratoSelecionado = document.querySelector('input[name="escolha_contrato"]:checked');
                 if(contratoSelecionado){
-                    contrato.value = contratoSelecionado
+                    contrato.value = contratoSelecionado.value
+                    var contratoNumeroElement = contratoSelecionado.closest('label').querySelector('span');
+
+                    if(contratoNumeroElement){
+                        var contratoNumero = contratoNumeroElement.textContent.trim();
+                        document.getElementById('only_user_see').value = contratoNumero;
+                    }                   
                     numero_nf_id.value  = numero_nf
                     serie_nf_id.value   = serie_nf
                     valor_nf_id.value   = parseFloat(valor_nf.replace(',', '.')) 

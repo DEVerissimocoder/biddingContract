@@ -880,38 +880,17 @@ class NotaFiscal_new(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
                     return HttpResponseRedirect(reverse('biddingContracts:notasfiscais', kwargs={'is_contract': is_contract}))
             else:# se o campo id_contrato for None
                 contrato = self.searchContractByForn(id_fornecedor, is_contract)
-                print("contrats: ",CONTRATO)
+                print("contracts: ",CONTRATO)
                 if isinstance(contrato, str):
                     messages.add_message(self.request, messages.WARNING, id_fornecedor.nome)
                     return HttpResponseRedirect(reverse('biddingContracts:new_notas', kwargs={'is_contract': is_contract})) 
-                if contrato.count()>1:
-                    context['contratos'] = contrato
-                    context['mostramodal'] = True
-                    context['fornecedor'] = id_fornecedor
-
-                    return render(self.request, "notafiscal/notaFiscal_new.html", context)
-                elif contrato.count()==1:
-                    print("para o caso de o fornecedor tiver apenas 1 contrato.")
-                    notas=self.search_NF_ByContract(contrato.first().id, is_contract) 
-                    #soma todos os valores retornados
-                    vlrTotNotas = sum(notas)
-                    #pega o valor do contrato
-                    vlr_contrato = contrato.first().valor
-                    dataHoje = datetime.today().date()
-                    dataFinalContrato = contrato.first().dataFinal            
-                    if self.valid_NF_valor(valorNFform, vlr_contrato, vlrTotNotas, contrato):
-                        return HttpResponseRedirect(reverse('biddingContracts:new_notas', kwargs={'is_contract': is_contract}))
-                    elif self.valid_NF_vigencia(dataHoje, dataFinalContrato, contrato):
-                        return HttpResponseRedirect(reverse("biddingContracts:new_notas", kwargs={'is_contract': is_contract}))
-                    else:
-                        notafiscal = form.save(commit=False)
-                        notafiscal.contrato_fk = contrato.first()
-                        notafiscal.save()
-                        messages.add_message(self.request, messages.SUCCESS, "SALVO COM SUCESSO")
-                        return HttpResponseRedirect(reverse('biddingContracts:notasfiscais', kwargs={'is_contract': is_contract}))
-                else:
-                    messages.add_message(self.request, messages.WARNING, "NÃO EXISTE CONTRATO PARA ESTE FORNECEDOR")
-                    return HttpResponseRedirect(reverse("biddingContracts:new_notas", kwargs ={'is_contract': is_contract}))       
+                
+                context['contratos'] = contrato
+                context['mostramodal'] = True
+                context['fornecedor'] = id_fornecedor     
+                
+                return render(self.request, "notafiscal/notaFiscal_new.html", context)
+                      
         else:
             ATAREGISTROPRECO = "ATA DE REGISTRO DE PREÇOS " 
             print("notafiscal - ata de registro de preços")
@@ -1027,12 +1006,11 @@ class NotasFiscaisUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView
             print(f"contrato: {contrato} id do contrato é: {contrato.id}")
             idsContrato=contr_ata.values_list('id', flat=True)
             print(f"id do contrato: {idsContrato}")
-            if not (contrato.id in idsContrato):
-                if contr_ata.count()>1:
-                    context['fornecedor'] = fornecedor
-                    context['mostramodal'] = True
-                    context['contrs_atas'] = contr_ata
-                    return render(self.request, "notafiscal/notafiscal_update.html", context)
+            if not (contrato.id in idsContrato):               
+                context['fornecedor'] = fornecedor
+                context['mostramodal'] = True
+                context['contrs_atas'] = contr_ata
+                return render(self.request, "notafiscal/notafiscal_update.html", context)
             #ATENÇÃO ESTAS 5 LINHAS NA LINHA DE IDENTAÇÃO AINDA NÃO FORAM TESTADAS
             notas = NotaFiscal.objects.filter(contrato_fk = contrato.id).values_list('valor', flat=True)            
             resultado = sum(notas)
