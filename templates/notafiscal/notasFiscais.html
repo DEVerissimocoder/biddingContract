@@ -7,7 +7,7 @@
   {% include "sidebar.html" %}
   <div class="container my-5">
     {% include "messages.html" %}
-    <h2 class="text-center mb-4 text-uppercase">Notas Fiscais Eletrônicas</h2>
+    <h2 class="text-center mb-4 text-uppercase text-muted">Notas Fiscais Eletrônicas</h2>
         {% if notafiscal_list %}
 
         <!-- Filtros para as notas fiscais -->
@@ -96,7 +96,7 @@
               </tr>
             {% endfor %}
         {% else %}
-          <h3 class="text-center text-uppercase">Sem notas Fiscais!</h3>
+          <h3 class="text-center text-uppercase text-muted">Sem notas Fiscais!</h3>
         {% endif %}
             </tbody>
           </table>
@@ -148,7 +148,7 @@
             {% endif %}
         </ul>
       <div class="d-flex justify-content-center flex-row-reverse gap-3">
-        <a href="{% url "biddingContracts:index" %}" class="btn btn-dark">Voltar</a>
+        <a href="{% url "biddingContracts:index" %}" class="btn btn-secondary">Voltar</a>
         {% comment %} <a href="{% url "biddingContracts:new_notas" is_contract %}" class="btn btn-success">+ Adicionar</a> {% endcomment %} <!-- Não acho viável um botão que leve a uma opção sabendo que existem duas -->
       </div>
   </div>
