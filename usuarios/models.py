@@ -4,9 +4,6 @@ from django.contrib.auth.models import User
 User = get_user_model()
 
 
-user = User.objects.get(username='root')
-user.set_password('1234')
-user.save()
-print("senha atualizada")
+
 
 
