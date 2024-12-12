@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class="form-check">
-    
+    {% if fornecedores %}
     {% for fornecedor in fornecedores %}
     <div class="form-check">
         <div class="d-flex align-items-center">
@@ -33,6 +33,9 @@
         </div>
     </div>
 {% endfor %}   
+{% else %}
+<p class="text-center">Nenhum fornecedor cadastrado!</p>
+{% endif %}
     </ul>
     </label>
   </div>
