@@ -121,7 +121,7 @@ WSGI_APPLICATION = 'biddingContract.wsgi.application'
 # Configuração do banco de dados
 DEBUG = config('DEBUG', default=False, cast=bool)
 
- 
+"""
 if DEBUG:
     DATABASES = {
         'default': {
@@ -143,20 +143,20 @@ else:
             },
         }
     }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': config('DB_NAME', default='default_db_name'),  # Valor padrão
-#         'USER': config('DB_USER', default='default_user'),
-#         'PASSWORD': config('DB_PASSWORD', default='default_password'),
-#         'HOST': config('DB_HOST', default='localhost'),
-#         'PORT': config('DB_PORT', default='5432', cast=int),  # Converte para inteiro
-#         'OPTIONS': {
-#             'sslmode': 'require', 
-#         },
-#     }
-# }
+"""
+DATABASES = {
+    'default': {
+         'ENGINE': 'django.db.backends.postgresql',
+         'NAME': config('DB_NAME', default='default_db_name'),  # Valor padrão
+         'USER': config('DB_USER', default='default_user'),
+         'PASSWORD': config('DB_PASSWORD', default='default_password'),
+         'HOST': config('DB_HOST', default='localhost'),
+         'PORT': config('DB_PORT', default='5432', cast=int),  # Converte para inteiro
+         'OPTIONS': {
+             'sslmode': 'require', 
+         },
+     }
+ }
 
 # DATABASES = {
 #     'default': {
