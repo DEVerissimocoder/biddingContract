@@ -75,10 +75,10 @@
                         </div>
                         {% endblock %}
                         
-                        <div class="d-flex justify-content-end mt-5">
+                        <div class="d-flex flex-row-reverse gap-3 justify-content-center mt-5">
                             {% block form_buttons %}
-                            <a href="{% url 'biddingContracts:index' %}" name="cancel" class="btn btn-secondary me-2">Cancelar</a>
-                            <button type="submit" class="btn btn-primary">Salvar</button>
+                            <a href="{% url 'biddingContracts:cadContrato' 0 %}" name="cancel" class="btn btn-secondary me-2">Cancelar</a>
+                            <button type="submit" class="btn btn-success">Cadastrar</button>
                             {% endblock %}
                         </div>
                     </form>
