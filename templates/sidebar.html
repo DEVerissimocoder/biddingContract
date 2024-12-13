@@ -4,6 +4,7 @@
     #sidebar {
         width: 200px;
         transition: width 0.3s ease;
+        
     }
     
     #sidebar.collapsed {
@@ -41,7 +42,7 @@
         border-radius: 5px;
     }
     
-        /* Define o estilo para o item ativo (ícone e texto) */
+    /* Define o estilo para o item ativo (ícone e texto) */
     .nav-link.active {
         background-color: white; /* Fundo branco para o item ativo */
         color: black !important; /* Cor preta para o texto do item ativo */
@@ -57,33 +58,27 @@
     .nav-link.active .nav-text {
         color: black !important; /* Texto em preto quando o item está ativo */
     }
-
     
     .nav-link i {
         color: white; /* Ícone branco por padrão */
     }
-    
-    
 </style>
-
-
 
 <!-- Sidebar -->
 <div class="text-white p-4 flex-shrink-0 d-flex flex-column align-items-center collapsed" id="sidebar" style="min-height: 100vh; background-color: #1d1d1d;">
     <i id="sidebarToggle" class="fa-solid fa-chevron-left mb-3" style="cursor: pointer;" title="Toggle Sidebar"></i>
     <h4 class="text-center text-uppercase mb-4 menu">Menu</h4>
     <hr class="w-100" style="background-color:#fff5f5" heigth="1px"> 
-    <ul class="nav d-flex flex-column  justify-content-start" id="navItems">
+    <ul class="nav d-flex flex-column justify-content-start" id="navItems">
         <li class="nav-item mb-3">
             <a class="nav-link text-white {% if request.path == '/' %}active{% endif %}" href="/">
                 <i class="fa-solid fa-house" title="Início"></i>
                 <span class="nav-text text-white small">Início</span>
             </a>
         </li>
-        
 
         <li class="nav-item mb-3">
-            <div class="d-flex flex-column align-items-center">
+            <div class="d-flex flex-column align-items-start">
                 <a class="nav-link text-white {% if request.resolver_match.url_name == 'detail_member' and request.resolver_match.namespace == 'usuarios' %}active{% endif %}" 
                    href="{% url 'usuarios:detail_member' user.pk %}">
                     <i class="fa-solid fa-user" title="Menu Pessoal"></i>
@@ -91,11 +86,10 @@
                 </a>
             </div>
         </li>
-        
 
         {% if perms.auth.view_user %} <!-- Visualiza somente com a permissão de ver usuários -->
         <li class="nav-item mb-3">
-            <div class="d-flex flex-column align-items-center">
+            <div class="d-flex flex-column align-items-start">
                 <a class="nav-link text-white {% if request.resolver_match.url_name == 'list_member' and request.resolver_match.namespace == 'usuarios' %}active{% endif %}" 
                    href="{% url 'usuarios:list_member' %}">
                     <i class="fa-solid fa-users" title="Usuários do Sistema"></i> 
@@ -105,38 +99,34 @@
         </li>
         {% endif %}
 
-        
-
         {% if perms.biddingContracts.view_secretaria %}
         <li class="nav-item mb-3">
-            <div class="d-flex flex-column align-items-center">
+            <div class="d-flex flex-column align-items-start">
                 <a class="nav-link text-white {% if request.resolver_match.url_name == 'list_secretarias' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
                    href="{% url 'biddingContracts:list_secretarias' %}">
-                    <i class="fa-solid fa-list-ol" title="Secretarias"></i> 
-                    <span class="nav-text text-white small">Secretaria</span> 
+                    <i class="fa-solid fa-s" title="Secretarias"></i> 
+                    <span class="nav-text text-white small">Secretaria</span>
                 </a>
             </div>
         </li>
         {% endif %}        
-       
+
         {% if perms.biddingContracts.view_contrato %}
         <li class="nav-item mb-3">
-            <div class="d-flex flex-column align-items-center">
+            <div class="d-flex flex-column align-items-start">
                 <a class="nav-link text-white {% if request.resolver_match.url_name == 'contratos' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
                    href="{% url 'biddingContracts:contratos' %}">
-                    <i class="fa-solid fa-list-ol" title="Contratos"></i>
+                    <i class="fa-solid fa-file-contract" title="Contratos"></i>
                     <span class="nav-text text-white small">Contratos</span>
                 </a>
             </div>
         </li>
         {% endif %}
-        
+
         {% if perms.biddingContracts.add_notafiscal %}
-        <!--cadastro de notas fiscais -->
-        <!--colapse-->
         <li class="nav-item mb-3">
-            <div  id="collapse-nf d-flex flex-column align-items-center" >
-                <div class="nav-link text-white ms-1">
+            <div id="collapse-nf" class="d-flex flex-column align-items-start">
+                <div class="nav-link text-white ms-0">
                     <i class="fa-solid fa-n" data-bs-toggle="collapse" data-bs-target="#nota-fiscal" aria-expanded="false" aria-controls="nota-fiscal" style="cursor: pointer;" title="Cadastrar Notas Fiscais"></i>
                     <span class="nav-text text-white small" data-bs-toggle="collapse" data-bs-target="#nota-fiscal" aria-expanded="false" aria-controls="nota-fiscal" style="cursor: pointer;">Notas Fiscais</span>
                 </div>
@@ -144,24 +134,23 @@
             <div class="collapse" id="nota-fiscal" data-bs-parent="collapse-nf">
                 <div>
                     <a class="nav-link text-white {% if request.resolver_match.url_name == 'new_notas' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
-                   href="{% url 'biddingContracts:new_notas' 0 %}">
+                       href="{% url 'biddingContracts:new_notas' 0 %}">
                         <i class="fa-solid fa-file-contract" title="Nova Nota Fiscal ARP"></i>
-                        <span class="nav-text text-white small"> nota fiscal (ARP)</span>
+                        <span class="nav-text text-white small">nota fiscal (ARP)</span>
                     </a>
                     <a class="nav-link text-white {% if request.resolver_match.url_name == 'new_notas' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
-                   href="{% url 'biddingContracts:new_notas' 1 %}">
+                       href="{% url 'biddingContracts:new_notas' 1 %}">
                         <i class="fa-regular fa-note-sticky" title="Nova Nota Fiscal Contrato"></i>
-                        <span class="nav-text text-white small"> nota fiscal (contrato)</span>
+                        <span class="nav-text text-white small">nota fiscal (contrato)</span>
                     </a>
                 </div>
             </div>
         </li>
-        <!--fim do colapse -->
         {% endif %}
 
         {% if perms.biddingContracts.view_notafiscal %}
         <li class="nav-item mb-3">
-            <div class="d-flex flex-column align-items-center">
+            <div class="d-flex flex-column align-items-start">
                 <a class="nav-link text-white {% if request.resolver_match.url_name == 'notasfiscais' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
                    href="{% url 'biddingContracts:notasfiscais' 2 %}">
                     <i class="fa-solid fa-list-ol" title="Notas Fiscais"></i>
@@ -171,13 +160,12 @@
         </li>
         {% endif %}    
 
-        
         {% if perms.biddingContracts.view_licitacao %}
         <li class="nav-item mb-3">
-            <div class="d-flex flex-column align-items-center">
+            <div class="d-flex flex-column align-items-start">
                 <a class="nav-link text-white {% if request.resolver_match.url_name == 'list_bidding' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
                    href="{% url 'biddingContracts:list_bidding' %}">
-                    <i class="fa-solid fa-list-ol" title="Licitações"></i>
+                    <i class="fa-solid fa-l" title="Licitações"></i>
                     <span class="nav-text text-white small">Licitações</span>
                 </a>
             </div>
@@ -186,37 +174,43 @@
 
         {% if perms.biddingContracts.view_ataregistropreco %}
         <li class="nav-item mb-3">
-            <a class="nav-link text-white {% if request.resolver_match.url_name == 'atas' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
+            <div class="d-flex flex-column align-items-start">
+                <a class="nav-link text-white {% if request.resolver_match.url_name == 'atas' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
                    href="{% url 'biddingContracts:atas' %}">
-                <i class="fa-solid fa-list-ol" title="Atas de Registros de Preços"></i>
-                <span class="nav-text text-white small">ARPs</span>
-            </a>
+                    <i class="fa-solid fa-a" title="Atas de Registros de Preços"></i>
+                    <span class="nav-text text-white small">ARPs</span>
+                </a>
+            </div>
         </li>
         {% endif %}
 
         {% if perms.biddingContracts.view_userlogin %}
         <li class="nav-item mb-3">
-            <a class="nav-link text-white {% if request.resolver_match.url_name == 'logados' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
+            <div class="d-flex flex-column align-items-start">
+                <a class="nav-link text-white {% if request.resolver_match.url_name == 'logados' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
                    href="{% url 'biddingContracts:logados' %}">
-                   <i class="fa-solid fa-users-rectangle" title="Todos acessos"></i>
-                <span class="nav-text text-white small">Relatório de Acessos</span>
-            </a>
+                    <i class="fa-solid fa-users-rectangle" title="Todos acessos"></i>
+                    <span class="nav-text text-white small">Relatório de Acessos</span>
+                </a>
+            </div>
         </li>
         {% endif %}
 
         {% if perms.biddingContracts.view_registroexcluido %}
         <li class="nav-item mb-3">
-            <a class="nav-link text-white {% if request.resolver_match.url_name == 'excluidos' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
+            <div class="d-flex flex-column align-items-start">
+                <a class="nav-link text-white {% if request.resolver_match.url_name == 'excluidos' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
                    href="{% url 'biddingContracts:excluidos' %}">
-                   <i class="fa-solid fa-trash" title="exclusões"></i>
-                <span class="nav-text text-white small">exclusões</span>
-            </a>
+                    <i class="fa-solid fa-trash" title="exclusões"></i>
+                    <span class="nav-text text-white small">exclusões</span>
+                </a>
+            </div>
         </li>
         {% endif %}
 
         {% if user.is_authenticated %}
             <li class="nav-item mb-3">
-                <div class="d-flex flex-column align-items-center">
+                <div class="d-flex flex-column align-items-start">
                     <form action="{% url 'logout' %}" method="post" class="">
                         {% csrf_token %}
                         <button class="nav-link link-danger text-danger" type="submit">
@@ -231,66 +225,39 @@
 </div>
 
 {% block javascript %}
-    <script>
-        document.getElementById('sidebarToggle').addEventListener('click', function () {
-            const sidebar = document.getElementById('sidebar');
-            const navItems = document.querySelectorAll('#navItems .sidebar-text');
-        
-            sidebar.classList.toggle('collapsed');
-        
-            navItems.forEach(item => {
-                item.classList.toggle('d-none');
-            });
-        
-            // Mudar a direção do ícone
-            if (sidebar.classList.contains('collapsed')) {
-                this.classList.remove('fa-chevron-left');
-                this.classList.add('fa-chevron-right');
-            } else {
-                this.classList.remove('fa-chevron-right');
-                this.classList.add('fa-chevron-left');
-            }
-        });
-        
-        // Verificar o estado inicial do sidebar para ajustar o ícone corretamente
-        window.addEventListener('DOMContentLoaded', function() {
-            const sidebar = document.getElementById('sidebar');
-            const toggleIcon = document.getElementById('sidebarToggle');
-        
-            if (sidebar.classList.contains('collapsed')) {
-                toggleIcon.classList.remove('fa-chevron-left');
-                toggleIcon.classList.add('fa-chevron-right');
-            } else {
-                toggleIcon.classList.remove('fa-chevron-right');
-                toggleIcon.classList.add('fa-chevron-left');
-            }
-        });
-
-            // 
-        document.addEventListener('DOMContentLoaded', function () {
-            var collapseElement = document.getElementById('nota-fiscal');
-            var collapseState = localStorage.getItem('collapseState');
-
-            // Verifica se há um estado salvo e aplica ao collapse
-            if (collapseState === 'shown') {
-            var collapse = new bootstrap.Collapse(collapseElement, {toggle: false});
-            collapse.show();  // Expande se o estado for 'shown'
-            } else {
-            var collapse = new bootstrap.Collapse(collapseElement, {toggle: false});
-            collapse.hide();  // Colapsa se o estado for 'hidden' ou null
-            }
-
-            // Escuta o evento de mostrar/esconder do collapse e salva o estado
-            collapseElement.addEventListener('show.bs.collapse', function () {
-            localStorage.setItem('collapseState', 'shown');
-            });
-
-            collapseElement.addEventListener('hide.bs.collapse', function () {
-            localStorage.setItem('collapseState', 'hidden');
-            });
-        });
-    </script>
-{% endblock javascript%}
-
+<script>
+    document.getElementById('sidebarToggle').addEventListener('click', function () {
+        const sidebar = document.getElementById('sidebar');
+        const navItems = document.querySelectorAll('#navItems .sidebar-text');
     
+        sidebar.classList.toggle('collapsed');
     
+        navItems.forEach(item => {
+            item.classList.toggle('d-none');
+        });
+    
+        // Mudar a direção do ícone
+        if (sidebar.classList.contains('collapsed')) {
+            this.classList.remove('fa-chevron-left');
+            this.classList.add('fa-chevron-right');
+        } else {
+            this.classList.remove('fa-chevron-right');
+            this.classList.add('fa-chevron-left');
+        }
+    });
+    
+    // Verificar o estado inicial do sidebar para ajustar o ícone corretamente
+    window.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.getElementById('sidebar');
+        const toggleIcon = document.getElementById('sidebarToggle');
+    
+        if (sidebar.classList.contains('collapsed')) {
+            toggleIcon.classList.remove('fa-chevron-left');
+            toggleIcon.classList.add('fa-chevron-right');
+        } else {
+            toggleIcon.classList.remove('fa-chevron-right');
+            toggleIcon.classList.add('fa-chevron-left');
+        }
+    });
+</script>
+{% endblock javascript %}

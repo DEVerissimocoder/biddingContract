@@ -86,7 +86,7 @@
                   <td class="">
                     <div class="d-flex gap-3 justify-content-center align-align-middle" style="font-size:14px;">
                       {% if perms.biddingContracts.change_notafiscal %}
-                        <a class="btn btn-link text-indigo" href="{% url "biddingContracts:updatenfe" notafiscal.pk is_contract %}">Editar</a>
+                        <a class="btn btn-link text-black" href="{% url "biddingContracts:updatenfe" notafiscal.pk is_contract %}">Editar</a>
                       {% endif %}
                       {% if perms.biddingContracts.delete_notafiscal %}
                         <a class="btn btn-link text-danger" href="{% url "biddingContracts:deletenfe" notafiscal.pk %}">Excluir</a>
