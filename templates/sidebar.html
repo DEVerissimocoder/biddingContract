@@ -204,6 +204,16 @@
         </li>
         {% endif %}
 
+        {% if perms.biddingContracts.view_userlogin %}
+        <li class="nav-item mb-3">
+            <a class="nav-link text-white {% if request.resolver_match.url_name == 'logados' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
+                   href="{% url 'biddingContracts:fornecedores' %}">
+                   <i class="fa-solid fa-users-rectangle" title="Todos acessos"></i>
+                <span class="nav-text text-white small">Fornecedores</span>
+            </a>
+        </li>
+        {% endif %}
+
         {% if perms.biddingContracts.view_registroexcluido %}
         <li class="nav-item mb-3">
             <a class="nav-link text-white {% if request.resolver_match.url_name == 'excluidos' and request.resolver_match.namespace == 'biddingContracts' %}active{% endif %}" 
@@ -227,6 +237,8 @@
                 </div>
             </li>
         {% endif %}
+
+        
     </ul>
 </div>
 
