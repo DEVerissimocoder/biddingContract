@@ -6,7 +6,7 @@ User = get_user_model()
 
 from django.contrib.auth.forms import AuthenticationForm
 
-class CustomLoginForm(AuthenticationForm):
+class CustomLoginForm(forms.Form):
     username = forms.CharField(
         label="Login",
         required=True,

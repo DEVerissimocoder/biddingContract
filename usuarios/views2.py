@@ -1,12 +1,10 @@
 from django.shortcuts import render, redirect
-from django. urls import reverse_lazy
 from usuarios.forms2 import  CadastroForms, CustomLoginForm, UpdateEmailForm
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate
 from django.contrib import messages, auth
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.contrib.auth.decorators import permission_required
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -18,26 +16,26 @@ def login(request):
         form = CustomLoginForm(request.POST)
 
         if form.is_valid():
-            username = form["username"].value()
-            password = form["password"].value()
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
 
             usuario = authenticate(
                 request,
                 username=username,
                 password=password
             )
+
             if usuario is not None and usuario.is_active:
-                aviso = 'Login efetuado com sucesso!'
                 auth.login(request, usuario)
-                messages.success(request, aviso)
-                return redirect('index')  # Redireciona para a página inicial após login bem-sucedido
+                messages.success(request, "Login Efetuado com sucesso!")
+                return redirect('index')
             else:
-                aviso = 'Login inválido! Dados incorretos ou conta não ativada.'
-                messages.error(request, aviso)
-                return redirect('login')  # Redireciona para a view de login em caso de erro
+                messages.error(request, "Usuário ou senha inválidos!")
+                return redirect('login')
+        else:
+            messages.error(request, "Corrija os erros abaixo!")
     else:
-        messages.info(request, 'Por favor, faça login para acessar.')
-        #messages.info(request, 'Por favor, faça login para acessar.')
+        form = CustomLoginForm()
     
     return render(request, "registration/login.html", {"form": form})
 
