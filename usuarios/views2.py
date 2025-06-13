@@ -28,7 +28,7 @@ def login(request):
             if usuario is not None and usuario.is_active:
                 auth.login(request, usuario)
                 messages.success(request, "Login Efetuado com sucesso!")
-                return redirect('index')
+                return redirect('biddingContracts:index')
             else:
                 messages.error(request, "Usuário ou senha inválidos!")
                 return redirect('login')
